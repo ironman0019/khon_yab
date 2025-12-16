@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blood_inventory', function (Blueprint $table) {
+        Schema::create('blood_inventories', function (Blueprint $table) {
             $table->id();
             $table->string('bag_id')->unique()->comment('Bag ID - Unique identifier for each blood bag');
             $table->foreignId('blood_donation_record_id')->constrained('blood_donation_records')->onDelete('cascade');
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('blood_inventory');
+        Schema::dropIfExists('blood_inventories');
     }
 };
