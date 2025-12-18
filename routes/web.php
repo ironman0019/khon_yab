@@ -7,14 +7,112 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/language/{locale}', [App\Http\Controllers\LanguageController::class, 'switch'])
+    ->name('language.switch');
+
+Route::get('/api/cities', function (Illuminate\Http\Request $request) {
+    if (! $request->has('province_id')) {
+        return response()->json([]);
+    }
+
+    $cities = App\Models\City::where('province_id', $request->province_id)
+        ->select('id', 'name')
+        ->get();
+
+    return response()->json($cities);
+})->name('api.cities');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Donor Dashboard
+Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Donor\DashboardController::class, 'index'])->name('dashboard.index');
+});
+
+// Hospital Dashboard
+Route::prefix('hospital')->middleware(['auth', 'verified'])->name('hospital.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Hospital\DashboardController::class, 'index'])->name('dashboard.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin routes
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard.index');
+
+    // User Management
+    Route::resource('user-management', App\Http\Controllers\Admin\UserManagement\UserController::class);
+    Route::post('user-management/{user}/toggle-admin', [App\Http\Controllers\Admin\UserManagement\UserController::class, 'toggleAdmin'])->name('user-management.toggle-admin');
+
+    // Donor Management
+    Route::resource('donor-management', App\Http\Controllers\Admin\DonorManagement\DonorController::class);
+    Route::post('donor-management/{donor}/toggle-health-status', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleHealthStatus'])->name('donor-management.toggle-health-status');
+    Route::post('donor-management/{donor}/toggle-donation-ability', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleDonationAbility'])->name('donor-management.toggle-donation-ability');
+
+    // Blood Request Management
+    Route::resource('blood-request-management', App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class);
+    Route::post('blood-request-management/{blood_request}/approve', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'approve'])->name('blood-request-management.approve');
+    Route::post('blood-request-management/{blood_request}/reject', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'reject'])->name('blood-request-management.reject');
+    Route::post('blood-request-management/{blood_request}/complete', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'complete'])->name('blood-request-management.complete');
+
+    // Blood Inventory Management
+    Route::resource('inventory-management', App\Http\Controllers\Admin\InventoryManagement\BloodInventoryController::class);
+    Route::post('inventory-management/{blood_inventory}/mark-as-used', [App\Http\Controllers\Admin\InventoryManagement\BloodInventoryController::class, 'markAsUsed'])->name('inventory-management.mark-as-used');
+    Route::post('inventory-management/{blood_inventory}/mark-as-expired', [App\Http\Controllers\Admin\InventoryManagement\BloodInventoryController::class, 'markAsExpired'])->name('inventory-management.mark-as-expired');
+
+    // Blood Donation Record Management
+    Route::resource('blood-donation-management', App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class);
+    Route::get('blood-donation-management/{blood_donation_record}/print', [App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class, 'printReceipt'])->name('blood-donation-management.print');
+    Route::get('blood-donation-management/{blood_donation_management}/test/create', [App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class, 'createTest'])->name('blood-donation-management.test.create');
+    Route::post('blood-donation-management/{blood_donation_management}/test', [App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class, 'storeTest'])->name('blood-donation-management.test.store');
+    Route::get('blood-donation-management/{blood_donation_management}/test/edit', [App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class, 'editTest'])->name('blood-donation-management.test.edit');
+    Route::put('blood-donation-management/{blood_donation_management}/test', [App\Http\Controllers\Admin\BloodDonationManagement\BloodDonationRecordController::class, 'updateTest'])->name('blood-donation-management.test.update');
+
+    // Language Management
+    Route::resource('language-management', App\Http\Controllers\Admin\LanguageManagement\LanguageController::class)
+        ->parameters(['language-management' => 'language']);
+    Route::post('language-management/{language}/toggle-active', [App\Http\Controllers\Admin\LanguageManagement\LanguageController::class, 'toggleActive'])->name('language-management.toggle-active');
+    Route::post('language-management/{language}/set-default', [App\Http\Controllers\Admin\LanguageManagement\LanguageController::class, 'setDefault'])->name('language-management.set-default');
+
+    // Translation Management
+    Route::resource('language-management.translations', App\Http\Controllers\Admin\LanguageManagement\TranslationController::class)
+        ->parameters(['language-management' => 'language']);
+    Route::post('language-management/translations/import', [App\Http\Controllers\Admin\LanguageManagement\TranslationController::class, 'importFromFiles'])->name('language-management.translations.import');
+
+    // Province/City Management
+    Route::resource('province-management', App\Http\Controllers\Admin\ProvinceManagement\ProvinceController::class);
+    Route::resource('province-management.cities', App\Http\Controllers\Admin\ProvinceManagement\CityController::class);
+
+    // Reports Management
+    Route::get('reports-management', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'index'])->name('reports-management.index');
+    Route::get('reports-management/donations', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'donations'])->name('reports-management.donations');
+    Route::get('reports-management/blood-requests', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'bloodRequests'])->name('reports-management.blood-requests');
+    Route::get('reports-management/inventory', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'inventory'])->name('reports-management.inventory');
+    Route::get('reports-management/user-statistics', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'userStatistics'])->name('reports-management.user-statistics');
+    Route::get('reports-management/summary', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'summary'])->name('reports-management.summary');
+    Route::get('reports-management/active-donors', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'activeDonors'])->name('reports-management.active-donors');
+    Route::get('reports-management/shortage', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'shortage'])->name('reports-management.shortage');
+    Route::get('reports-management/approved-requests', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'approvedRequests'])->name('reports-management.approved-requests');
+    Route::get('reports-management/donation-history', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'donationHistory'])->name('reports-management.donation-history');
+    Route::get('reports-management/by-province', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'byProvince'])->name('reports-management.by-province');
+    Route::get('reports-management/monthly-yearly', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'monthlyYearly'])->name('reports-management.monthly-yearly');
+    Route::get('reports-management/bag-expiration', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'bagExpiration'])->name('reports-management.bag-expiration');
+
+    // Database Backup
+    Route::resource('backup-management', App\Http\Controllers\Admin\BackupManagement\BackupController::class);
+    Route::get('backup-management/{backup}/download', [App\Http\Controllers\Admin\BackupManagement\BackupController::class, 'download'])->name('backup-management.download');
+    Route::post('backup-management/clean-old', [App\Http\Controllers\Admin\BackupManagement\BackupController::class, 'cleanOld'])->name('backup-management.clean-old');
+
+    // Site Settings
+    Route::get('settings', [App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('settings.index');
+    Route::put('settings', [App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

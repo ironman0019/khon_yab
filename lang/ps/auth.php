@@ -1,0 +1,61 @@
+<?php
+
+return [
+    'failed' => 'دا معلومات زموږ د ریکارډونو سره مطابقت نلري.',
+    'password' => 'چمتو شوی پاسورډ غلط دی.',
+    'throttle' => 'د ننوتلو هڅې ډېرې زیاتې دي. مهرباني وکړئ په :seconds ثانیو کې بیا هڅه وکړئ.',
+
+    'Email' => 'بریښنالیک',
+    'Password' => 'پاسورډ',
+    'Remember me' => 'ما په یاد وساتئ',
+    'Log in' => 'ننوتل',
+    'Forgot your password?' => 'ستاسو پاسورډ هیر دی؟',
+    'Register' => 'نوم لیکنه',
+    'Already registered?' => 'له مخکې نوم لیکنه کړې؟',
+    'Don\'t have an account?' => 'حساب نلرئ؟',
+
+    'Full Name' => 'بشپړ نوم',
+    'User Type' => 'د کارن ډول',
+    'User' => 'کارن',
+    'Donor' => 'ورکونکی',
+    'Hospital User' => 'د روغتون کارن',
+    'Confirm Password' => 'د پاسورډ تایید',
+
+    'Mobile Number' => 'د موبایل شمیره',
+    'National Code' => 'د ملي کوډ',
+    'Age' => 'عمر',
+    'Gender' => 'جنس',
+    'Select Gender' => 'جنس غوره کړئ',
+    'Male' => 'نارینه',
+    'Female' => 'ښځینه',
+    'Other' => 'نور',
+    'Province' => 'ولایت',
+    'Select Province' => 'ولایت غوره کړئ',
+    'City' => 'ښار',
+    'Select City' => 'ښار غوره کړئ',
+    'Address' => 'پته',
+    'Blood Type' => 'د وینې ډول',
+    'Select Blood Type' => 'د وینې ډول غوره کړئ',
+    'RH Factor' => 'RH فاکتور',
+    'Select RH Factor' => 'RH فاکتور غوره کړئ',
+    'Positive' => 'مثبت',
+    'Negative' => 'منفي',
+
+    'Hospital Name' => 'د روغتون نوم',
+    'Hospital Code' => 'د روغتون کوډ',
+    'Phone Number' => 'د تلیفون شمیره',
+    'License Number' => 'د جواز شمیره',
+    'Contact Person Name' => 'د اړیکو کس نوم',
+
+    'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.' => 'د نوم لیکنې لپاره مننه! پیل کولو دمخه، مهرباني وکړئ خپل بریښنالیک پته د هغه لینک په کلیک کولو سره تایید کړئ چې موږ یې تاسو ته ولیږل. که تاسو بریښنالیک ترلاسه نه کړئ، موږ به په خوښۍ بل یو وړاندې کړو.',
+    'A new verification link has been sent to the email address you provided during registration.' => 'نوی تایید لینک هغه بریښنالیک پتې ته لیږل شوی چې تاسو یې د نوم لیکنې پر مهال چمتو کړی و.',
+    'Resend Verification Email' => 'تایید بریښنالیک بیا ولیږئ',
+    'Log Out' => 'وتل',
+
+    'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.' => 'ستاسو پاسورډ هیر دی؟ ستونزه نشته. یوازې زموږ ته خپل بریښنالیک پته ورکړئ او موږ به تاسو ته د پاسورډ بیا تنظیمولو لینک ولیږو چې تاسو ته به اجازه درکړي نوی یو غوره کړئ.',
+    'Email Password Reset Link' => 'د پاسورډ بیا تنظیمولو لینک ولیږئ',
+    'Back to login' => 'بیرته ننوتلو ته',
+    'Reset Password' => 'پاسورډ بیا تنظیم کړئ',
+
+    'Blood Bank Management System' => 'د وینې بانک د مدیریت سیسټم',
+];

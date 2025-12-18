@@ -1,0 +1,61 @@
+<?php
+
+return [
+    'failed' => 'این اعتبارات با سوابق ما مطابقت ندارد.',
+    'password' => 'رمز عبور ارائه شده نادرست است.',
+    'throttle' => 'تلاش‌های ورود بسیار زیاد. لطفاً در :seconds ثانیه دیگر تلاش کنید.',
+
+    'Email' => 'پست الکترونیک',
+    'Password' => 'رمز عبور',
+    'Remember me' => 'مرا به خاطر بسپار',
+    'Log in' => 'ورود',
+    'Forgot your password?' => 'رمز عبور خود را فراموش کرده‌اید؟',
+    'Register' => 'ثبت نام',
+    'Already registered?' => 'از قبل ثبت نام کرده‌اید؟',
+    'Don\'t have an account?' => 'حساب کاربری ندارید؟',
+
+    'Full Name' => 'نام کامل',
+    'User Type' => 'نوع کاربر',
+    'User' => 'کاربر',
+    'Donor' => 'اهداکننده',
+    'Hospital User' => 'کاربر بیمارستان',
+    'Confirm Password' => 'تأیید رمز عبور',
+
+    'Mobile Number' => 'شماره موبایل',
+    'National Code' => 'کد ملی',
+    'Age' => 'سن',
+    'Gender' => 'جنسیت',
+    'Select Gender' => 'انتخاب جنسیت',
+    'Male' => 'مرد',
+    'Female' => 'زن',
+    'Other' => 'سایر',
+    'Province' => 'استان',
+    'Select Province' => 'انتخاب استان',
+    'City' => 'شهر',
+    'Select City' => 'انتخاب شهر',
+    'Address' => 'آدرس',
+    'Blood Type' => 'گروه خونی',
+    'Select Blood Type' => 'انتخاب گروه خونی',
+    'RH Factor' => 'فاکتور RH',
+    'Select RH Factor' => 'انتخاب فاکتور RH',
+    'Positive' => 'مثبت',
+    'Negative' => 'منفی',
+
+    'Hospital Name' => 'نام بیمارستان',
+    'Hospital Code' => 'کد بیمارستان',
+    'Phone Number' => 'شماره تلفن',
+    'License Number' => 'شماره مجوز',
+    'Contact Person Name' => 'نام شخص تماس',
+
+    'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.' => 'از ثبت نام شما متشکریم! قبل از شروع، لطفاً آدرس ایمیل خود را با کلیک روی لینکی که برای شما ایمیل کرده‌ایم تأیید کنید. اگر ایمیل را دریافت نکرده‌اید، با کمال میل یکی دیگر برای شما ارسال می‌کنیم.',
+    'A new verification link has been sent to the email address you provided during registration.' => 'لینک تأیید جدید به آدرس ایمیل ارائه شده در زمان ثبت نام ارسال شد.',
+    'Resend Verification Email' => 'ارسال مجدد ایمیل تأیید',
+    'Log Out' => 'خروج',
+
+    'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.' => 'رمز عبور خود را فراموش کرده‌اید؟ مشکلی نیست. فقط آدرس ایمیل خود را به ما بگویید و ما یک لینک بازنشانی رمز عبور برای شما ایمیل می‌کنیم که به شما امکان می‌دهد رمز جدیدی انتخاب کنید.',
+    'Email Password Reset Link' => 'ارسال لینک بازنشانی رمز عبور',
+    'Back to login' => 'بازگشت به ورود',
+    'Reset Password' => 'بازنشانی رمز عبور',
+
+    'Blood Bank Management System' => 'سیستم مدیریت بانک خون',
+];

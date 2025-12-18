@@ -28,7 +28,26 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        // Redirect based on user type
+        return $this->redirectBasedOnUserType($user);
+    }
+
+    /**
+     * Redirect user based on their type.
+     */
+    protected function redirectBasedOnUserType($user): RedirectResponse
+    {
+        if ($user->isAdmin()) {
+            return redirect()->intended(route('admin.dashboard.index', absolute: false));
+        }
+
+        return match ($user->user_type) {
+            \App\Enums\UserType::Donor->value => redirect()->intended(route('donor.dashboard.index', absolute: false)),
+            \App\Enums\UserType::HospitalUser->value => redirect()->intended(route('hospital.dashboard.index', absolute: false)),
+            default => redirect()->intended(route('dashboard', absolute: false)),
+        };
     }
 
     /**

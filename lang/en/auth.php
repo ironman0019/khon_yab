@@ -1,0 +1,61 @@
+<?php
+
+return [
+    'failed' => 'These credentials do not match our records.',
+    'password' => 'The provided password is incorrect.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    'Email' => 'Email',
+    'Password' => 'Password',
+    'Remember me' => 'Remember me',
+    'Log in' => 'Log in',
+    'Forgot your password?' => 'Forgot your password?',
+    'Register' => 'Register',
+    'Already registered?' => 'Already registered?',
+    'Don\'t have an account?' => 'Don\'t have an account?',
+
+    'Full Name' => 'Full Name',
+    'User Type' => 'User Type',
+    'User' => 'User',
+    'Donor' => 'Donor',
+    'Hospital User' => 'Hospital User',
+    'Confirm Password' => 'Confirm Password',
+
+    'Mobile Number' => 'Mobile Number',
+    'National Code' => 'National Code',
+    'Age' => 'Age',
+    'Gender' => 'Gender',
+    'Select Gender' => 'Select Gender',
+    'Male' => 'Male',
+    'Female' => 'Female',
+    'Other' => 'Other',
+    'Province' => 'Province',
+    'Select Province' => 'Select Province',
+    'City' => 'City',
+    'Select City' => 'Select City',
+    'Address' => 'Address',
+    'Blood Type' => 'Blood Type',
+    'Select Blood Type' => 'Select Blood Type',
+    'RH Factor' => 'RH Factor',
+    'Select RH Factor' => 'Select RH Factor',
+    'Positive' => 'Positive',
+    'Negative' => 'Negative',
+
+    'Hospital Name' => 'Hospital Name',
+    'Hospital Code' => 'Hospital Code',
+    'Phone Number' => 'Phone Number',
+    'License Number' => 'License Number',
+    'Contact Person Name' => 'Contact Person Name',
+
+    'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.' => 'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.',
+    'A new verification link has been sent to the email address you provided during registration.' => 'A new verification link has been sent to the email address you provided during registration.',
+    'Resend Verification Email' => 'Resend Verification Email',
+    'Log Out' => 'Log Out',
+
+    'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+    'Email Password Reset Link' => 'Email Password Reset Link',
+    'Back to login' => 'Back to login',
+    'Reset Password' => 'Reset Password',
+
+    'Blood Bank Management System' => 'Blood Bank Management System',
+];
