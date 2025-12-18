@@ -1,0 +1,192 @@
+@php
+    $isRtl = in_array(app()->getLocale(), ['fa', 'ps']);
+@endphp
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Donation History') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Page Header -->
+            <div class="mb-6 flex {{ $isRtl ? 'flex-row-reverse' : '' }} justify-between items-center">
+                <div class="{{ $isRtl ? 'text-right' : 'text-left' }}">
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('My Donation History') }}</h1>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('View all your blood donation records') }}</p>
+                </div>
+                <a href="{{ route('donor.donation-records.create') }}" 
+                   class="inline-flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                    <svg class="w-5 h-5 {{ $isRtl ? 'ml-2' : 'mr-2' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    {{ __('Request Donation') }}
+                </a>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
+                <form method="GET" action="{{ route('donor.donation-records.index') }}" class="flex flex-col gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Status Filter -->
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('Status') }}</label>
+                            <x-select 
+                                id="status"
+                                name="status" 
+                                class="block w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            >
+                                <option value="">{{ __('All Statuses') }}</option>
+                                <option value="0" @selected(request('status') == '0')>{{ __('Test Pending') }}</option>
+                                <option value="1" @selected(request('status') == '1')>{{ __('Safe') }}</option>
+                                <option value="2" @selected(request('status') == '2')>{{ __('Unsafe') }}</option>
+                                <option value="3" @selected(request('status') == '3')>{{ __('Discarded') }}</option>
+                            </x-select>
+                        </div>
+
+                        <!-- Donation Type Filter -->
+                        <div>
+                            <label for="donation_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('Donation Type') }}</label>
+                            <x-select 
+                                id="donation_type"
+                                name="donation_type" 
+                                class="block w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                            >
+                                <option value="">{{ __('All Types') }}</option>
+                                <option value="0" @selected(request('donation_type') == '0')>{{ __('Whole Blood') }}</option>
+                                <option value="1" @selected(request('donation_type') == '1')>{{ __('Plasma') }}</option>
+                                <option value="2" @selected(request('donation_type') == '2')>{{ __('Platelets') }}</option>
+                            </x-select>
+                        </div>
+
+                        <!-- Date Range -->
+                        <div>
+                            <label for="date_from" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('Date From') }}</label>
+                            <x-text-input 
+                                id="date_from"
+                                name="date_from" 
+                                type="date" 
+                                class="block w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                                value="{{ request('date_from') }}"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="flex {{ $isRtl ? 'flex-row-reverse justify-start' : 'justify-end' }} gap-2">
+                        <a href="{{ route('donor.donation-records.index') }}" 
+                           class="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-colors">
+                            {{ __('Reset') }}
+                        </a>
+                        <button type="submit" 
+                                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            {{ __('Filter') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Donation Records Table -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                @if($donationRecords->count() > 0)
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-900">
+                                <tr>
+                                    <th class="px-6 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {{ __('Date') }}
+                                    </th>
+                                    <th class="px-6 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {{ __('Type') }}
+                                    </th>
+                                    <th class="px-6 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {{ __('Amount') }}
+                                    </th>
+                                    <th class="px-6 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {{ __('Status') }}
+                                    </th>
+                                    <th class="px-6 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        {{ __('Actions') }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                @foreach($donationRecords as $record)
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                            {{ $record->donation_date->format('Y-m-d') }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                            @if($record->donation_type == 0)
+                                                {{ __('Whole Blood') }}
+                                            @elseif($record->donation_type == 1)
+                                                {{ __('Plasma') }}
+                                            @else
+                                                {{ __('Platelets') }}
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                            {{ number_format($record->amount_ml) }} ml
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($record->status == 0)
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                    {{ __('Test Pending') }}
+                                                </span>
+                                            @elseif($record->status == 1)
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                    {{ __('Safe') }}
+                                                </span>
+                                            @elseif($record->status == 2)
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                                                    {{ __('Unsafe') }}
+                                                </span>
+                                            @else
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+                                                    {{ __('Discarded') }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex {{ $isRtl ? 'flex-row-reverse' : '' }} gap-2">
+                                                <a href="{{ route('donor.donation-records.show', $record) }}" 
+                                                   class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                                    {{ __('View') }}
+                                                </a>
+                                                @if($record->status == 0 && $record->submitted_by_donor)
+                                                    <form method="POST" action="{{ route('donor.donation-records.cancel', $record) }}" 
+                                                          onsubmit="return confirm('{{ __('Are you sure you want to cancel this donation request?') }}');">
+                                                        @csrf
+                                                        @method('POST')
+                                                        <button type="submit" 
+                                                                class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                                            {{ __('Cancel') }}
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+                        {{ $donationRecords->links() }}
+                    </div>
+                @else
+                    <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+                        <p>{{ __('No donation records found.') }}</p>
+                        <a href="{{ route('donor.donation-records.create') }}" 
+                           class="mt-4 inline-block text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                            {{ __('Create your first donation request') }}
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</x-app-layout>
+

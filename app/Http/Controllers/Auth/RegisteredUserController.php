@@ -100,10 +100,7 @@ class RegisteredUserController extends Controller
             return redirect()->route('admin.dashboard.index');
         }
 
-        return match ($user->user_type) {
-            UserType::Donor->value => redirect()->route('donor.dashboard.index'),
-            UserType::HospitalUser->value => redirect()->route('hospital.dashboard.index'),
-            default => redirect()->route('dashboard'),
-        };
+        // Non-admin users redirect to home page
+        return redirect()->route('home.index');
     }
 }

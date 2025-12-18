@@ -27,17 +27,44 @@ Route::get('/api/cities', function (Illuminate\Http\Request $request) {
 })->name('api.cities');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = auth()->user();
+    
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard.index');
+    }
+    
+    return match ($user->user_type) {
+        \App\Enums\UserType::Donor->value => redirect()->route('donor.dashboard.index'),
+        \App\Enums\UserType::HospitalUser->value => redirect()->route('hospital.dashboard.index'),
+        \App\Enums\UserType::User->value => redirect()->route('user.dashboard.index'),
+        default => view('dashboard'),
+    };
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Donor Dashboard
 Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Donor\DashboardController::class, 'index'])->name('dashboard.index');
+    
+    // Donation Records
+    Route::resource('donation-records', App\Http\Controllers\Donor\BloodDonationRecordController::class);
+    Route::post('donation-records/{donation_record}/cancel', [App\Http\Controllers\Donor\BloodDonationRecordController::class, 'cancel'])->name('donation-records.cancel');
+    
+    // Profile
+    Route::get('/profile', [App\Http\Controllers\Donor\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\Donor\ProfileController::class, 'update'])->name('profile.update');
+    
+    // Reports
+    Route::get('/reports', [App\Http\Controllers\Donor\DashboardController::class, 'reports'])->name('reports');
 });
 
 // Hospital Dashboard
 Route::prefix('hospital')->middleware(['auth', 'verified'])->name('hospital.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Hospital\DashboardController::class, 'index'])->name('dashboard.index');
+});
+
+// User Dashboard
+Route::prefix('user')->middleware(['auth', 'verified'])->name('user.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard.index');
 });
 
 Route::middleware('auth')->group(function () {

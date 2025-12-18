@@ -78,4 +78,58 @@ class Donor extends Model
     {
         return $this->hasMany(BloodDonationRecord::class);
     }
+
+    /**
+     * Calculate the next eligible donation date based on last donation.
+     */
+    public function nextEligibleDonationDate(?int $donationType = 0): ?\Illuminate\Support\Carbon
+    {
+        if (!$this->last_donation_date) {
+            return now();
+        }
+
+        $minDays = match ($donationType) {
+            0 => 56, // Whole Blood - 8 weeks
+            1 => 28, // Plasma - 4 weeks
+            2 => 7,  // Platelets - 1 week
+            default => 56,
+        };
+
+        return $this->last_donation_date->copy()->addDays($minDays);
+    }
+
+    /**
+     * Check if the donor can donate now.
+     */
+    public function canDonate(?int $donationType = 0): bool
+    {
+        if (!$this->ability_to_donate || !$this->health_status) {
+            return false;
+        }
+
+        if (!$this->last_donation_date) {
+            return true;
+        }
+
+        $nextEligibleDate = $this->nextEligibleDonationDate($donationType);
+        return now()->greaterThanOrEqualTo($nextEligibleDate);
+    }
+
+    /**
+     * Get days until next eligible donation.
+     */
+    public function daysUntilNextDonation(?int $donationType = 0): ?int
+    {
+        if (!$this->last_donation_date) {
+            return 0;
+        }
+
+        $nextEligibleDate = $this->nextEligibleDonationDate($donationType);
+        
+        if (now()->greaterThanOrEqualTo($nextEligibleDate)) {
+            return 0;
+        }
+
+        return now()->diffInDays($nextEligibleDate);
+    }
 }

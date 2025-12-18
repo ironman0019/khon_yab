@@ -43,11 +43,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(route('admin.dashboard.index', absolute: false));
         }
 
-        return match ($user->user_type) {
-            \App\Enums\UserType::Donor->value => redirect()->intended(route('donor.dashboard.index', absolute: false)),
-            \App\Enums\UserType::HospitalUser->value => redirect()->intended(route('hospital.dashboard.index', absolute: false)),
-            default => redirect()->intended(route('dashboard', absolute: false)),
-        };
+        // Non-admin users redirect to home page
+        return redirect()->intended(route('home.index', absolute: false));
     }
 
     /**

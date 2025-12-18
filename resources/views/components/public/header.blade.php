@@ -49,7 +49,17 @@
 
                 <!-- Sign In Button -->
                 @auth
-                    <a href="{{ route('dashboard') }}" 
+                    @php
+                        $dashboardRoute = auth()->user()->isAdmin() 
+                            ? route('admin.dashboard.index')
+                            : match(auth()->user()->user_type) {
+                                \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
+                                \App\Enums\UserType::HospitalUser->value => route('hospital.dashboard.index'),
+                                \App\Enums\UserType::User->value => route('user.dashboard.index'),
+                                default => route('dashboard'),
+                            };
+                    @endphp
+                    <a href="{{ $dashboardRoute }}" 
                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
                         {{ __('home.Dashboard') }}
                     </a>
