@@ -662,4 +662,9 @@ return [
     'The site phone must be a string.' => 'تلفن سایت باید یک رشته متنی باشد.',
     'The site phone may not be greater than :max characters.' => 'تلفن سایت نمی‌تواند بیشتر از :max کاراکتر باشد.',
     'The site address must be a string.' => 'آدرس سایت باید یک رشته متنی باشد.',
+    // Notifications
+    'Notifications' => 'اعلان‌ها',
+    'Loading...' => 'در حال بارگذاری...',
+    'No pending blood requests' => 'هیچ درخواست خونی در انتظار وجود ندارد',
+    'View all pending requests' => 'مشاهده تمام درخواست‌های در انتظار',
 ];

@@ -662,4 +662,9 @@ return [
     'The site phone must be a string.' => 'د سایټ ټیلیفون باید یو متن وي.',
     'The site phone may not be greater than :max characters.' => 'د سایټ ټیلیفون نشي کولی د :max حروفو څخه زیات وي.',
     'The site address must be a string.' => 'د سایټ پته باید یو متن وي.',
+    // Notifications
+    'Notifications' => 'خبرتیاوې',
+    'Loading...' => 'پورته کول...',
+    'No pending blood requests' => 'هیڅ پاتې د وینو غوښتنې نشته',
+    'View all pending requests' => 'ټولې پاتې غوښتنې وګورئ',
 ];

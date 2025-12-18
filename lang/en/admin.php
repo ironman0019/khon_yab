@@ -665,4 +665,9 @@ return [
     'The site phone must be a string.' => 'The site phone must be a string.',
     'The site phone may not be greater than :max characters.' => 'The site phone may not be greater than :max characters.',
     'The site address must be a string.' => 'The site address must be a string.',
+    // Notifications
+    'Notifications' => 'Notifications',
+    'Loading...' => 'Loading...',
+    'No pending blood requests' => 'No pending blood requests',
+    'View all pending requests' => 'View all pending requests',
 ];
