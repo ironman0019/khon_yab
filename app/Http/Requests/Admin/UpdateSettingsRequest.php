@@ -30,4 +30,27 @@ class UpdateSettingsRequest extends FormRequest
             'site_address' => ['sometimes', 'nullable', 'string'],
         ];
     }
+
+    /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'site_name.required' => __('admin.The site name field is required.'),
+            'site_name.string' => __('admin.The site name must be a string.'),
+            'site_name.max' => __('admin.The site name may not be greater than :max characters.'),
+            'site_logo.image' => __('admin.The site logo must be an image.'),
+            'site_logo.max' => __('admin.The site logo may not be greater than :max kilobytes.'),
+            'default_language_code.string' => __('admin.The default language code must be a string.'),
+            'default_language_code.exists' => __('admin.The selected default language code is invalid.'),
+            'site_email.email' => __('admin.The site email must be a valid email address.'),
+            'site_email.max' => __('admin.The site email may not be greater than :max characters.'),
+            'site_phone.string' => __('admin.The site phone must be a string.'),
+            'site_phone.max' => __('admin.The site phone may not be greater than :max characters.'),
+            'site_address.string' => __('admin.The site address must be a string.'),
+        ];
+    }
 }
