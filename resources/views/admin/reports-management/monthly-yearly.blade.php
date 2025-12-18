@@ -7,7 +7,7 @@
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('admin.Monthly/Yearly Report') }}</h1>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('admin.View aggregated monthly and yearly statistics') }}</p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex gap-2 no-print">
                     <a href="{{ route('admin.reports-management.index') }}" 
                        class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-colors">
                         <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Filters -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6 no-print">
                 <form method="GET" action="{{ route('admin.reports-management.monthly-yearly') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <!-- Period Type -->
                     <div>
@@ -69,17 +69,21 @@
             </div>
 
             <!-- Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6 no-print">
                 <!-- Donations Chart -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{{ __('admin.Donations by Period') }}</h2>
-                    <canvas id="donationsChart" height="200"></canvas>
+                    <div class="h-[400px]">
+                        <canvas id="donationsChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Requests Chart -->
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{{ __('admin.Requests by Period') }}</h2>
-                    <canvas id="requestsChart" height="200"></canvas>
+                    <div class="h-[400px]">
+                        <canvas id="requestsChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -226,4 +230,117 @@
             });
         });
     </script>
+
+    <style>
+        @media print {
+            /* Hide elements with no-print class */
+            .no-print {
+                display: none !important;
+            }
+
+            /* Hide sidebar */
+            aside {
+                display: none !important;
+            }
+
+            /* Hide header */
+            header {
+                display: none !important;
+            }
+
+            /* Hide page description */
+            .mb-6.flex.justify-between.items-center p {
+                display: none !important;
+            }
+
+            /* Hide canvas elements (charts) */
+            canvas {
+                display: none !important;
+            }
+
+            /* Reset body and main container */
+            body {
+                margin: 0 !important;
+                padding: 20px !important;
+                background: #fff !important;
+            }
+
+            main {
+                padding: 0 !important;
+                background: #fff !important;
+                overflow: visible !important;
+            }
+
+            /* Show content container */
+            .py-6 {
+                padding: 0 !important;
+            }
+
+            .max-w-7xl {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Style the page title */
+            h1 {
+                font-size: 24px !important;
+                font-weight: bold !important;
+                color: #000 !important;
+                margin-bottom: 20px !important;
+                margin-top: 0 !important;
+            }
+
+            /* Style the table for printing */
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                border: 1px solid #000 !important;
+                margin-top: 20px !important;
+            }
+
+            th, td {
+                border: 1px solid #000 !important;
+                padding: 8px !important;
+                text-align: left !important;
+                color: #000 !important;
+                background: #fff !important;
+            }
+
+            th {
+                background-color: #f3f4f6 !important;
+                font-weight: bold !important;
+            }
+
+            /* Remove dark mode colors from table */
+            table * {
+                color: #000 !important;
+            }
+
+            thead {
+                background-color: #f3f4f6 !important;
+            }
+
+            tbody tr {
+                background: #fff !important;
+            }
+
+            /* Ensure table container is visible */
+            .bg-white.rounded-lg.shadow-sm.border {
+                border: none !important;
+                box-shadow: none !important;
+                background: #fff !important;
+            }
+
+            /* Show table container */
+            .overflow-x-auto {
+                overflow: visible !important;
+            }
+
+            /* Hide alerts */
+            [role="alert"] {
+                display: none !important;
+            }
+        }
+    </style>
 </x-admin-layout>

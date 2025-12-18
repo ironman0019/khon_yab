@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Enums\BloodInventoryStatus;
 use App\Enums\BloodRequestStatus;
 use App\Models\BloodDonationRecord;
 use App\Models\BloodInventory;
@@ -516,32 +517,51 @@ class ReportsService
     public function getBagExpirationReport(array $filters = []): array
     {
         $today = Carbon::today();
-        $query = BloodInventory::with(['bloodDonationRecord.donor.user', 'province'])
-            ->where('status', 0); // In stock only
+        $query = BloodInventory::with(['bloodDonationRecord.donor.user', 'province']);
 
-        // Expiration date range filter
-        if (isset($filters['expiration_date_from'])) {
-            $query->whereDate('expiration_date', '>=', $filters['expiration_date_from']);
+        // Filter type: expired, expiring_soon, or all
+        if (isset($filters['expiration_type']) && $filters['expiration_type'] !== '') {
+            match ($filters['expiration_type']) {
+                'expired' => $query->where(function ($q) use ($today) {
+                    // Include bags marked as expired (status = 2) OR in-stock bags with past expiration date
+                    $q->where('status', BloodInventoryStatus::Expired->value)
+                      ->orWhere(function ($subQ) use ($today) {
+                          $subQ->where('status', BloodInventoryStatus::InStock->value)
+                               ->where('expiration_date', '<', $today);
+                      });
+                }),
+                'expiring_soon' => $query->where('status', BloodInventoryStatus::InStock->value)
+                    ->whereBetween('expiration_date', [$today, $today->copy()->addDays(7)]),
+                default => null,
+            };
         } else {
-            // Default: show expiring soon (next 30 days) and expired
-            $query->whereDate('expiration_date', '<=', $today->copy()->addDays(30));
+            // Default: show expired and expiring soon (next 7 days) when no filter is set
+            $query->where(function ($q) use ($today) {
+                // Expired: status = 2 OR (status = 0 AND expiration_date < today)
+                $q->where('status', BloodInventoryStatus::Expired->value)
+                  ->orWhere(function ($subQ) use ($today) {
+                      $subQ->where('status', BloodInventoryStatus::InStock->value)
+                           ->where('expiration_date', '<', $today);
+                  })
+                  // Expiring soon: status = 0 AND expiration_date within next 7 days
+                  ->orWhere(function ($subQ) use ($today) {
+                      $subQ->where('status', BloodInventoryStatus::InStock->value)
+                           ->whereBetween('expiration_date', [$today, $today->copy()->addDays(7)]);
+                  });
+            });
         }
 
-        if (isset($filters['expiration_date_to'])) {
+        // Expiration date range filter
+        if (isset($filters['expiration_date_from']) && $filters['expiration_date_from'] !== '') {
+            $query->whereDate('expiration_date', '>=', $filters['expiration_date_from']);
+        }
+
+        if (isset($filters['expiration_date_to']) && $filters['expiration_date_to'] !== '') {
             $query->whereDate('expiration_date', '<=', $filters['expiration_date_to']);
         }
 
-        // Filter type: expired, expiring_soon, or all
-        if (isset($filters['expiration_type'])) {
-            match ($filters['expiration_type']) {
-                'expired' => $query->where('expiration_date', '<', $today),
-                'expiring_soon' => $query->whereBetween('expiration_date', [$today, $today->copy()->addDays(7)]),
-                default => null,
-            };
-        }
-
         // Blood type filter
-        if (isset($filters['blood_type'])) {
+        if (isset($filters['blood_type']) && $filters['blood_type'] !== '') {
             $query->where('blood_type', $filters['blood_type']);
         }
 
@@ -554,10 +574,16 @@ class ReportsService
 
         // Separate expired and expiring soon
         $expired = $inventory->filter(function ($item) use ($today) {
-            return $item->expiration_date && $item->expiration_date->lt($today);
+            // Expired: status = 2 OR (status = 0 AND expiration_date < today)
+            return $item->status === BloodInventoryStatus::Expired->value
+                || ($item->status === BloodInventoryStatus::InStock->value && $item->expiration_date && $item->expiration_date->lt($today));
         });
         $expiringSoon = $inventory->filter(function ($item) use ($today) {
-            return $item->expiration_date && $item->expiration_date->gte($today) && $item->expiration_date->lte($today->copy()->addDays(7));
+            // Expiring soon: status = 0 AND expiration_date within next 7 days
+            return $item->status === BloodInventoryStatus::InStock->value
+                && $item->expiration_date
+                && $item->expiration_date->gte($today)
+                && $item->expiration_date->lte($today->copy()->addDays(7));
         });
 
         return [
