@@ -556,6 +556,7 @@ return [
     'View expiring and expired blood bags' => 'مشاهده کیسه‌های خون در حال انقضا و منقضی شده',
     'Back to Reports' => 'بازگشت به گزارش‌ها',
     'Print' => 'چاپ',
+    'Export Excel' => 'خروجی اکسل',
     'Active Donors Report' => 'گزارش اهداکنندگان فعال',
     'Blood Inventory Report' => 'گزارش موجودی خون',
     'Blood Shortage Report' => 'گزارش کمبود خون',

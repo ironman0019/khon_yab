@@ -147,6 +147,20 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('reports-management/monthly-yearly', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'monthlyYearly'])->name('reports-management.monthly-yearly');
     Route::get('reports-management/bag-expiration', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'bagExpiration'])->name('reports-management.bag-expiration');
 
+    // Reports Management - Excel Exports
+    Route::get('reports-management/donations/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportDonations'])->name('reports-management.donations.export');
+    Route::get('reports-management/blood-requests/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportBloodRequests'])->name('reports-management.blood-requests.export');
+    Route::get('reports-management/inventory/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportInventory'])->name('reports-management.inventory.export');
+    Route::get('reports-management/user-statistics/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportUserStatistics'])->name('reports-management.user-statistics.export');
+    Route::get('reports-management/summary/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportSummary'])->name('reports-management.summary.export');
+    Route::get('reports-management/active-donors/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportActiveDonors'])->name('reports-management.active-donors.export');
+    Route::get('reports-management/shortage/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportShortage'])->name('reports-management.shortage.export');
+    Route::get('reports-management/approved-requests/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportApprovedRequests'])->name('reports-management.approved-requests.export');
+    Route::get('reports-management/donation-history/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportDonationHistory'])->name('reports-management.donation-history.export');
+    Route::get('reports-management/by-province/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportByProvince'])->name('reports-management.by-province.export');
+    Route::get('reports-management/monthly-yearly/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportMonthlyYearly'])->name('reports-management.monthly-yearly.export');
+    Route::get('reports-management/bag-expiration/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportBagExpiration'])->name('reports-management.bag-expiration.export');
+
     // Database Backup
     Route::resource('backup-management', App\Http\Controllers\Admin\BackupManagement\BackupController::class);
     Route::get('backup-management/{backup}/download', [App\Http\Controllers\Admin\BackupManagement\BackupController::class, 'download'])->name('backup-management.download');

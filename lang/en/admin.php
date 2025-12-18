@@ -556,6 +556,7 @@ return [
     'View expiring and expired blood bags' => 'View expiring and expired blood bags',
     'Back to Reports' => 'Back to Reports',
     'Print' => 'Print',
+    'Export Excel' => 'Export Excel',
     'Active Donors Report' => 'Active Donors Report',
     'Blood Inventory Report' => 'Blood Inventory Report',
     'Blood Shortage Report' => 'Blood Shortage Report',

@@ -556,6 +556,7 @@ return [
     'View expiring and expired blood bags' => 'د وینو بکسونه وګورئ چې نږدې انقضا یا تیر شوي دي',
     'Back to Reports' => 'راپورونو ته بیرته',
     'Print' => 'چاپ',
+    'Export Excel' => 'د ایکسل صادرات',
     'Active Donors Report' => 'د فعالو وین ورکونکو راپور',
     'Blood Inventory Report' => 'د وینو موجوداتو راپور',
     'Blood Shortage Report' => 'د وینو کمښت راپور',
