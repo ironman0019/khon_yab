@@ -27,19 +27,19 @@
             <!-- Page Header -->
             <div class="mb-6 flex justify-between items-center">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('Database Backup Management') }}</h1>
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('Create, download, and manage database backups') }}</p>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('admin.Database Backup Management') }}</h1>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('admin.Create, download, and manage database backups') }}</p>
                 </div>
                 <div class="flex gap-2">
                     <form method="POST" action="{{ route('admin.backup-management.clean-old') }}" class="inline">
                         @csrf
                         <button type="submit" 
-                                onclick="return confirm('{{ __('Are you sure you want to delete backups older than 30 days?') }}')"
+                                onclick="return confirm('{{ __('admin.Are you sure you want to delete backups older than 30 days?') }}')"
                                 class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
-                            {{ __('Clean Old Backups') }}
+                            {{ __('admin.Clean Old Backups') }}
                         </button>
                     </form>
                     <form method="POST" action="{{ route('admin.backup-management.store') }}" class="inline">
@@ -49,7 +49,7 @@
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            {{ __('Create Backup') }}
+                            {{ __('admin.Create Backup') }}
                         </button>
                     </form>
                 </div>
@@ -77,7 +77,7 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Total Backups') }}</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('admin.Total Backups') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ number_format($totalBackups) }}</p>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Total Size') }}</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('admin.Total Size') }}</p>
                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $formatBytes($totalSize) }}</p>
                         </div>
                     </div>
@@ -105,12 +105,12 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('Latest Backup') }}</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('admin.Latest Backup') }}</p>
                             <p class="text-lg font-semibold text-gray-900 dark:text-white">
                                 @if($backups->isNotEmpty())
                                     {{ $backups->first()->created_at->diffForHumans() }}
                                 @else
-                                    {{ __('Never') }}
+                                    {{ __('admin.Never') }}
                                 @endif
                             </p>
                         </div>
@@ -125,19 +125,19 @@
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Filename') }}
+                                    {{ __('admin.Filename') }}
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Size') }}
+                                    {{ __('admin.Size') }}
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Created At') }}
+                                    {{ __('admin.Created At') }}
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Created By') }}
+                                    {{ __('admin.Created By') }}
                                 </th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {{ __('Actions') }}
+                                    {{ __('admin.Actions') }}
                                 </th>
                             </tr>
                         </thead>
@@ -169,32 +169,32 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 dark:text-white">
-                                            {{ $backup->createdBy->full_name ?? __('Unknown') }}
+                                            {{ $backup->createdBy->full_name ?? __('admin.Unknown') }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end gap-2">
                                             <a href="{{ route('admin.backup-management.download', $backup) }}" 
                                                class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors"
-                                               title="{{ __('Download') }}">
+                                               title="{{ __('admin.Download') }}">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                                 </svg>
-                                                {{ __('Download') }}
+                                                {{ __('admin.Download') }}
                                             </a>
                                             <form method="POST" 
                                                   action="{{ route('admin.backup-management.destroy', $backup) }}" 
                                                   class="inline"
-                                                  onsubmit="return confirm('{{ __('Are you sure you want to delete this backup? This action cannot be undone.') }}')">
+                                                  onsubmit="return confirm('{{ __('admin.Are you sure you want to delete this backup? This action cannot be undone.') }}')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
                                                         class="inline-flex items-center px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded-lg transition-colors"
-                                                        title="{{ __('Delete') }}">
+                                                        title="{{ __('admin.Delete') }}">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                     </svg>
-                                                    {{ __('Delete') }}
+                                                    {{ __('admin.Delete') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -206,8 +206,8 @@
                                         <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                                         </svg>
-                                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('No backups') }}</h3>
-                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('Get started by creating a new database backup.') }}</p>
+                                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">{{ __('admin.No backups') }}</h3>
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('admin.Get started by creating a new database backup.') }}</p>
                                         <div class="mt-6">
                                             <form method="POST" action="{{ route('admin.backup-management.store') }}" class="inline">
                                                 @csrf
@@ -216,7 +216,7 @@
                                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                                     </svg>
-                                                    {{ __('Create Your First Backup') }}
+                                                    {{ __('admin.Create Your First Backup') }}
                                                 </button>
                                             </form>
                                         </div>
@@ -236,12 +236,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         <div class="text-sm text-blue-800 dark:text-blue-300">
-                            <p class="font-medium mb-1">{{ __('Backup Information') }}</p>
+                            <p class="font-medium mb-1">{{ __('admin.Backup Information') }}</p>
                             <ul class="list-disc list-inside space-y-1">
-                                <li>{{ __('Backups are stored in the storage/app/backups directory') }}</li>
-                                <li>{{ __('Old backups (older than 30 days) can be cleaned automatically') }}</li>
-                                <li>{{ __('Download backups regularly and store them in a safe location') }}</li>
-                                <li>{{ __('Backups contain all database data and should be kept secure') }}</li>
+                                <li>{{ __('admin.Backups are stored in the storage/app/backups directory') }}</li>
+                                <li>{{ __('admin.Old backups (older than 30 days) can be cleaned automatically') }}</li>
+                                <li>{{ __('admin.Download backups regularly and store them in a safe location') }}</li>
+                                <li>{{ __('admin.Backups contain all database data and should be kept secure') }}</li>
                             </ul>
                         </div>
                     </div>

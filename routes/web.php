@@ -162,7 +162,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('reports-management/bag-expiration/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportBagExpiration'])->name('reports-management.bag-expiration.export');
 
     // Database Backup
-    Route::resource('backup-management', App\Http\Controllers\Admin\BackupManagement\BackupController::class);
+    Route::resource('backup-management', App\Http\Controllers\Admin\BackupManagement\BackupController::class)
+        ->parameters(['backup-management' => 'backup']);
     Route::get('backup-management/{backup}/download', [App\Http\Controllers\Admin\BackupManagement\BackupController::class, 'download'])->name('backup-management.download');
     Route::post('backup-management/clean-old', [App\Http\Controllers\Admin\BackupManagement\BackupController::class, 'cleanOld'])->name('backup-management.clean-old');
 

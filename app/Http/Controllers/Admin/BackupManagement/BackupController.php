@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Backup;
 use App\Services\Admin\BackupService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BackupController extends Controller
 {
@@ -43,9 +43,25 @@ class BackupController extends Controller
     }
 
     /**
+     * Store a newly created backup.
+     */
+    public function store(): RedirectResponse
+    {
+        try {
+            $backup = $this->backupService->createBackup(auth()->id());
+
+            return redirect()->route('admin.backup-management.index')
+                ->with('success', 'Backup created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.backup-management.index')
+                ->with('error', 'Failed to create backup: '.$e->getMessage());
+        }
+    }
+
+    /**
      * Download a backup file.
      */
-    public function download(Backup $backup): Response
+    public function download(Backup $backup): StreamedResponse
     {
         if (! Storage::exists($backup->file_path)) {
             abort(404, 'Backup file not found.');
