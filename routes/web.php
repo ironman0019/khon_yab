@@ -3,8 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+// Home routes (public)
+Route::prefix('/')->name('home.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Home\HomeController::class, 'index'])->name('index');
+    Route::get('/contact', [App\Http\Controllers\Home\HomeController::class, 'contact'])->name('contact');
+    Route::get('/about', [App\Http\Controllers\Home\HomeController::class, 'about'])->name('about');
+    Route::get('/search', [App\Http\Controllers\Home\HomeController::class, 'search'])->name('search');
 });
 
 Route::get('/language/{locale}', [App\Http\Controllers\LanguageController::class, 'switch'])
