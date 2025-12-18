@@ -9,16 +9,18 @@
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} justify-between h-16">
             <!-- Logo -->
-            <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }}">
+            <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} gap-3">
                 @if($siteLogo)
-                    <a href="{{ route('home.index') }}" class="flex items-center">
+                    <a href="{{ route('home.index') }}" class="flex items-center gap-3">
                         <img src="{{ asset('storage/' . $siteLogo) }}" 
                              alt="{{ $siteName }}" 
                              class="h-10 w-auto object-contain">
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">khonYab</span>
                     </a>
                 @else
-                    <a href="{{ route('home.index') }}" class="flex items-center">
+                    <a href="{{ route('home.index') }}" class="flex items-center gap-3">
                         <x-auth-logo inline class="h-10 w-10" />
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">khonYab</span>
                     </a>
                 @endif
             </div>
