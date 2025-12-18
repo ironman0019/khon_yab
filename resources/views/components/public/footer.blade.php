@@ -4,6 +4,7 @@
     $siteName = \App\Models\Setting::get('site_name', config('app.name'));
     $siteEmail = \App\Models\Setting::get('site_email');
     $sitePhone = \App\Models\Setting::get('site_phone');
+    $siteAddress = \App\Models\Setting::get('site_address');
 @endphp
 
 <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
@@ -76,6 +77,17 @@
                         <a href="tel:{{ $sitePhone }}" class="hover:text-red-600 dark:hover:text-red-400 transition-colors">
                             {{ $sitePhone }}
                         </a>
+                    </li>
+                    @endif
+                    @if($siteAddress)
+                    <li class="flex items-start {{ $isRtl ? 'flex-row-reverse justify-end' : '' }} gap-2">
+                        <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <span class="hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                            {{ $siteAddress }}
+                        </span>
                     </li>
                     @endif
                 </ul>
