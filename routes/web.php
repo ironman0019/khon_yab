@@ -28,11 +28,11 @@ Route::get('/api/cities', function (Illuminate\Http\Request $request) {
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
-    
+
     if ($user->isAdmin()) {
         return redirect()->route('admin.dashboard.index');
     }
-    
+
     return match ($user->user_type) {
         \App\Enums\UserType::Donor->value => redirect()->route('donor.dashboard.index'),
         \App\Enums\UserType::HospitalUser->value => redirect()->route('hospital.dashboard.index'),
@@ -44,15 +44,15 @@ Route::get('/dashboard', function () {
 // Donor Dashboard
 Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Donor\DashboardController::class, 'index'])->name('dashboard.index');
-    
+
     // Donation Records
     Route::resource('donation-records', App\Http\Controllers\Donor\BloodDonationRecordController::class);
     Route::post('donation-records/{donation_record}/cancel', [App\Http\Controllers\Donor\BloodDonationRecordController::class, 'cancel'])->name('donation-records.cancel');
-    
+
     // Profile
     Route::get('/profile', [App\Http\Controllers\Donor\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\Donor\ProfileController::class, 'update'])->name('profile.update');
-    
+
     // Reports
     Route::get('/reports', [App\Http\Controllers\Donor\DashboardController::class, 'reports'])->name('reports');
 });
@@ -60,6 +60,15 @@ Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(
 // Hospital Dashboard
 Route::prefix('hospital')->middleware(['auth', 'verified'])->name('hospital.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Hospital\DashboardController::class, 'index'])->name('dashboard.index');
+
+    // Blood Requests
+    Route::resource('blood-requests', App\Http\Controllers\Hospital\BloodRequestController::class);
+    Route::get('blood-requests/{blood_request}/print', [App\Http\Controllers\Hospital\BloodRequestController::class, 'print'])->name('blood-requests.print');
+
+    // Profile
+    Route::get('/profile', [App\Http\Controllers\Hospital\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\Hospital\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/receipts/download', [App\Http\Controllers\Hospital\ProfileController::class, 'downloadReceipts'])->name('receipts.download');
 });
 
 // User Dashboard
@@ -88,7 +97,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('donor-management/{donor}/toggle-donation-ability', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleDonationAbility'])->name('donor-management.toggle-donation-ability');
 
     // Blood Request Management
-    Route::resource('blood-request-management', App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class);
+    Route::resource('blood-request-management', App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class)
+        ->parameters(['blood-request-management' => 'bloodRequest']);
     Route::post('blood-request-management/{blood_request}/approve', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'approve'])->name('blood-request-management.approve');
     Route::post('blood-request-management/{blood_request}/reject', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'reject'])->name('blood-request-management.reject');
     Route::post('blood-request-management/{blood_request}/complete', [App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class, 'complete'])->name('blood-request-management.complete');

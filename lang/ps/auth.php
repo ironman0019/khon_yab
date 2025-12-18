@@ -58,4 +58,27 @@ return [
     'Reset Password' => 'پاسورډ بیا تنظیم کړئ',
 
     'Blood Bank Management System' => 'د وینې بانک د مدیریت سیسټم',
+
+    // Profile
+    'Profile' => 'پروفایل',
+    'Profile Information' => 'د پروفایل معلومات',
+    'Update your account\'s profile information and email address.' => 'د خپل حساب د پروفایل معلومات او بریښنالیک پته تازه کړئ.',
+    'Your email address is unverified.' => 'ستاسو بریښنالیک پته تایید شوې نه ده.',
+    'Click here to re-send the verification email.' => 'د تایید بریښنالیک بیا لیږلو لپاره دلته کلیک وکړئ.',
+    'A new verification link has been sent to your email address.' => 'نوی تایید لینک ستاسو بریښنالیک پتې ته لیږل شوی.',
+    'Save' => 'خوندي کول',
+    'Saved.' => 'خوندي شو.',
+
+    // Password Update
+    'Update Password' => 'پاسورډ تازه کول',
+    'Ensure your account is using a long, random password to stay secure.' => 'ډاډ ترلاسه کړئ چې ستاسو حساب د امنیت لپاره د اوږد او تصادفي پاسورډ کاروي.',
+    'Current Password' => 'اوسنی پاسورډ',
+    'New Password' => 'نوی پاسورډ',
+
+    // Delete Account
+    'Delete Account' => 'حساب ړنګول',
+    'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.' => 'یوځل چې ستاسو حساب ړنګ شي، ټولې سرچینې او معلومات به د تل لپاره ړنګ شي. د خپل حساب ړنګولو دمخه، مهرباني وکړئ هر ډول معلومات یا معلومات چې تاسو یې ساتل غواړئ ډاونلوډ کړئ.',
+    'Are you sure you want to delete your account?' => 'آیا تاسو ډاډه یاست چې غواړئ خپل حساب ړنګ کړئ؟',
+    'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.' => 'یوځل چې ستاسو حساب ړنګ شي، ټولې سرچینې او معلومات به د تل لپاره ړنګ شي. مهرباني وکړئ خپل پاسورډ ولیکئ ترڅو تایید کړئ چې تاسو غواړئ خپل حساب د تل لپاره ړنګ کړئ.',
+    'Cancel' => 'لغوه کول',
 ];

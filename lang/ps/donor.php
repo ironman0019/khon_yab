@@ -74,5 +74,20 @@ return [
     'RH Factor' => 'RH فاکتور',
     'Cancel' => 'لغوه کول',
     'Update Profile' => 'پروفایل تازه کول',
+    
+    // Create Donation Request
+    'Create Donation Request' => 'د ورکړې غوښتنه جوړه کړئ',
+    'Submit a new blood donation request' => 'د نوي وینې ورکړې غوښتنه وسپارئ',
+    'Donation Information' => 'د ورکړې معلومات',
+    'Donation Type' => 'د ورکړې ډول',
+    'Select Type' => 'ډول ټاکل',
+    'Amount (ml)' => 'مقدار (ml)',
+    'Donation Date' => 'د ورکړې نیټه',
+    'Expiration Date' => 'د پای نیټه',
+    'Optional - will be calculated automatically if not provided' => 'اختیاري - که چیرې ورکړل نشي نو په اتوماتیک ډول محاسبه کیږي',
+    'Donation Location' => 'د ورکړې موقعیت',
+    'Notes' => 'یادښتونه',
+    'Additional information about the donation' => 'د ورکړې په اړه اضافي معلومات',
+    'Submit Donation Request' => 'د ورکړې غوښتنه وسپارئ',
 ];
 

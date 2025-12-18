@@ -58,4 +58,27 @@ return [
     'Reset Password' => 'بازنشانی رمز عبور',
 
     'Blood Bank Management System' => 'سیستم مدیریت بانک خون',
+
+    // Profile
+    'Profile' => 'پروفایل',
+    'Profile Information' => 'اطلاعات پروفایل',
+    'Update your account\'s profile information and email address.' => 'اطلاعات پروفایل و آدرس ایمیل حساب کاربری خود را به‌روزرسانی کنید.',
+    'Your email address is unverified.' => 'آدرس ایمیل شما تأیید نشده است.',
+    'Click here to re-send the verification email.' => 'برای ارسال مجدد ایمیل تأیید اینجا کلیک کنید.',
+    'A new verification link has been sent to your email address.' => 'لینک تأیید جدید به آدرس ایمیل شما ارسال شد.',
+    'Save' => 'ذخیره',
+    'Saved.' => 'ذخیره شد.',
+
+    // Password Update
+    'Update Password' => 'به‌روزرسانی رمز عبور',
+    'Ensure your account is using a long, random password to stay secure.' => 'اطمینان حاصل کنید که حساب کاربری شما از یک رمز عبور طولانی و تصادفی برای امنیت استفاده می‌کند.',
+    'Current Password' => 'رمز عبور فعلی',
+    'New Password' => 'رمز عبور جدید',
+
+    // Delete Account
+    'Delete Account' => 'حذف حساب کاربری',
+    'Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.' => 'پس از حذف حساب کاربری شما، تمام منابع و داده‌های آن به طور دائمی حذف خواهند شد. قبل از حذف حساب کاربری خود، لطفاً هر داده یا اطلاعاتی که می‌خواهید نگه دارید را دانلود کنید.',
+    'Are you sure you want to delete your account?' => 'آیا مطمئن هستید که می‌خواهید حساب کاربری خود را حذف کنید؟',
+    'Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.' => 'پس از حذف حساب کاربری شما، تمام منابع و داده‌های آن به طور دائمی حذف خواهند شد. لطفاً رمز عبور خود را وارد کنید تا تأیید کنید که می‌خواهید حساب کاربری خود را به طور دائمی حذف کنید.',
+    'Cancel' => 'لغو',
 ];

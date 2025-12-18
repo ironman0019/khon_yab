@@ -74,5 +74,20 @@ return [
     'RH Factor' => 'فاکتور RH',
     'Cancel' => 'لغو',
     'Update Profile' => 'به‌روزرسانی پروفایل',
+    
+    // Create Donation Request
+    'Create Donation Request' => 'ایجاد درخواست اهدا',
+    'Submit a new blood donation request' => 'ارسال درخواست اهدای خون جدید',
+    'Donation Information' => 'اطلاعات اهدا',
+    'Donation Type' => 'نوع اهدا',
+    'Select Type' => 'انتخاب نوع',
+    'Amount (ml)' => 'مقدار (میلی‌لیتر)',
+    'Donation Date' => 'تاریخ اهدا',
+    'Expiration Date' => 'تاریخ انقضا',
+    'Optional - will be calculated automatically if not provided' => 'اختیاری - در صورت عدم ارائه به صورت خودکار محاسبه می‌شود',
+    'Donation Location' => 'مکان اهدا',
+    'Notes' => 'یادداشت‌ها',
+    'Additional information about the donation' => 'اطلاعات اضافی در مورد اهدا',
+    'Submit Donation Request' => 'ارسال درخواست اهدا',
 ];
 

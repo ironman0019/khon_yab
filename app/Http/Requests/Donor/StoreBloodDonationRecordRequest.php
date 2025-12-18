@@ -28,7 +28,7 @@ class StoreBloodDonationRecordRequest extends FormRequest
             'donation_date' => ['required', 'date', 'before_or_equal:today'],
             'expiration_date' => ['nullable', 'date', 'after:donation_date'],
             'province_id' => ['nullable', 'integer', 'exists:provinces,id'],
-            'city_id' => ['nullable', 'integer', 'exists:cities,id', 'required_if:province_id,!=,null'],
+            'city_id' => ['nullable', 'integer', 'exists:cities,id', 'required_with:province_id'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ];
     }

@@ -97,6 +97,39 @@ class BloodRequestController extends Controller
                 ->with('error', __('admin.Only pending requests can be approved.'));
         }
 
+        // Check available inventory
+        $availableInventory = \App\Models\BloodInventory::where('blood_type', $bloodRequest->blood_type)
+            ->where('rh_factor', $bloodRequest->rh_factor)
+            ->where('status', \App\Enums\BloodInventoryStatus::InStock->value)
+            ->where('expiration_date', '>', now())
+            ->orderBy('expiration_date', 'asc')
+            ->get();
+
+        if ($availableInventory->count() < $bloodRequest->number_of_bags) {
+            return redirect()->route('admin.blood-request-management.index')
+                ->with('error', __('admin.Insufficient inventory available. Available: :available, Requested: :requested', [
+                    'available' => $availableInventory->count(),
+                    'requested' => $bloodRequest->number_of_bags,
+                ]));
+        }
+
+        // Reduce inventory
+        $bagsToDeduct = $bloodRequest->number_of_bags;
+        foreach ($availableInventory as $inventoryItem) {
+            if ($bagsToDeduct <= 0) {
+                break;
+            }
+
+            $inventoryItem->update([
+                'status' => \App\Enums\BloodInventoryStatus::Used->value,
+                'exit_date' => now(),
+                'removed_by' => auth()->id(),
+                'notes' => 'Used for blood request #'.$bloodRequest->id.($inventoryItem->notes ? ' - '.$inventoryItem->notes : ''),
+            ]);
+
+            $bagsToDeduct--;
+        }
+
         $bloodRequest->update([
             'status' => BloodRequestStatus::Approved->value,
             'approved_by' => auth()->id(),

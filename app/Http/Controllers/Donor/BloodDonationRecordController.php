@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Donor;
 
+use App\Enums\BloodInventoryStatus;
 use App\Enums\DonationRecordStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Donor\StoreBloodDonationRecordRequest;
 use App\Models\BloodDonationRecord;
+use App\Models\BloodInventory;
 use App\Models\City;
 use App\Models\Province;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class BloodDonationRecordController extends Controller
@@ -81,8 +85,14 @@ class BloodDonationRecordController extends Controller
         }
 
         // Check minimum days since last donation
-        if ($donor->last_donation_date) {
-            $daysSinceLastDonation = now()->diffInDays($donor->last_donation_date);
+        // Get the most recent non-deleted donation record
+        $lastDonation = BloodDonationRecord::where('donor_id', $donor->id)
+            ->where('donation_date', '<=', $request->donation_date)
+            ->latest('donation_date')
+            ->first();
+        
+        if ($lastDonation) {
+            $daysSinceLastDonation = now()->diffInDays($lastDonation->donation_date);
             $minDays = $this->getMinimumDaysForDonationType($request->donation_type);
             
             if ($daysSinceLastDonation < $minDays) {
@@ -98,23 +108,73 @@ class BloodDonationRecordController extends Controller
             $request->donation_type
         );
 
-        BloodDonationRecord::create([
-            'donor_id' => $donor->id,
-            'donation_type' => $request->donation_type,
-            'amount_ml' => $request->amount_ml,
-            'donation_date' => $request->donation_date,
-            'expiration_date' => $expirationDate,
-            'status' => DonationRecordStatus::TestPending->value,
-            'submitted_by_donor' => true,
-            'province_id' => $request->province_id ?? $donor->province_id,
-            'city_id' => $request->city_id ?? $donor->city_id,
-            'notes' => $request->notes,
-        ]);
+        try {
+            DB::transaction(function () use ($request, $donor, $expirationDate) {
+                // Ensure province_id is set
+                $provinceId = $request->province_id ?? $donor->province_id;
+                if (!$provinceId) {
+                    throw new \Exception(__('Province is required. Please update your profile or select a province.'));
+                }
 
-        // Update donor's last donation date
-        $donor->update([
-            'last_donation_date' => $request->donation_date,
-        ]);
+                // Ensure blood_type and rh_factor are set
+                if (!$donor->blood_type || !$donor->rh_factor) {
+                    throw new \Exception(__('Blood type and RH factor are required. Please update your profile.'));
+                }
+
+                // Create donation record
+                $donationRecord = BloodDonationRecord::create([
+                    'donor_id' => $donor->id,
+                    'donation_type' => $request->donation_type,
+                    'amount_ml' => $request->amount_ml,
+                    'donation_date' => $request->donation_date,
+                    'expiration_date' => $expirationDate,
+                    'status' => DonationRecordStatus::TestPending->value,
+                    'submitted_by_donor' => true,
+                    'province_id' => $provinceId,
+                    'city_id' => $request->city_id ?? $donor->city_id,
+                    'notes' => $request->notes,
+                ]);
+
+                // Automatically create blood inventory entry
+                $bagId = $this->generateUniqueBagId($request->donation_date);
+
+                BloodInventory::create([
+                    'bag_id' => $bagId,
+                    'blood_donation_record_id' => $donationRecord->id,
+                    'province_id' => $provinceId,
+                    'blood_type' => $donor->blood_type,
+                    'rh_factor' => $donor->rh_factor,
+                    'entry_date' => $request->donation_date,
+                    'expiration_date' => $expirationDate,
+                    'status' => BloodInventoryStatus::InStock->value,
+                    'added_by' => null,
+                    'notes' => 'Auto-generated from donation record #'.$donationRecord->id,
+                ]);
+
+                // Update donor's last donation date
+                // Use the most recent donation date (which could be the one we just created)
+                $mostRecentDonation = BloodDonationRecord::where('donor_id', $donor->id)
+                    ->latest('donation_date')
+                    ->first();
+                
+                $donor->update([
+                    'last_donation_date' => $mostRecentDonation->donation_date,
+                ]);
+            });
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($e->errors());
+        } catch (\Exception $e) {
+            Log::error('Blood donation record creation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()->route('donor.donation-records.index')
             ->with('success', __('Donation request submitted successfully.'));
@@ -185,6 +245,24 @@ class BloodDonationRecordController extends Controller
         };
 
         return date('Y-m-d', strtotime($donationDate . " +{$days} days"));
+    }
+
+    /**
+     * Generate a unique bag ID for blood inventory.
+     */
+    private function generateUniqueBagId(string $date): string
+    {
+        $datePrefix = date('Ymd', strtotime($date));
+        $counter = 1;
+        $bagId = sprintf('BAG-%s-%04d', $datePrefix, $counter);
+
+        // Ensure uniqueness by checking if bag_id already exists
+        while (BloodInventory::where('bag_id', $bagId)->exists()) {
+            $counter++;
+            $bagId = sprintf('BAG-%s-%04d', $datePrefix, $counter);
+        }
+
+        return $bagId;
     }
 }
 

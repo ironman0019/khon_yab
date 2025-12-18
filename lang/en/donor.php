@@ -74,5 +74,20 @@ return [
     'RH Factor' => 'RH Factor',
     'Cancel' => 'Cancel',
     'Update Profile' => 'Update Profile',
+    
+    // Create Donation Request
+    'Create Donation Request' => 'Create Donation Request',
+    'Submit a new blood donation request' => 'Submit a new blood donation request',
+    'Donation Information' => 'Donation Information',
+    'Donation Type' => 'Donation Type',
+    'Select Type' => 'Select Type',
+    'Amount (ml)' => 'Amount (ml)',
+    'Donation Date' => 'Donation Date',
+    'Expiration Date' => 'Expiration Date',
+    'Optional - will be calculated automatically if not provided' => 'Optional - will be calculated automatically if not provided',
+    'Donation Location' => 'Donation Location',
+    'Notes' => 'Notes',
+    'Additional information about the donation' => 'Additional information about the donation',
+    'Submit Donation Request' => 'Submit Donation Request',
 ];
 
