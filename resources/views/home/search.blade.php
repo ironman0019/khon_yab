@@ -197,10 +197,9 @@
             const provinceSelect = document.getElementById('province_id');
             const citySelect = document.getElementById('city_id');
             const selectCityText = '{{ __('home.Select City') }}';
+            const selectedCityId = '{{ request('city_id') }}';
 
-            provinceSelect.addEventListener('change', function() {
-                const provinceId = this.value;
-                
+            function loadCities(provinceId) {
                 // Clear city options
                 citySelect.innerHTML = `<option value="">${selectCityText}</option>`;
                 
@@ -216,6 +215,9 @@
                                 const option = document.createElement('option');
                                 option.value = city.id;
                                 option.textContent = city.name;
+                                if (selectedCityId && city.id == selectedCityId) {
+                                    option.selected = true;
+                                }
                                 citySelect.appendChild(option);
                             });
                         })
@@ -226,6 +228,17 @@
                     // Disable city select if no province selected
                     citySelect.disabled = true;
                 }
+            }
+
+            // Initialize cities on page load if province is already selected
+            const selectedProvinceId = provinceSelect.value;
+            if (selectedProvinceId) {
+                loadCities(selectedProvinceId);
+            }
+
+            // Handle province change
+            provinceSelect.addEventListener('change', function() {
+                loadCities(this.value);
             });
         });
     </script>

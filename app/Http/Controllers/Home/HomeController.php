@@ -60,21 +60,23 @@ class HomeController extends Controller
             ->where('status', 1); // Only approved requests
 
         // Filter by blood type
-        if ($request->has('blood_type') && $request->blood_type !== '') {
+        if ($request->filled('blood_type')) {
             $query->where('blood_type', $request->blood_type);
         }
 
         // Filter by province
-        if ($request->has('province_id') && $request->province_id !== '') {
+        if ($request->filled('province_id')) {
             $query->where('province_id', $request->province_id);
         }
 
         // Filter by city
-        if ($request->has('city_id') && $request->city_id !== '') {
+        if ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
 
-        $bloodRequests = $query->latest()->paginate(12);
+        $bloodRequests = $query->latest()->paginate(12)
+            ->appends($request->only(['blood_type', 'province_id', 'city_id']));
+        
         $provinces = Province::with('cities')->orderBy('name')->get();
 
         return view('home.search', compact('bloodRequests', 'provinces'));
