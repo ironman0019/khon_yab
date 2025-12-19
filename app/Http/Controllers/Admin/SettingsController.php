@@ -17,13 +17,39 @@ class SettingsController extends Controller
      */
     public function index(): View
     {
+        $defaultLanguage = Setting::get('default_language_code', config('app.locale', 'en'));
+        $currentLocale = app()->getLocale();
+
+        // Helper function to get setting value, handling JSON multilingual settings
+        $getSettingValue = function (string $key, mixed $default = null) use ($defaultLanguage, $currentLocale): mixed {
+            $setting = Setting::where('key', $key)->first();
+
+            if (! $setting) {
+                return $default;
+            }
+
+            // If it's a JSON type, extract the value for current locale or default language
+            if (in_array($setting->type, ['json', 'array'])) {
+                $value = json_decode($setting->value, true);
+                if (is_array($value)) {
+                    // Try current locale first, then default language, then first available value
+                    return $value[$currentLocale] ?? $value[$defaultLanguage] ?? ($value['en'] ?? reset($value) ?? $default);
+                }
+
+                return $default;
+            }
+
+            // For non-JSON settings, use the Setting::get method
+            return Setting::get($key, $default);
+        };
+
         $settings = [
-            'site_name' => Setting::get('site_name', config('app.name')),
-            'site_logo' => Setting::get('site_logo'),
-            'default_language_code' => Setting::get('default_language_code'),
-            'site_email' => Setting::get('site_email'),
-            'site_phone' => Setting::get('site_phone'),
-            'site_address' => Setting::get('site_address'),
+            'site_name' => $getSettingValue('site_name', config('app.name')),
+            'site_logo' => $getSettingValue('site_logo'),
+            'default_language_code' => $getSettingValue('default_language_code'),
+            'site_email' => $getSettingValue('site_email'),
+            'site_phone' => $getSettingValue('site_phone'),
+            'site_address' => $getSettingValue('site_address'),
         ];
 
         $languages = Language::where('is_active', true)->get();
