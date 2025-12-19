@@ -23,26 +23,26 @@ class BloodRequestController extends Controller
         $query = BloodRequest::with(['requestedBy:id,full_name,email', 'approvedBy:id,full_name', 'province', 'city']);
 
         // Filter by status
-        if ($request->has('status')) {
+        if ($request->filled('status')) {
             $query->where('status', $request->get('status'));
         }
 
         // Filter by blood type
-        if ($request->has('blood_type')) {
+        if ($request->filled('blood_type')) {
             $query->where('blood_type', $request->get('blood_type'));
         }
 
         // Filter by date range
-        if ($request->has('date_from')) {
+        if ($request->filled('date_from')) {
             $query->whereDate('created_at', '>=', $request->get('date_from'));
         }
 
-        if ($request->has('date_to')) {
+        if ($request->filled('date_to')) {
             $query->whereDate('created_at', '<=', $request->get('date_to'));
         }
 
         // Search functionality
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('patient_name', 'like', "%{$search}%")
