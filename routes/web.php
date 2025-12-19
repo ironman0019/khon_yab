@@ -97,6 +97,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('donor-management/{donor}/toggle-health-status', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleHealthStatus'])->name('donor-management.toggle-health-status');
     Route::post('donor-management/{donor}/toggle-donation-ability', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleDonationAbility'])->name('donor-management.toggle-donation-ability');
 
+    // Hospital User Management
+    Route::resource('hospital-user-management', App\Http\Controllers\Admin\HospitalUserManagement\HospitalUserController::class);
+    Route::post('hospital-user-management/{hospital_user}/toggle-status', [App\Http\Controllers\Admin\HospitalUserManagement\HospitalUserController::class, 'toggleStatus'])->name('hospital-user-management.toggle-status');
+
     // Blood Request Management
     Route::resource('blood-request-management', App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class)
         ->parameters(['blood-request-management' => 'bloodRequest']);
