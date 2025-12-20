@@ -1,10 +1,35 @@
 @props([])
 @php
     $isRtl = in_array(app()->getLocale(), ['fa', 'ps']);
-    $siteName = \App\Models\Setting::get('site_name', config('app.name'));
-    $siteEmail = \App\Models\Setting::get('site_email');
-    $sitePhone = \App\Models\Setting::get('site_phone');
-    $siteAddress = \App\Models\Setting::get('site_address');
+    $locale = app()->getLocale();
+    
+    // Helper function to extract string value from setting (handles arrays/translations)
+    $getSettingValue = function($value, $default = null) use ($locale) {
+        if (is_array($value)) {
+            // If it's an array, try to get the value for current locale
+            if (isset($value[$locale])) {
+                return $value[$locale];
+            }
+            // Fallback to first value if available
+            if (!empty($value)) {
+                return reset($value);
+            }
+            return $default;
+        }
+        return $value ?? $default;
+    };
+    
+    $siteNameRaw = \App\Models\Setting::get('site_name', config('app.name'));
+    $siteName = $getSettingValue($siteNameRaw, config('app.name'));
+    
+    $siteEmailRaw = \App\Models\Setting::get('site_email');
+    $siteEmail = $getSettingValue($siteEmailRaw);
+    
+    $sitePhoneRaw = \App\Models\Setting::get('site_phone');
+    $sitePhone = $getSettingValue($sitePhoneRaw);
+    
+    $siteAddressRaw = \App\Models\Setting::get('site_address');
+    $siteAddress = $getSettingValue($siteAddressRaw);
 @endphp
 
 <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
