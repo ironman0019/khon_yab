@@ -41,9 +41,13 @@
                             class="block w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                         >
                             <option value="">{{ __('All Languages') }}</option>
-                            @foreach($languages as $language)
-                                <option value="{{ $language->code }}" {{ request('language_code') == $language->code ? 'selected' : '' }}>
-                                    {{ $language->name }} ({{ $language->code }})
+                            @foreach($languages as $lang)
+                                @php
+                                    $isSelected = request('language_code') == $lang->code || 
+                                                  (!request()->has('language_code') && $language && $language->code == $lang->code);
+                                @endphp
+                                <option value="{{ $lang->code }}" {{ $isSelected ? 'selected' : '' }}>
+                                    {{ $lang->name }} ({{ $lang->code }})
                                 </option>
                             @endforeach
                         </x-select>

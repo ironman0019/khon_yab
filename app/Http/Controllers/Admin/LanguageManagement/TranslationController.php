@@ -25,21 +25,21 @@ class TranslationController extends Controller
     {
         $query = Translation::query();
 
-        // Filter by language if provided via route parameter
-        if ($language) {
-            $query->where('language_code', $language->code);
-        } elseif ($request->has('language_code')) {
-            // Fallback to query parameter if not in route
+        // Filter by language - prioritize query parameter over route parameter
+        if ($request->filled('language_code')) {
             $query->where('language_code', $request->get('language_code'));
+        } elseif ($language) {
+            // Use route parameter as default if no query parameter provided
+            $query->where('language_code', $language->code);
         }
 
         // Filter by group
-        if ($request->has('group')) {
+        if ($request->filled('group')) {
             $query->where('group', $request->get('group'));
         }
 
         // Search functionality
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('key', 'like', "%{$search}%")
@@ -47,7 +47,7 @@ class TranslationController extends Controller
             });
         }
 
-        $translations = $query->with('language')->latest()->paginate(20);
+        $translations = $query->with('language')->latest()->paginate(20)->withQueryString();
         $languages = Language::where('is_active', true)->orderBy('name')->get();
         $groups = $this->translationService->getGroups();
 
