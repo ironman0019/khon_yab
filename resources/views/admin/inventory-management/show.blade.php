@@ -67,8 +67,11 @@
                         {{ __('admin.Expired') }}
                     </span>
                 @elseif($isExpiringSoon)
+                    @php
+                        $daysDiff = round($bloodInventory->expiration_date->diffInDays(now()));
+                    @endphp
                     <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 {{ $isRtl ? 'mr-2' : 'ml-2' }}">
-                        {{ __('admin.Expiring Soon') }} ({{ $bloodInventory->expiration_date->diffInDays(now()) }} {{ __('admin.days') }})
+                        {{ __('admin.Expiring Soon') }} ({{ $daysDiff }} {{ __('admin.days') }})
                     </span>
                 @endif
             </div>

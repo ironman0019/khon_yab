@@ -202,10 +202,19 @@
                                         <div class="text-sm {{ $isExpired ? 'text-red-600 dark:text-red-400 font-semibold' : ($isExpiringSoon ? 'text-yellow-600 dark:text-yellow-400 font-semibold' : 'text-gray-900 dark:text-white') }} {{ $isRtl ? 'text-right' : 'text-left' }}">
                                             {{ $item->expiration_date ? $item->expiration_date->format('Y-m-d') : '' }}
                                         </div>
-                                        @if($isExpiringSoon && !$isExpired)
-                                            <div class="text-xs text-yellow-600 dark:text-yellow-400 {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                                {{ __('admin.Expires in') }} {{ $item->expiration_date->diffInDays(now()) }} {{ __('admin.days') }}
-                                            </div>
+                                        @if($item->expiration_date)
+                                            @php
+                                                $daysDiff = round($item->expiration_date->diffInDays(now()));
+                                            @endphp
+                                            @if($isExpiringSoon && !$isExpired)
+                                                <div class="text-xs text-yellow-600 dark:text-yellow-400 {{ $isRtl ? 'text-right' : 'text-left' }}">
+                                                    {{ __('admin.Expires in') }} {{ $daysDiff }} {{ __('admin.days') }}
+                                                </div>
+                                            @elseif($isExpired)
+                                                <div class="text-xs text-red-600 dark:text-red-400 {{ $isRtl ? 'text-right' : 'text-left' }}">
+                                                    {{ __('admin.Expired') }} {{ abs($daysDiff) }} {{ __('admin.days ago') }}
+                                                </div>
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
