@@ -210,8 +210,22 @@
                                                 {{ $record->donation_date->format('Y-m-d') }}
                                             </td>
                                             <td class="px-4 py-3 text-sm {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                                <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
-                                                    {{ $record->status->name ?? __('admin.Unknown') }}
+                                                @php
+                                                    $statusLabels = [
+                                                        0 => __('admin.Test Pending'),
+                                                        1 => __('admin.Safe'),
+                                                        2 => __('admin.Unsafe'),
+                                                        3 => __('admin.Discarded'),
+                                                    ];
+                                                    $statusColors = [
+                                                        0 => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+                                                        1 => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+                                                        2 => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+                                                        3 => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400',
+                                                    ];
+                                                @endphp
+                                                <span class="px-2 py-1 text-xs font-medium rounded-full {{ $statusColors[$record->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400' }}">
+                                                    {{ $statusLabels[$record->status] ?? __('admin.Unknown') }}
                                                 </span>
                                             </td>
                                             <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
