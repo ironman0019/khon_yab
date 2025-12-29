@@ -3,7 +3,7 @@
           x-data="{ 
               userType: {{ old('user_type', 0) }}, 
               cities: [],
-              hospitalCities: [],
+              laboratoryCities: [],
               init() {
                   @if(old('province_id'))
                       fetch('/api/cities?province_id={{ old('province_id') }}')
@@ -11,10 +11,10 @@
                           .then(data => this.cities = data)
                           .catch(() => {});
                   @endif
-                  @if(old('hospital_province_id'))
-                      fetch('/api/cities?province_id={{ old('hospital_province_id') }}')
+                  @if(old('laboratory_province_id'))
+                      fetch('/api/cities?province_id={{ old('laboratory_province_id') }}')
                           .then(response => response.json())
-                          .then(data => this.hospitalCities = data)
+                          .then(data => this.laboratoryCities = data)
                           .catch(() => {});
                   @endif
               }
@@ -58,7 +58,7 @@
                       required>
                 <option value="0" {{ old('user_type', '') == '0' ? 'selected' : '' }}>{{ __('auth.User') }}</option>
                 <option value="1" {{ old('user_type', '') == '1' ? 'selected' : '' }}>{{ __('auth.Donor') }}</option>
-                <option value="2" {{ old('user_type', '') == '2' ? 'selected' : '' }}>{{ __('auth.Hospital User') }}</option>
+                <option value="2" {{ old('user_type', '') == '2' ? 'selected' : '' }}>{{ __('auth.Laboratory') }}</option>
             </x-select>
             <x-input-error :messages="$errors->get('user_type')" class="mt-2" />
         </div>
@@ -206,62 +206,62 @@
             </div>
         </div>
 
-        <!-- Hospital User Fields (Conditional) -->
+        <!-- Laboratory Fields (Conditional) -->
         <div x-show="userType == 2" x-transition style="display: none;">
-            <!-- Hospital Name -->
+            <!-- Laboratory Name -->
             <div class="mt-4">
-                <x-input-label for="hospital_name" :value="__('auth.Hospital Name')" />
-                <x-text-input id="hospital_name" 
+                <x-input-label for="laboratory_name" :value="__('auth.Laboratory Name')" />
+                <x-text-input id="laboratory_name" 
                               class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
                               type="text" 
-                              name="hospital_name" 
-                              :value="old('hospital_name')" 
+                              name="laboratory_name" 
+                              :value="old('laboratory_name')" 
                               x-bind:required="userType == 2" />
-                <x-input-error :messages="$errors->get('hospital_name')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_name')" class="mt-2" />
             </div>
 
-            <!-- Hospital Code -->
+            <!-- Laboratory Code -->
             <div class="mt-4">
-                <x-input-label for="hospital_code" :value="__('auth.Hospital Code')" />
-                <x-text-input id="hospital_code" 
+                <x-input-label for="laboratory_code" :value="__('auth.Laboratory Code')" />
+                <x-text-input id="laboratory_code" 
                               class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
                               type="text" 
-                              name="hospital_code" 
-                              :value="old('hospital_code')" 
+                              name="laboratory_code" 
+                              :value="old('laboratory_code')" 
                               x-bind:required="userType == 2" />
-                <x-input-error :messages="$errors->get('hospital_code')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_code')" class="mt-2" />
             </div>
 
             <!-- Mobile Number -->
             <div class="mt-4">
-                <x-input-label for="hospital_mobile_number" :value="__('auth.Mobile Number')" />
-                <x-text-input id="hospital_mobile_number" 
+                <x-input-label for="laboratory_mobile_number" :value="__('auth.Mobile Number')" />
+                <x-text-input id="laboratory_mobile_number" 
                               class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
                               type="text" 
-                              name="hospital_mobile_number" 
-                              :value="old('hospital_mobile_number')" 
+                              name="laboratory_mobile_number" 
+                              :value="old('laboratory_mobile_number')" 
                               x-bind:required="userType == 2"
                               autocomplete="tel" />
-                <x-input-error :messages="$errors->get('hospital_mobile_number')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_mobile_number')" class="mt-2" />
             </div>
 
             <!-- Phone Number -->
             <div class="mt-4">
-                <x-input-label for="hospital_phone_number" :value="__('auth.Phone Number')" />
-                <x-text-input id="hospital_phone_number" 
+                <x-input-label for="laboratory_phone_number" :value="__('auth.Phone Number')" />
+                <x-text-input id="laboratory_phone_number" 
                               class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
                               type="text" 
-                              name="hospital_phone_number" 
-                              :value="old('hospital_phone_number')" 
+                              name="laboratory_phone_number" 
+                              :value="old('laboratory_phone_number')" 
                               autocomplete="tel" />
-                <x-input-error :messages="$errors->get('hospital_phone_number')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_phone_number')" class="mt-2" />
             </div>
 
             <!-- Province -->
             <div class="mt-4">
-                <x-input-label for="hospital_province_id" :value="__('auth.Province')" />
-                <x-select id="hospital_province_id" 
-                          name="hospital_province_id" 
+                <x-input-label for="laboratory_province_id" :value="__('auth.Province')" />
+                <x-select id="laboratory_province_id" 
+                          name="laboratory_province_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                           x-bind:required="userType == 2"
                           x-on:change="
@@ -269,48 +269,48 @@
                                   fetch('/api/cities?province_id=' + $event.target.value)
                                       .then(response => response.json())
                                       .then(data => {
-                                          hospitalCities = data;
-                                          document.getElementById('hospital_city_id').value = '';
+                                          laboratoryCities = data;
+                                          document.getElementById('laboratory_city_id').value = '';
                                       })
-                                      .catch(() => hospitalCities = []);
+                                      .catch(() => laboratoryCities = []);
                               } else {
-                                  hospitalCities = [];
+                                  laboratoryCities = [];
                               }
                           ">
                     <option value="">{{ __('auth.Select Province') }}</option>
                     @foreach($provinces as $province)
-                        <option value="{{ $province->id }}" {{ old('hospital_province_id') == $province->id ? 'selected' : '' }}>
+                        <option value="{{ $province->id }}" {{ old('laboratory_province_id') == $province->id ? 'selected' : '' }}>
                             {{ $province->name }}
                         </option>
                     @endforeach
                 </x-select>
-                <x-input-error :messages="$errors->get('hospital_province_id')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_province_id')" class="mt-2" />
             </div>
 
             <!-- City -->
             <div class="mt-4">
-                <x-input-label for="hospital_city_id" :value="__('auth.City')" />
-                <x-select id="hospital_city_id" 
-                          name="hospital_city_id" 
+                <x-input-label for="laboratory_city_id" :value="__('auth.City')" />
+                <x-select id="laboratory_city_id" 
+                          name="laboratory_city_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                           x-bind:required="userType == 2">
                     <option value="">{{ __('auth.Select City') }}</option>
-                    <template x-for="city in hospitalCities" :key="city.id">
+                    <template x-for="city in laboratoryCities" :key="city.id">
                         <option :value="city.id" x-text="city.name"></option>
                     </template>
                 </x-select>
-                <x-input-error :messages="$errors->get('hospital_city_id')" class="mt-2" />
+                <x-input-error :messages="$errors->get('laboratory_city_id')" class="mt-2" />
             </div>
 
             <!-- Address -->
             <div class="mt-4">
-                <x-input-label for="hospital_address" :value="__('auth.Address')" />
-                <textarea id="hospital_address" 
-                          name="hospital_address" 
+                <x-input-label for="laboratory_address" :value="__('auth.Address')" />
+                <textarea id="laboratory_address" 
+                          name="laboratory_address" 
                           class="block mt-1 w-full border-red-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm"
                           rows="3"
-                          x-bind:required="userType == 2">{{ old('hospital_address') }}</textarea>
-                <x-input-error :messages="$errors->get('hospital_address')" class="mt-2" />
+                          x-bind:required="userType == 2">{{ old('laboratory_address') }}</textarea>
+                <x-input-error :messages="$errors->get('laboratory_address')" class="mt-2" />
             </div>
 
             <!-- License Number -->

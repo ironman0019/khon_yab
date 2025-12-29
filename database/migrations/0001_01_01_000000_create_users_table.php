@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->tinyInteger('user_type')->default(0)->comment("0 => user, 1 => donor, 2 => hospital_user");
-            $table->tinyInteger('is_admin')->default(0)->comment("0 => not_admin, 1 => admin");
+            $table->tinyInteger('user_type')->default(0)->comment('0 => user, 1 => donor, 2 => laboratory');
+            $table->tinyInteger('is_admin')->default(0)->comment('0 => not_admin, 1 => admin');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

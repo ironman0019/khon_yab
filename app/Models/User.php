@@ -60,11 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the hospital user profile associated with the user.
+     * Get the laboratory profile associated with the user.
      */
-    public function hospitalUser(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function laboratory(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
-        return $this->hasOne(HospitalUser::class);
+        return $this->hasOne(Laboratory::class);
     }
 
     /**

@@ -47,16 +47,16 @@ class StoreRegisteredUserRequest extends FormRequest
             ]);
         }
 
-        // Add hospital_user-specific validation if user_type is hospital_user
-        if ($this->user_type == UserType::HospitalUser->value) {
+        // Add laboratory-specific validation if user_type is laboratory
+        if ($this->user_type == UserType::Laboratory->value) {
             $rules = array_merge($rules, [
-                'hospital_name' => ['required', 'string', 'max:255'],
-                'hospital_code' => ['required', 'string', 'max:50', 'unique:hospital_users,hospital_code'],
-                'hospital_mobile_number' => ['required', 'string', 'max:20'],
-                'hospital_phone_number' => ['nullable', 'string', 'max:20'],
-                'hospital_province_id' => ['required', 'integer', 'exists:provinces,id'],
-                'hospital_city_id' => ['required', 'integer', 'exists:cities,id'],
-                'hospital_address' => ['required', 'string'],
+                'laboratory_name' => ['required', 'string', 'max:255'],
+                'laboratory_code' => ['required', 'string', 'max:50', 'unique:laboratories,laboratory_code'],
+                'laboratory_mobile_number' => ['required', 'string', 'max:20'],
+                'laboratory_phone_number' => ['nullable', 'string', 'max:20'],
+                'laboratory_province_id' => ['required', 'integer', 'exists:provinces,id'],
+                'laboratory_city_id' => ['required', 'integer', 'exists:cities,id'],
+                'laboratory_address' => ['required', 'string'],
                 'license_number' => ['nullable', 'string', 'max:100'],
                 'contact_person_name' => ['required', 'string', 'max:255'],
             ]);
@@ -86,13 +86,13 @@ class StoreRegisteredUserRequest extends FormRequest
             'city_id.required' => __('validation.required', ['attribute' => __('City')]),
             'blood_type.required' => __('validation.required', ['attribute' => __('Blood Type')]),
             'rh_factor.required' => __('validation.required', ['attribute' => __('RH Factor')]),
-            'hospital_name.required' => __('validation.required', ['attribute' => __('Hospital Name')]),
-            'hospital_code.required' => __('validation.required', ['attribute' => __('Hospital Code')]),
-            'hospital_code.unique' => __('validation.unique', ['attribute' => __('Hospital Code')]),
-            'hospital_mobile_number.required' => __('validation.required', ['attribute' => __('Mobile Number')]),
-            'hospital_province_id.required' => __('validation.required', ['attribute' => __('Province')]),
-            'hospital_city_id.required' => __('validation.required', ['attribute' => __('City')]),
-            'hospital_address.required' => __('validation.required', ['attribute' => __('Address')]),
+            'laboratory_name.required' => __('validation.required', ['attribute' => __('Laboratory Name')]),
+            'laboratory_code.required' => __('validation.required', ['attribute' => __('Laboratory Code')]),
+            'laboratory_code.unique' => __('validation.unique', ['attribute' => __('Laboratory Code')]),
+            'laboratory_mobile_number.required' => __('validation.required', ['attribute' => __('Mobile Number')]),
+            'laboratory_province_id.required' => __('validation.required', ['attribute' => __('Province')]),
+            'laboratory_city_id.required' => __('validation.required', ['attribute' => __('City')]),
+            'laboratory_address.required' => __('validation.required', ['attribute' => __('Address')]),
             'contact_person_name.required' => __('validation.required', ['attribute' => __('Contact Person Name')]),
         ];
     }

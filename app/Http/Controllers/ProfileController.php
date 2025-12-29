@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserType;
-use App\Http\Controllers\Hospital\ProfileController as HospitalProfileController;
-use App\Http\Requests\Hospital\UpdateHospitalProfileRequest;
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Controllers\Laboratory\ProfileController as LaboratoryProfileController;
+use App\Http\Requests\Laboratory\UpdateLaboratoryProfileRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +21,11 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // If user is a hospital user, delegate to hospital profile controller
-        if ($user->user_type === UserType::HospitalUser->value) {
-            $hospitalController = new HospitalProfileController();
-            return $hospitalController->edit('profile.update');
+        // If user is a laboratory user, delegate to laboratory profile controller
+        if ($user->user_type === UserType::Laboratory->value) {
+            $laboratoryController = new LaboratoryProfileController;
+
+            return $laboratoryController->edit('profile.update');
         }
 
         return view('profile.edit', [
@@ -40,20 +40,20 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        // If user is a hospital user, validate and update using hospital profile request
-        if ($user->user_type === UserType::HospitalUser->value) {
-            $formRequest = new UpdateHospitalProfileRequest();
+        // If user is a laboratory user, validate and update using laboratory profile request
+        if ($user->user_type === UserType::Laboratory->value) {
+            $formRequest = new UpdateLaboratoryProfileRequest;
             $validated = $request->validate($formRequest->rules(), $formRequest->messages());
-            $hospitalUser = $user->hospitalUser;
+            $laboratory = $user->laboratory;
 
-            if (! $hospitalUser) {
-                abort(404, __('hospital.Hospital profile not found.'));
+            if (! $laboratory) {
+                abort(404, __('laboratory.Laboratory profile not found.'));
             }
 
-            $hospitalUser->update($validated);
+            $laboratory->update($validated);
 
             return Redirect::route('profile.edit')
-                ->with('success', __('hospital.Hospital profile updated successfully.'));
+                ->with('success', __('laboratory.Laboratory profile updated successfully.'));
         }
 
         // For other user types, use the standard profile update request

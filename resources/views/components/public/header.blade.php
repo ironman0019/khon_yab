@@ -56,7 +56,7 @@
                             ? route('admin.dashboard.index')
                             : match(auth()->user()->user_type) {
                                 \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
-                                \App\Enums\UserType::HospitalUser->value => route('hospital.dashboard.index'),
+                                \App\Enums\UserType::Laboratory->value => route('laboratory.dashboard.index'),
                                 \App\Enums\UserType::User->value => route('user.dashboard.index'),
                                 default => route('dashboard'),
                             };

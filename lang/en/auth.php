@@ -18,7 +18,7 @@ return [
     'User Type' => 'User Type',
     'User' => 'User',
     'Donor' => 'Donor',
-    'Hospital User' => 'Hospital User',
+    'Laboratory' => 'Laboratory',
     'Confirm Password' => 'Confirm Password',
 
     'Mobile Number' => 'Mobile Number',
@@ -41,8 +41,8 @@ return [
     'Positive' => 'Positive',
     'Negative' => 'Negative',
 
-    'Hospital Name' => 'Hospital Name',
-    'Hospital Code' => 'Hospital Code',
+    'Laboratory Name' => 'Laboratory Name',
+    'Laboratory Code' => 'Laboratory Code',
     'Phone Number' => 'Phone Number',
     'License Number' => 'License Number',
     'Contact Person Name' => 'Contact Person Name',

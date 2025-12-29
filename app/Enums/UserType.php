@@ -6,5 +6,5 @@ enum UserType: int
 {
     case User = 0;
     case Donor = 1;
-    case HospitalUser = 2;
+    case Laboratory = 2;
 }

@@ -6,7 +6,7 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreRegisteredUserRequest;
 use App\Models\Donor;
-use App\Models\HospitalUser;
+use App\Models\Laboratory;
 use App\Models\Province;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -65,17 +65,17 @@ class RegisteredUserController extends Controller
                 ]);
             }
 
-            // If hospital_user, create hospital_user profile
-            if ($validated['user_type'] == UserType::HospitalUser->value) {
-                HospitalUser::create([
+            // If laboratory, create laboratory profile
+            if ($validated['user_type'] == UserType::Laboratory->value) {
+                Laboratory::create([
                     'user_id' => $user->id,
-                    'hospital_name' => $validated['hospital_name'],
-                    'hospital_code' => $validated['hospital_code'],
-                    'mobile_number' => $validated['hospital_mobile_number'],
-                    'phone_number' => $validated['hospital_phone_number'] ?? null,
-                    'province_id' => $validated['hospital_province_id'],
-                    'city_id' => $validated['hospital_city_id'],
-                    'address' => $validated['hospital_address'],
+                    'laboratory_name' => $validated['laboratory_name'],
+                    'laboratory_code' => $validated['laboratory_code'],
+                    'mobile_number' => $validated['laboratory_mobile_number'],
+                    'phone_number' => $validated['laboratory_phone_number'] ?? null,
+                    'province_id' => $validated['laboratory_province_id'],
+                    'city_id' => $validated['laboratory_city_id'],
+                    'address' => $validated['laboratory_address'],
                     'license_number' => $validated['license_number'] ?? null,
                     'contact_person_name' => $validated['contact_person_name'],
                     'status' => 0, // pending

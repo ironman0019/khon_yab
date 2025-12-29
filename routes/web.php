@@ -35,7 +35,7 @@ Route::get('/dashboard', function () {
 
     return match ($user->user_type) {
         \App\Enums\UserType::Donor->value => redirect()->route('donor.dashboard.index'),
-        \App\Enums\UserType::HospitalUser->value => redirect()->route('hospital.dashboard.index'),
+        \App\Enums\UserType::Laboratory->value => redirect()->route('laboratory.dashboard.index'),
         \App\Enums\UserType::User->value => redirect()->route('user.dashboard.index'),
         default => view('dashboard'),
     };
@@ -57,18 +57,21 @@ Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(
     Route::get('/reports', [App\Http\Controllers\Donor\DashboardController::class, 'reports'])->name('reports');
 });
 
-// Hospital Dashboard
-Route::prefix('hospital')->middleware(['auth', 'verified'])->name('hospital.')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Hospital\DashboardController::class, 'index'])->name('dashboard.index');
+// Laboratory Dashboard
+Route::prefix('laboratory')->middleware(['auth', 'verified'])->name('laboratory.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Laboratory\DashboardController::class, 'index'])->name('dashboard.index');
 
     // Blood Requests
-    Route::resource('blood-requests', App\Http\Controllers\Hospital\BloodRequestController::class);
-    Route::get('blood-requests/{blood_request}/print', [App\Http\Controllers\Hospital\BloodRequestController::class, 'print'])->name('blood-requests.print');
+    Route::resource('blood-requests', App\Http\Controllers\Laboratory\BloodRequestController::class);
+    Route::get('blood-requests/{blood_request}/print', [App\Http\Controllers\Laboratory\BloodRequestController::class, 'print'])->name('blood-requests.print');
+
+    // Blood Donation Records
+    Route::resource('donation-records', App\Http\Controllers\Laboratory\BloodDonationRecordController::class);
 
     // Profile
-    Route::get('/profile', [App\Http\Controllers\Hospital\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [App\Http\Controllers\Hospital\ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/receipts/download', [App\Http\Controllers\Hospital\ProfileController::class, 'downloadReceipts'])->name('receipts.download');
+    Route::get('/profile', [App\Http\Controllers\Laboratory\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\Laboratory\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/receipts/download', [App\Http\Controllers\Laboratory\ProfileController::class, 'downloadReceipts'])->name('receipts.download');
 });
 
 // User Dashboard
@@ -97,9 +100,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('donor-management/{donor}/toggle-health-status', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleHealthStatus'])->name('donor-management.toggle-health-status');
     Route::post('donor-management/{donor}/toggle-donation-ability', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleDonationAbility'])->name('donor-management.toggle-donation-ability');
 
-    // Hospital User Management
-    Route::resource('hospital-user-management', App\Http\Controllers\Admin\HospitalUserManagement\HospitalUserController::class);
-    Route::post('hospital-user-management/{hospital_user}/toggle-status', [App\Http\Controllers\Admin\HospitalUserManagement\HospitalUserController::class, 'toggleStatus'])->name('hospital-user-management.toggle-status');
+    // Laboratory Management
+    Route::resource('laboratory-management', App\Http\Controllers\Admin\LaboratoryManagement\LaboratoryController::class);
+    Route::post('laboratory-management/{laboratory}/toggle-status', [App\Http\Controllers\Admin\LaboratoryManagement\LaboratoryController::class, 'toggleStatus'])->name('laboratory-management.toggle-status');
 
     // Blood Request Management
     Route::resource('blood-request-management', App\Http\Controllers\Admin\BloodRequestManagement\BloodRequestController::class)

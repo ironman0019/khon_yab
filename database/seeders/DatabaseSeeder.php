@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,7 +20,7 @@ class DatabaseSeeder extends Seeder
             AfghanistanProvinceCitySeeder::class,
             UserSeeder::class,
             DonorSeeder::class,
-            HospitalUserSeeder::class,
+            LaboratorySeeder::class,
             BloodDonationRecordSeeder::class,
             BloodTestSeeder::class,
             BloodInventorySeeder::class,
