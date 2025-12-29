@@ -49,7 +49,7 @@
                             @endphp
                             <option value="0" @selected($userType == '0')>{{ __('admin.User') }}</option>
                             <option value="1" @selected($userType == '1')>{{ __('admin.Donor') }}</option>
-                            <option value="2" @selected($userType == '2')>{{ __('admin.Hospital User') }}</option>
+                            <option value="2" @selected($userType == '2')>{{ __('admin.Laboratory') }}</option>
                         </x-select>
                     </div>
 
@@ -128,7 +128,7 @@
                                             $userTypeLabels = [
                                                 0 => __('admin.User'),
                                                 1 => __('admin.Donor'),
-                                                2 => __('admin.Hospital User'),
+                                                2 => __('admin.Laboratory'),
                                             ];
                                             $userTypeColors = [
                                                 0 => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',

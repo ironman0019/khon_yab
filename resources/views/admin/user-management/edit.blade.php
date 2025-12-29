@@ -83,7 +83,7 @@
                             <option value="">{{ __('admin.Select User Type') }}</option>
                             <option value="0" {{ old('user_type', $user->user_type) == '0' ? 'selected' : '' }}>{{ __('admin.User') }}</option>
                             <option value="1" {{ old('user_type', $user->user_type) == '1' ? 'selected' : '' }}>{{ __('admin.Donor') }}</option>
-                            <option value="2" {{ old('user_type', $user->user_type) == '2' ? 'selected' : '' }}>{{ __('admin.Hospital User') }}</option>
+                            <option value="2" {{ old('user_type', $user->user_type) == '2' ? 'selected' : '' }}>{{ __('admin.Laboratory') }}</option>
                         </x-select>
                         <x-input-error :messages="$errors->get('user_type')" class="mt-2" />
                     </div>
