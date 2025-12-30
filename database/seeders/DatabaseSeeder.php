@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             BloodInventorySeeder::class,
             BloodRequestSeeder::class,
             SettingSeeder::class,
+            BackupSeeder::class,
+            MessageSeeder::class,
         ]);
     }
 }
