@@ -73,6 +73,11 @@ Route::prefix('laboratory')->middleware(['auth', 'verified'])->name('laboratory.
 
     // Blood Donation Records
     Route::resource('donation-records', App\Http\Controllers\Laboratory\BloodDonationRecordController::class);
+    Route::get('donation-records/{donation_record}/print', [App\Http\Controllers\Laboratory\BloodDonationRecordController::class, 'print'])->name('donation-records.print');
+    Route::get('donation-records/{donation_record}/test/create', [App\Http\Controllers\Laboratory\BloodDonationRecordController::class, 'createTest'])->name('donation-records.test.create');
+    Route::post('donation-records/{donation_record}/test', [App\Http\Controllers\Laboratory\BloodDonationRecordController::class, 'storeTest'])->name('donation-records.test.store');
+    Route::get('donation-records/{donation_record}/test/edit', [App\Http\Controllers\Laboratory\BloodDonationRecordController::class, 'editTest'])->name('donation-records.test.edit');
+    Route::put('donation-records/{donation_record}/test', [App\Http\Controllers\Laboratory\BloodDonationRecordController::class, 'updateTest'])->name('donation-records.test.update');
 
     // Profile
     Route::get('/profile', [App\Http\Controllers\Laboratory\ProfileController::class, 'edit'])->name('profile.edit');
