@@ -100,6 +100,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the messages sent by this user.
+     */
+    public function sentMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get the messages received by this user.
+     */
+    public function receivedMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
+
+    /**
      * Check if the user is an admin.
      */
     public function isAdmin(): bool

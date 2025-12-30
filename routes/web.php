@@ -55,6 +55,12 @@ Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(
 
     // Reports
     Route::get('/reports', [App\Http\Controllers\Donor\DashboardController::class, 'reports'])->name('reports');
+
+    // Messages
+    Route::get('/messages', [App\Http\Controllers\Donor\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/create', [App\Http\Controllers\Donor\MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages', [App\Http\Controllers\Donor\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{user}', [App\Http\Controllers\Donor\MessageController::class, 'show'])->name('messages.show');
 });
 
 // Laboratory Dashboard
@@ -72,6 +78,12 @@ Route::prefix('laboratory')->middleware(['auth', 'verified'])->name('laboratory.
     Route::get('/profile', [App\Http\Controllers\Laboratory\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\Laboratory\ProfileController::class, 'update'])->name('profile.update');
     Route::get('/receipts/download', [App\Http\Controllers\Laboratory\ProfileController::class, 'downloadReceipts'])->name('receipts.download');
+
+    // Messages
+    Route::get('/messages', [App\Http\Controllers\Laboratory\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/create', [App\Http\Controllers\Laboratory\MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages', [App\Http\Controllers\Laboratory\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{user}', [App\Http\Controllers\Laboratory\MessageController::class, 'show'])->name('messages.show');
 });
 
 // Receiver Dashboard
@@ -85,12 +97,25 @@ Route::prefix('receiver')->middleware(['auth', 'verified'])->name('receiver.')->
     // Profile
     Route::get('/profile', [App\Http\Controllers\Receiver\ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [App\Http\Controllers\Receiver\ProfileController::class, 'update'])->name('profile.update');
+
+    // Messages
+    Route::get('/messages', [App\Http\Controllers\Receiver\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/create', [App\Http\Controllers\Receiver\MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages', [App\Http\Controllers\Receiver\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{user}', [App\Http\Controllers\Receiver\MessageController::class, 'show'])->name('messages.show');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Messages
+    Route::get('/messages', [App\Http\Controllers\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{user}', [App\Http\Controllers\MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages', [App\Http\Controllers\MessageController::class, 'store'])->name('messages.store');
+    Route::post('/messages/{message}/read', [App\Http\Controllers\MessageController::class, 'markAsRead'])->name('messages.read');
+    Route::post('/messages/conversation/{user}/read', [App\Http\Controllers\MessageController::class, 'markConversationAsRead'])->name('messages.conversation.read');
 });
 
 // Admin routes
@@ -98,6 +123,15 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     // Dashboard
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/notifications', [App\Http\Controllers\Admin\DashboardController::class, 'notifications'])->name('notifications');
+
+    // Messages
+    Route::get('/messages', [App\Http\Controllers\Admin\MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/unread-count', [App\Http\Controllers\Admin\MessageController::class, 'unreadCount'])->name('messages.unread-count');
+    Route::get('/messages/create', [App\Http\Controllers\Admin\MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages', [App\Http\Controllers\Admin\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{user}', [App\Http\Controllers\Admin\MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{message}/read', [App\Http\Controllers\Admin\MessageController::class, 'markAsRead'])->name('messages.read');
+    Route::post('/messages/conversation/{user}/read', [App\Http\Controllers\Admin\MessageController::class, 'markConversationAsRead'])->name('messages.conversation.read');
 
     // User Management
     Route::resource('user-management', App\Http\Controllers\Admin\UserManagement\UserController::class);

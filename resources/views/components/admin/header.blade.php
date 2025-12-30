@@ -58,6 +58,34 @@
                 </x-slot>
             </x-dropdown>
 
+            <!-- Messages -->
+            <div x-data="{ 
+                unreadCount: 0,
+                fetchUnreadCount() {
+                    fetch('{{ route('admin.messages.unread-count') }}')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.unreadCount = data.count;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching unread count:', error);
+                        });
+                }
+            }"
+            x-init="fetchUnreadCount(); setInterval(() => fetchUnreadCount(), 60000)"
+            class="relative">
+                <a href="{{ route('admin.messages.index') }}" 
+                   class="relative p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <span x-show="unreadCount > 0" 
+                          class="absolute top-3 {{ $isRtl ? 'left-1' : 'right-1' }} flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 text-xs font-semibold text-white bg-blue-600 rounded-full ring-2 ring-white dark:ring-gray-800"
+                          x-text="unreadCount > 99 ? '99+' : unreadCount"
+                          style="display: none;"></span>
+                </a>
+            </div>
+
             <!-- Notifications -->
             <div x-data="{ 
                 count: 0,
@@ -121,7 +149,7 @@
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                                     </svg>
-                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('admin.No pending blood requests') }}</p>
+                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ __('admin.No notifications') }}</p>
                                 </div>
                             </template>
                             <template x-for="notification in notifications" :key="notification.id">
@@ -132,13 +160,29 @@
                                             <div class="w-2 h-2 rounded-full bg-red-600"></div>
                                         </div>
                                         <div class="flex-1 min-w-0 {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
-                                                <span x-text="notification.patient_name"></span> - <span x-text="notification.blood_type"></span>
-                                            </p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                <span x-text="notification.medical_center"></span> • <span x-text="notification.number_of_bags"></span> {{ __('admin.bags') }}
-                                            </p>
-                                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.created_at"></p>
+                                            <template x-if="notification.type === 'blood_request'">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                                        <span x-text="notification.patient_name"></span> - <span x-text="notification.blood_type"></span>
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        <span x-text="notification.medical_center"></span> • <span x-text="notification.number_of_bags"></span> {{ __('admin.bags') }}
+                                                    </p>
+                                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.created_at"></p>
+                                                </div>
+                                            </template>
+                                            <template x-if="notification.type === 'message'">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                                        <span x-text="notification.sender_name"></span>
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        <span x-text="notification.subject"></span>
+                                                    </p>
+                                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.message_preview"></p>
+                                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.created_at"></p>
+                                                </div>
+                                            </template>
                                         </div>
                                     </div>
                                 </a>

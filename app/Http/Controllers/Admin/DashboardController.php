@@ -35,24 +35,35 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        $count = BloodRequest::where('status', 0)->count();
+        $bloodRequestCount = BloodRequest::where('status', 0)->count();
+
+        // Build notifications
+        $notifications = collect();
+
+        // Add blood request notifications
+        foreach ($pendingRequests as $request) {
+            $notifications->push([
+                'id' => 'blood_request_'.$request->id,
+                'type' => 'blood_request',
+                'patient_name' => $request->patient_name,
+                'blood_type' => $request->blood_type.$request->rh_factor,
+                'number_of_bags' => $request->number_of_bags,
+                'medical_center' => $request->medical_center,
+                'requested_by' => $request->requestedBy->full_name ?? 'Unknown',
+                'province' => $request->province->name ?? '',
+                'city' => $request->city->name ?? '',
+                'created_at' => $request->created_at->diffForHumans(),
+                'timestamp' => $request->created_at->timestamp,
+                'url' => route('admin.blood-request-management.show', ['bloodRequest' => $request->id]),
+            ]);
+        }
+
+        // Sort by timestamp descending and limit to 10
+        $notifications = $notifications->sortByDesc('timestamp')->take(10)->values();
 
         return response()->json([
-            'count' => $count,
-            'notifications' => $pendingRequests->map(function ($request) {
-                return [
-                    'id' => $request->id,
-                    'patient_name' => $request->patient_name,
-                    'blood_type' => $request->blood_type . $request->rh_factor,
-                    'number_of_bags' => $request->number_of_bags,
-                    'medical_center' => $request->medical_center,
-                    'requested_by' => $request->requestedBy->full_name ?? 'Unknown',
-                    'province' => $request->province->name ?? '',
-                    'city' => $request->city->name ?? '',
-                    'created_at' => $request->created_at->diffForHumans(),
-                    'url' => route('admin.blood-request-management.show', ['bloodRequest' => $request->id]),
-                ];
-            }),
+            'count' => $bloodRequestCount,
+            'notifications' => $notifications,
         ]);
     }
 }
