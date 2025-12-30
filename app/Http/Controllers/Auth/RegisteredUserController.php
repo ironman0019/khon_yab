@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\StoreRegisteredUserRequest;
 use App\Models\Donor;
 use App\Models\Laboratory;
 use App\Models\Province;
+use App\Models\Receiver;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -46,6 +47,22 @@ class RegisteredUserController extends Controller
                 'user_type' => $validated['user_type'],
                 'is_admin' => false,
             ]);
+
+            // If receiver, create receiver profile
+            if ($validated['user_type'] == UserType::Receiver->value) {
+                Receiver::create([
+                    'user_id' => $user->id,
+                    'mobile_number' => $validated['mobile_number'],
+                    'national_code' => $validated['national_code'],
+                    'age' => $validated['age'],
+                    'gender' => $validated['gender'],
+                    'province_id' => $validated['province_id'],
+                    'city_id' => $validated['city_id'],
+                    'address' => $validated['address'],
+                    'blood_type' => $validated['blood_type'],
+                    'rh_factor' => $validated['rh_factor'],
+                ]);
+            }
 
             // If donor, create donor profile
             if ($validated['user_type'] == UserType::Donor->value) {

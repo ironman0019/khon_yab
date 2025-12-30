@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TranslationSeeder::class,
             AfghanistanProvinceCitySeeder::class,
             UserSeeder::class,
+            ReceiverSeeder::class,
             DonorSeeder::class,
             LaboratorySeeder::class,
             BloodDonationRecordSeeder::class,

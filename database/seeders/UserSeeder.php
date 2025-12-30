@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
                 'full_name' => 'Admin User',
                 'email' => 'admin@khonyab.af',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => true,
                 'email_verified_at' => now(),
             ],
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
                 'full_name' => 'مدیر سیستم',
                 'email' => 'admin-fa@khonyab.af',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => true,
                 'email_verified_at' => now(),
             ],
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
                 'full_name' => 'د سیسټم مدیر',
                 'email' => 'admin-ps@khonyab.af',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => true,
                 'email_verified_at' => now(),
             ],
@@ -51,12 +51,12 @@ class UserSeeder extends Seeder
 
         // Test users for different user types
         $testUsers = [
-            // Regular users
+            // Regular users (Receivers)
             [
                 'full_name' => 'John Smith',
                 'email' => 'user1@example.com',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => false,
                 'email_verified_at' => now(),
             ],
@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
                 'full_name' => 'احمد محمدی',
                 'email' => 'user2@example.com',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => false,
                 'email_verified_at' => now(),
             ],
@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
                 'full_name' => 'احمد خان',
                 'email' => 'user3@example.com',
                 'password' => Hash::make('password'),
-                'user_type' => UserType::User->value,
+                'user_type' => UserType::Receiver->value,
                 'is_admin' => false,
                 'email_verified_at' => now(),
             ],
@@ -89,4 +89,3 @@ class UserSeeder extends Seeder
         $this->command->info('Total users: '.User::count());
     }
 }
-

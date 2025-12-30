@@ -16,6 +16,7 @@ return [
 
     'Full Name' => 'Full Name',
     'User Type' => 'User Type',
+    'Receiver' => 'Receiver',
     'User' => 'User',
     'Donor' => 'Donor',
     'Laboratory' => 'Laboratory',

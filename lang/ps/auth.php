@@ -17,7 +17,9 @@ return [
     'Full Name' => 'بشپړ نوم',
     'User Type' => 'د کارن ډول',
     'User' => 'کارن',
+    'Receiver' => 'ترلاسه کوونکی',
     'Donor' => 'ورکونکی',
+    'Laboratory' => 'آزمايښت',
     'Hospital User' => 'د روغتون کارن',
     'Confirm Password' => 'د پاسورډ تایید',
 
@@ -43,6 +45,8 @@ return [
 
     'Hospital Name' => 'د روغتون نوم',
     'Hospital Code' => 'د روغتون کوډ',
+    'Laboratory Name' => 'د آزمايښت نوم',
+    'Laboratory Code' => 'د آزمايښت کوډ',
     'Phone Number' => 'د تلیفون شمیره',
     'License Number' => 'د جواز شمیره',
     'Contact Person Name' => 'د اړیکو کس نوم',

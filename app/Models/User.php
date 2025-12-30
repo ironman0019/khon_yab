@@ -60,6 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the receiver profile associated with the user.
+     */
+    public function receiver(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Receiver::class);
+    }
+
+    /**
      * Get the laboratory profile associated with the user.
      */
     public function laboratory(): \Illuminate\Database\Eloquent\Relations\HasOne

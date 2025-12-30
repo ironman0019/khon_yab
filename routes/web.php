@@ -34,9 +34,9 @@ Route::get('/dashboard', function () {
     }
 
     return match ($user->user_type) {
+        \App\Enums\UserType::Receiver->value => redirect()->route('receiver.dashboard.index'),
         \App\Enums\UserType::Donor->value => redirect()->route('donor.dashboard.index'),
         \App\Enums\UserType::Laboratory->value => redirect()->route('laboratory.dashboard.index'),
-        \App\Enums\UserType::User->value => redirect()->route('user.dashboard.index'),
         default => view('dashboard'),
     };
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,9 +74,17 @@ Route::prefix('laboratory')->middleware(['auth', 'verified'])->name('laboratory.
     Route::get('/receipts/download', [App\Http\Controllers\Laboratory\ProfileController::class, 'downloadReceipts'])->name('receipts.download');
 });
 
-// User Dashboard
-Route::prefix('user')->middleware(['auth', 'verified'])->name('user.')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard.index');
+// Receiver Dashboard
+Route::prefix('receiver')->middleware(['auth', 'verified'])->name('receiver.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Receiver\DashboardController::class, 'index'])->name('dashboard.index');
+
+    // Blood Requests
+    Route::resource('blood-requests', App\Http\Controllers\Receiver\BloodRequestController::class);
+    Route::get('blood-requests/{blood_request}/print', [App\Http\Controllers\Receiver\BloodRequestController::class, 'print'])->name('blood-requests.print');
+
+    // Profile
+    Route::get('/profile', [App\Http\Controllers\Receiver\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\Receiver\ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -99,6 +107,9 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::resource('donor-management', App\Http\Controllers\Admin\DonorManagement\DonorController::class);
     Route::post('donor-management/{donor}/toggle-health-status', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleHealthStatus'])->name('donor-management.toggle-health-status');
     Route::post('donor-management/{donor}/toggle-donation-ability', [App\Http\Controllers\Admin\DonorManagement\DonorController::class, 'toggleDonationAbility'])->name('donor-management.toggle-donation-ability');
+
+    // Receiver Management
+    Route::resource('receiver-management', App\Http\Controllers\Admin\ReceiverManagement\ReceiverController::class);
 
     // Laboratory Management
     Route::resource('laboratory-management', App\Http\Controllers\Admin\LaboratoryManagement\LaboratoryController::class);

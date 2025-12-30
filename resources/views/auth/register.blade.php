@@ -17,8 +17,112 @@
                           .then(data => this.laboratoryCities = data)
                           .catch(() => {});
                   @endif
+                  this.updateRequiredFields();
+              },
+              updateRequiredFields() {
+                  // This runs whenever userType changes or on init
+                  // Use requestAnimationFrame to ensure DOM is updated after Alpine.js processes x-show
+                  requestAnimationFrame(() => {
+                      const form = this.$el;
+                      if (!form) return;
+                      
+                      const receiverContainer = form.querySelector('[data-user-type=receiver]');
+                      const donorContainer = form.querySelector('[data-user-type=donor]');
+                      const labContainer = form.querySelector('[data-user-type=laboratory]');
+                      
+                      // Remove required from ALL containers first
+                      [receiverContainer, donorContainer, labContainer].forEach(container => {
+                          if (container) {
+                              container.querySelectorAll('input, select, textarea').forEach(field => {
+                                  field.removeAttribute('required');
+                                  // Also disable fields in hidden containers to prevent validation
+                                  const isHidden = container.offsetParent === null || 
+                                                 window.getComputedStyle(container).display === 'none';
+                                  if (isHidden) {
+                                      field.setAttribute('disabled', 'disabled');
+                                  } else {
+                                      field.removeAttribute('disabled');
+                                  }
+                              });
+                          }
+                      });
+                      
+                      // Add required back ONLY to visible container fields
+                      let activeContainer = null;
+                      if (this.userType == 0) {
+                          activeContainer = receiverContainer;
+                      } else if (this.userType == 1) {
+                          activeContainer = donorContainer;
+                      } else if (this.userType == 2) {
+                          activeContainer = labContainer;
+                      }
+                      
+                      if (activeContainer) {
+                          // Check if container is actually visible
+                          const rect = activeContainer.getBoundingClientRect();
+                          const isVisible = activeContainer.offsetParent !== null && 
+                                          rect.width > 0 && 
+                                          rect.height > 0 &&
+                                          window.getComputedStyle(activeContainer).display !== 'none';
+                          
+                          if (isVisible) {
+                              activeContainer.querySelectorAll('input:not([type=password]):not([type=hidden]), select, textarea').forEach(field => {
+                                  // Skip fields that are explicitly optional
+                                  if (field.name !== 'laboratory_phone_number' && field.name !== 'license_number') {
+                                      field.setAttribute('required', 'required');
+                                  }
+                              });
+                          }
+                      }
+                  });
+              },
+              handleSubmit(event) {
+                  // CRITICAL: Update required/disabled fields synchronously BEFORE browser validation runs
+                  const form = event.target;
+                  const receiverContainer = form.querySelector('[data-user-type=receiver]');
+                  const donorContainer = form.querySelector('[data-user-type=donor]');
+                  const labContainer = form.querySelector('[data-user-type=laboratory]');
+                  
+                  // Remove required and add disabled to ALL hidden containers (synchronously)
+                  [receiverContainer, donorContainer, labContainer].forEach(container => {
+                      if (container) {
+                          const isHidden = container.offsetParent === null || 
+                                         window.getComputedStyle(container).display === 'none';
+                          container.querySelectorAll('input, select, textarea').forEach(field => {
+                              if (isHidden) {
+                                  field.removeAttribute('required');
+                                  field.setAttribute('disabled', 'disabled');
+                              } else {
+                                  field.removeAttribute('disabled');
+                              }
+                          });
+                      }
+                  });
+                  
+                  // Add required back ONLY to visible container fields (synchronously)
+                  let activeContainer = null;
+                  if (this.userType == 0) {
+                      activeContainer = receiverContainer;
+                  } else if (this.userType == 1) {
+                      activeContainer = donorContainer;
+                  } else if (this.userType == 2) {
+                      activeContainer = labContainer;
+                  }
+                  
+                  if (activeContainer && activeContainer.offsetParent !== null) {
+                      activeContainer.querySelectorAll('input:not([type=password]):not([type=hidden]), select, textarea').forEach(field => {
+                          if (field.name !== 'laboratory_phone_number' && field.name !== 'license_number') {
+                              field.setAttribute('required', 'required');
+                          }
+                      });
+                  }
+                  
+                  // Let browser validation proceed - disabled fields are ignored by validation
               }
-          }">
+          }"
+          x-effect="updateRequiredFields()"
+          x-on:submit="handleSubmit"
+          x-init="$watch('userType', () => updateRequiredFields())">
         @csrf
 
         <!-- Full Name -->
@@ -55,16 +159,17 @@
                       name="user_type" 
                       class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                       x-model="userType"
+                      x-on:change="updateRequiredFields()"
                       required>
-                <option value="0" {{ old('user_type', '') == '0' ? 'selected' : '' }}>{{ __('auth.User') }}</option>
+                <option value="0" {{ old('user_type', '') == '0' ? 'selected' : '' }}>{{ __('auth.Receiver') }}</option>
                 <option value="1" {{ old('user_type', '') == '1' ? 'selected' : '' }}>{{ __('auth.Donor') }}</option>
                 <option value="2" {{ old('user_type', '') == '2' ? 'selected' : '' }}>{{ __('auth.Laboratory') }}</option>
             </x-select>
             <x-input-error :messages="$errors->get('user_type')" class="mt-2" />
         </div>
 
-        <!-- Donor Fields (Conditional) -->
-        <div x-show="userType == 1" x-transition style="display: none;">
+        <!-- Receiver Fields (Always visible, hidden when other types selected) -->
+        <div x-show="userType == 0" x-transition data-user-type="receiver">
             <!-- Mobile Number -->
             <div class="mt-4">
                 <x-input-label for="mobile_number" :value="__('auth.Mobile Number')" />
@@ -73,7 +178,6 @@
                               type="text" 
                               name="mobile_number" 
                               :value="old('mobile_number')" 
-                              x-bind:required="userType == 1"
                               autocomplete="tel" />
                 <x-input-error :messages="$errors->get('mobile_number')" class="mt-2" />
             </div>
@@ -86,7 +190,7 @@
                               type="text" 
                               name="national_code" 
                               :value="old('national_code')" 
-                              x-bind:required="userType == 1" />
+ />
                 <x-input-error :messages="$errors->get('national_code')" class="mt-2" />
             </div>
 
@@ -100,7 +204,7 @@
                               :value="old('age')" 
                               min="18"
                               max="100"
-                              x-bind:required="userType == 1" />
+ />
                 <x-input-error :messages="$errors->get('age')" class="mt-2" />
             </div>
 
@@ -110,7 +214,7 @@
                 <x-select id="gender" 
                           name="gender" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 1">
+>
                     <option value="">{{ __('auth.Select Gender') }}</option>
                     <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('auth.Male') }}</option>
                     <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('auth.Female') }}</option>
@@ -125,7 +229,6 @@
                 <x-select id="province_id" 
                           name="province_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 1"
                           x-on:change="
                               if ($event.target.value) {
                                   fetch('/api/cities?province_id=' + $event.target.value)
@@ -155,7 +258,7 @@
                 <x-select id="city_id" 
                           name="city_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 1">
+>
                     <option value="">{{ __('auth.Select City') }}</option>
                     <template x-for="city in cities" :key="city.id">
                         <option :value="city.id" x-text="city.name"></option>
@@ -171,7 +274,7 @@
                           name="address" 
                           class="block mt-1 w-full border-red-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm"
                           rows="3"
-                          x-bind:required="userType == 1">{{ old('address') }}</textarea>
+>{{ old('address') }}</textarea>
                 <x-input-error :messages="$errors->get('address')" class="mt-2" />
             </div>
 
@@ -181,7 +284,7 @@
                 <x-select id="blood_type" 
                           name="blood_type" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 1">
+>
                     <option value="">{{ __('auth.Select Blood Type') }}</option>
                     <option value="A" {{ old('blood_type') == 'A' ? 'selected' : '' }}>A</option>
                     <option value="B" {{ old('blood_type') == 'B' ? 'selected' : '' }}>B</option>
@@ -197,7 +300,148 @@
                 <x-select id="rh_factor" 
                           name="rh_factor" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 1">
+>
+                    <option value="">{{ __('auth.Select RH Factor') }}</option>
+                    <option value="positive" {{ old('rh_factor') == 'positive' ? 'selected' : '' }}>{{ __('auth.Positive') }}</option>
+                    <option value="negative" {{ old('rh_factor') == 'negative' ? 'selected' : '' }}>{{ __('auth.Negative') }}</option>
+                </x-select>
+                <x-input-error :messages="$errors->get('rh_factor')" class="mt-2" />
+            </div>
+        </div>
+
+        <!-- Donor Fields (Conditional) -->
+        <div x-show="userType == 1" x-transition style="display: none;" data-user-type="donor">
+            <!-- Mobile Number -->
+            <div class="mt-4">
+                <x-input-label for="donor_mobile_number" :value="__('auth.Mobile Number')" />
+                <x-text-input id="donor_mobile_number" 
+                              class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
+                              type="text" 
+                              name="mobile_number" 
+                              :value="old('mobile_number')" 
+                              autocomplete="tel" />
+                <x-input-error :messages="$errors->get('mobile_number')" class="mt-2" />
+            </div>
+
+            <!-- National Code -->
+            <div class="mt-4">
+                <x-input-label for="donor_national_code" :value="__('auth.National Code')" />
+                <x-text-input id="donor_national_code" 
+                              class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
+                              type="text" 
+                              name="national_code" 
+                              :value="old('national_code')" 
+ />
+                <x-input-error :messages="$errors->get('national_code')" class="mt-2" />
+            </div>
+
+            <!-- Age -->
+            <div class="mt-4">
+                <x-input-label for="donor_age" :value="__('auth.Age')" />
+                <x-text-input id="donor_age" 
+                              class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white" 
+                              type="number" 
+                              name="age" 
+                              :value="old('age')" 
+                              min="18"
+                              max="100"
+ />
+                <x-input-error :messages="$errors->get('age')" class="mt-2" />
+            </div>
+
+            <!-- Gender -->
+            <div class="mt-4">
+                <x-input-label for="donor_gender" :value="__('auth.Gender')" />
+                <x-select id="donor_gender" 
+                          name="gender" 
+                          class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+>
+                    <option value="">{{ __('auth.Select Gender') }}</option>
+                    <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('auth.Male') }}</option>
+                    <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('auth.Female') }}</option>
+                    <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>{{ __('auth.Other') }}</option>
+                </x-select>
+                <x-input-error :messages="$errors->get('gender')" class="mt-2" />
+            </div>
+
+            <!-- Province -->
+            <div class="mt-4">
+                <x-input-label for="donor_province_id" :value="__('auth.Province')" />
+                <x-select id="donor_province_id" 
+                          name="province_id" 
+                          class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                          x-on:change="
+                              if ($event.target.value) {
+                                  fetch('/api/cities?province_id=' + $event.target.value)
+                                      .then(response => response.json())
+                                      .then(data => {
+                                          cities = data;
+                                          document.getElementById('donor_city_id').value = '';
+                                      })
+                                      .catch(() => cities = []);
+                              } else {
+                                  cities = [];
+                              }
+                          ">
+                    <option value="">{{ __('auth.Select Province') }}</option>
+                    @foreach($provinces as $province)
+                        <option value="{{ $province->id }}" {{ old('province_id') == $province->id ? 'selected' : '' }}>
+                            {{ $province->name }}
+                        </option>
+                    @endforeach
+                </x-select>
+                <x-input-error :messages="$errors->get('province_id')" class="mt-2" />
+            </div>
+
+            <!-- City -->
+            <div class="mt-4">
+                <x-input-label for="donor_city_id" :value="__('auth.City')" />
+                <x-select id="donor_city_id" 
+                          name="city_id" 
+                          class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+>
+                    <option value="">{{ __('auth.Select City') }}</option>
+                    <template x-for="city in cities" :key="city.id">
+                        <option :value="city.id" x-text="city.name"></option>
+                    </template>
+                </x-select>
+                <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
+            </div>
+
+            <!-- Address -->
+            <div class="mt-4">
+                <x-input-label for="donor_address" :value="__('auth.Address')" />
+                <textarea id="donor_address" 
+                          name="address" 
+                          class="block mt-1 w-full border-red-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm"
+                          rows="3"
+>{{ old('address') }}</textarea>
+                <x-input-error :messages="$errors->get('address')" class="mt-2" />
+            </div>
+
+            <!-- Blood Type -->
+            <div class="mt-4">
+                <x-input-label for="donor_blood_type" :value="__('auth.Blood Type')" />
+                <x-select id="donor_blood_type" 
+                          name="blood_type" 
+                          class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+>
+                    <option value="">{{ __('auth.Select Blood Type') }}</option>
+                    <option value="A" {{ old('blood_type') == 'A' ? 'selected' : '' }}>A</option>
+                    <option value="B" {{ old('blood_type') == 'B' ? 'selected' : '' }}>B</option>
+                    <option value="AB" {{ old('blood_type') == 'AB' ? 'selected' : '' }}>AB</option>
+                    <option value="O" {{ old('blood_type') == 'O' ? 'selected' : '' }}>O</option>
+                </x-select>
+                <x-input-error :messages="$errors->get('blood_type')" class="mt-2" />
+            </div>
+
+            <!-- RH Factor -->
+            <div class="mt-4">
+                <x-input-label for="donor_rh_factor" :value="__('auth.RH Factor')" />
+                <x-select id="donor_rh_factor" 
+                          name="rh_factor" 
+                          class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+>
                     <option value="">{{ __('auth.Select RH Factor') }}</option>
                     <option value="positive" {{ old('rh_factor') == 'positive' ? 'selected' : '' }}>{{ __('auth.Positive') }}</option>
                     <option value="negative" {{ old('rh_factor') == 'negative' ? 'selected' : '' }}>{{ __('auth.Negative') }}</option>
@@ -207,7 +451,7 @@
         </div>
 
         <!-- Laboratory Fields (Conditional) -->
-        <div x-show="userType == 2" x-transition style="display: none;">
+        <div x-show="userType == 2" x-transition style="display: none;" data-user-type="laboratory">
             <!-- Laboratory Name -->
             <div class="mt-4">
                 <x-input-label for="laboratory_name" :value="__('auth.Laboratory Name')" />
@@ -216,7 +460,7 @@
                               type="text" 
                               name="laboratory_name" 
                               :value="old('laboratory_name')" 
-                              x-bind:required="userType == 2" />
+ />
                 <x-input-error :messages="$errors->get('laboratory_name')" class="mt-2" />
             </div>
 
@@ -228,7 +472,7 @@
                               type="text" 
                               name="laboratory_code" 
                               :value="old('laboratory_code')" 
-                              x-bind:required="userType == 2" />
+ />
                 <x-input-error :messages="$errors->get('laboratory_code')" class="mt-2" />
             </div>
 
@@ -240,7 +484,6 @@
                               type="text" 
                               name="laboratory_mobile_number" 
                               :value="old('laboratory_mobile_number')" 
-                              x-bind:required="userType == 2"
                               autocomplete="tel" />
                 <x-input-error :messages="$errors->get('laboratory_mobile_number')" class="mt-2" />
             </div>
@@ -263,7 +506,6 @@
                 <x-select id="laboratory_province_id" 
                           name="laboratory_province_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 2"
                           x-on:change="
                               if ($event.target.value) {
                                   fetch('/api/cities?province_id=' + $event.target.value)
@@ -293,7 +535,7 @@
                 <x-select id="laboratory_city_id" 
                           name="laboratory_city_id" 
                           class="block mt-1 w-full border-red-300 focus:border-red-500 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                          x-bind:required="userType == 2">
+>
                     <option value="">{{ __('auth.Select City') }}</option>
                     <template x-for="city in laboratoryCities" :key="city.id">
                         <option :value="city.id" x-text="city.name"></option>
@@ -309,7 +551,7 @@
                           name="laboratory_address" 
                           class="block mt-1 w-full border-red-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm"
                           rows="3"
-                          x-bind:required="userType == 2">{{ old('laboratory_address') }}</textarea>
+>{{ old('laboratory_address') }}</textarea>
                 <x-input-error :messages="$errors->get('laboratory_address')" class="mt-2" />
             </div>
 
@@ -332,7 +574,7 @@
                               type="text" 
                               name="contact_person_name" 
                               :value="old('contact_person_name')" 
-                              x-bind:required="userType == 2" />
+ />
                 <x-input-error :messages="$errors->get('contact_person_name')" class="mt-2" />
             </div>
         </div>

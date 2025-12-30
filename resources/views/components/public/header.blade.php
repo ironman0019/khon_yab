@@ -57,7 +57,7 @@
                             : match(auth()->user()->user_type) {
                                 \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
                                 \App\Enums\UserType::Laboratory->value => route('laboratory.dashboard.index'),
-                                \App\Enums\UserType::User->value => route('user.dashboard.index'),
+                                \App\Enums\UserType::Receiver->value => route('receiver.dashboard.index'),
                                 default => route('dashboard'),
                             };
                     @endphp

@@ -32,6 +32,21 @@ class StoreRegisteredUserRequest extends FormRequest
             'user_type' => ['required', 'integer', Rule::enum(UserType::class)],
         ];
 
+        // Add receiver-specific validation if user_type is receiver
+        if ($this->user_type == UserType::Receiver->value) {
+            $rules = array_merge($rules, [
+                'mobile_number' => ['required', 'string', 'max:20'],
+                'national_code' => ['required', 'string', 'max:20', 'unique:receivers,national_code'],
+                'age' => ['required', 'integer', 'min:18', 'max:100'],
+                'gender' => ['required', 'string', Rule::in(['male', 'female', 'other'])],
+                'province_id' => ['required', 'integer', 'exists:provinces,id'],
+                'city_id' => ['required', 'integer', 'exists:cities,id'],
+                'address' => ['required', 'string'],
+                'blood_type' => ['required', 'string', Rule::in(['A', 'B', 'AB', 'O'])],
+                'rh_factor' => ['required', 'string', Rule::in(['positive', 'negative'])],
+            ]);
+        }
+
         // Add donor-specific validation if user_type is donor
         if ($this->user_type == UserType::Donor->value) {
             $rules = array_merge($rules, [

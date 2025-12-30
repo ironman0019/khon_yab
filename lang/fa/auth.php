@@ -17,7 +17,9 @@ return [
     'Full Name' => 'نام کامل',
     'User Type' => 'نوع کاربر',
     'User' => 'کاربر',
+    'Receiver' => 'گیرنده',
     'Donor' => 'اهداکننده',
+    'Laboratory' => 'آزمایشگاه',
     'Hospital User' => 'کاربر بیمارستان',
     'Confirm Password' => 'تأیید رمز عبور',
 
@@ -43,6 +45,8 @@ return [
 
     'Hospital Name' => 'نام بیمارستان',
     'Hospital Code' => 'کد بیمارستان',
+    'Laboratory Name' => 'نام آزمایشگاه',
+    'Laboratory Code' => 'کد آزمایشگاه',
     'Phone Number' => 'شماره تلفن',
     'License Number' => 'شماره مجوز',
     'Contact Person Name' => 'نام شخص تماس',

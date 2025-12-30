@@ -43,7 +43,7 @@
                                 : match(auth()->user()->user_type) {
                                     \App\Enums\UserType::Donor->value => route('donor.profile.edit'),
                                     \App\Enums\UserType::Laboratory->value => route('laboratory.profile.edit'),
-                                    \App\Enums\UserType::User->value => route('profile.edit'),
+                                    \App\Enums\UserType::Receiver->value => route('receiver.profile.edit'),
                                     default => route('profile.edit'),
                                 };
                         @endphp
@@ -99,7 +99,7 @@
                         : match(auth()->user()->user_type) {
                             \App\Enums\UserType::Donor->value => route('donor.profile.edit'),
                             \App\Enums\UserType::Laboratory->value => route('laboratory.profile.edit'),
-                            \App\Enums\UserType::User->value => route('profile.edit'),
+                            \App\Enums\UserType::Receiver->value => route('receiver.profile.edit'),
                             default => route('profile.edit'),
                         };
                 @endphp
