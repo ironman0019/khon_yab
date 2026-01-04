@@ -9,18 +9,18 @@
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} justify-between h-16">
             <!-- Logo -->
-            <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} gap-3">
+            <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} gap-2 sm:gap-3 flex-shrink-0 min-w-0">
                 @if($siteLogo)
-                    <a href="{{ route('home.index') }}" class="flex items-center gap-3">
+                    <a href="{{ route('home.index') }}" class="flex items-center gap-2 sm:gap-3 min-w-0">
                         <img src="{{ asset('storage/' . $siteLogo) }}" 
                              alt="{{ $siteName }}" 
-                             class="h-10 w-auto object-contain">
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">khonYab</span>
+                             class="h-8 w-8 sm:h-10 sm:w-10 object-contain flex-shrink-0">
+                        <span class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">khonYab</span>
                     </a>
                 @else
-                    <a href="{{ route('home.index') }}" class="flex items-center gap-3">
-                        <x-auth-logo inline class="h-10 w-10" />
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">khonYab</span>
+                    <a href="{{ route('home.index') }}" class="flex items-center gap-2 sm:gap-3 min-w-0">
+                        <x-auth-logo inline class="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0" />
+                        <span class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">khonYab</span>
                     </a>
                 @endif
             </div>
@@ -43,34 +43,40 @@
 
             <!-- Right Side Items -->
             <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} gap-3">
-                <!-- Language Switcher -->
-                <x-language-switcher />
+                <!-- Desktop Only: Language Switcher -->
+                <div class="hidden md:block">
+                    <x-language-switcher />
+                </div>
 
-                <!-- Dark Mode Toggle -->
-                <x-dark-mode-toggle />
+                <!-- Desktop Only: Dark Mode Toggle -->
+                <div class="hidden md:block">
+                    <x-dark-mode-toggle />
+                </div>
 
-                <!-- Sign In Button -->
-                @auth
-                    @php
-                        $dashboardRoute = auth()->user()->isAdmin() 
-                            ? route('admin.dashboard.index')
-                            : match(auth()->user()->user_type) {
-                                \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
-                                \App\Enums\UserType::Laboratory->value => route('laboratory.dashboard.index'),
-                                \App\Enums\UserType::Receiver->value => route('receiver.dashboard.index'),
-                                default => route('dashboard'),
-                            };
-                    @endphp
-                    <a href="{{ $dashboardRoute }}" 
-                       class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
-                        {{ __('home.Dashboard') }}
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" 
-                       class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
-                        {{ __('home.Sign In') }}
-                    </a>
-                @endauth
+                <!-- Desktop Only: Sign In Button -->
+                <div class="hidden md:block">
+                    @auth
+                        @php
+                            $dashboardRoute = auth()->user()->isAdmin() 
+                                ? route('admin.dashboard.index')
+                                : match(auth()->user()->user_type) {
+                                    \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
+                                    \App\Enums\UserType::Laboratory->value => route('laboratory.dashboard.index'),
+                                    \App\Enums\UserType::Receiver->value => route('receiver.dashboard.index'),
+                                    default => route('dashboard'),
+                                };
+                        @endphp
+                        <a href="{{ $dashboardRoute }}" 
+                           class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            {{ __('home.Dashboard') }}
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" 
+                           class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            {{ __('home.Sign In') }}
+                        </a>
+                    @endauth
+                </div>
 
                 <!-- Mobile Menu Button -->
                 <button 
@@ -97,10 +103,11 @@
             x-transition:leave="transition ease-in duration-75"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
-            class="md:hidden pb-4 border-t border-gray-200 dark:border-gray-700 mt-2 pt-4"
+            class="md:hidden pb-4 border-t border-gray-200 dark:border-gray-700 mt-2 pt-4 relative overflow-visible"
             style="display: none;"
         >
             <div class="flex flex-col {{ $isRtl ? 'items-end' : 'items-start' }} gap-3">
+                <!-- Navigation Links -->
                 <a href="{{ route('home.index') }}" 
                    class="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors font-medium">
                     {{ __('home.Home') }}
@@ -117,6 +124,53 @@
                    class="px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-colors font-medium">
                     {{ __('home.Contact') }}
                 </a>
+
+                <!-- Divider -->
+                <div class="border-t border-gray-200 dark:border-gray-700 my-2 w-full"></div>
+
+                <!-- Mobile Only: Language Switcher -->
+                <div class="w-full {{ $isRtl ? 'text-right' : 'text-left' }} relative overflow-visible">
+                    <div class="px-3 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+                        Language
+                    </div>
+                    <div class="px-3 relative overflow-visible">
+                        <x-language-switcher class="w-full" />
+                    </div>
+                </div>
+
+                <!-- Mobile Only: Dark Mode Toggle -->
+                <div class="flex items-center justify-between w-full px-3 py-2">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Dark Mode
+                    </span>
+                    <x-dark-mode-toggle />
+                </div>
+
+                <!-- Divider -->
+                <div class="border-t border-gray-200 dark:border-gray-700 my-2 w-full"></div>
+
+                <!-- Mobile Only: Sign In/Dashboard Button -->
+                @auth
+                    @php
+                        $dashboardRoute = auth()->user()->isAdmin() 
+                            ? route('admin.dashboard.index')
+                            : match(auth()->user()->user_type) {
+                                \App\Enums\UserType::Donor->value => route('donor.dashboard.index'),
+                                \App\Enums\UserType::Laboratory->value => route('laboratory.dashboard.index'),
+                                \App\Enums\UserType::Receiver->value => route('receiver.dashboard.index'),
+                                default => route('dashboard'),
+                            };
+                    @endphp
+                    <a href="{{ $dashboardRoute }}" 
+                       class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors text-center">
+                        {{ __('home.Dashboard') }}
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" 
+                       class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors text-center">
+                        {{ __('home.Sign In') }}
+                    </a>
+                @endauth
             </div>
         </div>
     </nav>

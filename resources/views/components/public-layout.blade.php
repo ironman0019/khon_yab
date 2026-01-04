@@ -8,10 +8,22 @@
 <html lang="{{ str_replace('_', '-', $locale) }}" dir="{{ $dir }}" x-data="{ darkMode: $store.theme.dark }" x-bind:class="{ 'dark': darkMode }">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="theme-color" content="#dc2626">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="khonYab">
 
         <title>{{ config('app.name', 'Laravel') }} - {{ __('home.Home') }}</title>
+
+        <!-- PWA Manifest -->
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        
+        <!-- Apple Touch Icons -->
+        <link rel="apple-touch-icon" href="{{ asset('icons/icon-192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icons/icon-192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('icons/icon-512x512.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
