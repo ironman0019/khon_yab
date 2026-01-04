@@ -56,8 +56,8 @@ class HomeController extends Controller
      */
     public function search(Request $request): View
     {
-        $query = BloodRequest::with(['province', 'city', 'requestedBy:id,full_name'])
-            ->where('status', 1); // Only approved requests
+        $query = BloodRequest::with(['province', 'city', 'requestedBy:id,full_name,email'])
+            ->whereIn('status', [0, 1, 3]); // Pending, Approved, and Completed requests (not rejected)
 
         // Filter by blood type
         if ($request->filled('blood_type')) {

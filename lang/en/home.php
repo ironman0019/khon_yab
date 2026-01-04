@@ -90,5 +90,13 @@ return [
     'Send us a message and we will get back to you as soon as possible.' => 'Send us a message and we will get back to you as soon as possible.',
     'Contact form will be available soon. Please use the contact information provided.' => 'Contact form will be available soon. Please use the contact information provided.',
     'A comprehensive blood bank management system designed to connect donors with those in need.' => 'A comprehensive blood bank management system designed to connect donors with those in need.',
+    'Positive' => 'Positive',
+    'Negative' => 'Negative',
+    'Pending' => 'Pending',
+    'Approved' => 'Approved',
+    'Completed' => 'Completed',
+    'Rejected' => 'Rejected',
+    'Status' => 'Status',
+    'Contact Email' => 'Contact Email',
 ];
 

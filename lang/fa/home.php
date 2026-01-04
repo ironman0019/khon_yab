@@ -89,5 +89,13 @@ return [
     'Send us a message and we will get back to you as soon as possible.' => 'برای ما پیام بفرستید و ما در اسرع وقت به شما پاسخ خواهیم داد.',
     'Contact form will be available soon. Please use the contact information provided.' => 'فرم تماس به زودی در دسترس خواهد بود. لطفاً از اطلاعات تماس ارائه شده استفاده کنید.',
     'A comprehensive blood bank management system designed to connect donors with those in need.' => 'یک سیستم مدیریت بانک خون جامع طراحی شده برای اتصال اهداکنندگان با نیازمندان.',
+    'Positive' => 'مثبت',
+    'Negative' => 'منفی',
+    'Pending' => 'در انتظار',
+    'Approved' => 'تایید شده',
+    'Completed' => 'تکمیل شده',
+    'Rejected' => 'رد شده',
+    'Status' => 'وضعیت',
+    'Contact Email' => 'ایمیل تماس',
 ];
 

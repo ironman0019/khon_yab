@@ -116,10 +116,25 @@
                                         {{ __('home.Patient Age') }}: {{ $request->patient_age }}
                                     </p>
                                 </div>
-                                <div class="px-3 py-1 bg-red-100 dark:bg-red-900/30 rounded-lg">
-                                    <span class="text-red-600 dark:text-red-400 font-semibold">
-                                        {{ $request->blood_type }}{{ $request->rh_factor }}
-                                    </span>
+                                <div class="flex flex-col items-end gap-2">
+                                    <div class="px-3 py-1 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                                        <span class="text-red-600 dark:text-red-400 font-semibold">
+                                            {{ $request->blood_type }}-{{ __('home.' . ucfirst($request->rh_factor)) }}
+                                        </span>
+                                    </div>
+                                    @if($request->status == 0)
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                            {{ __('home.Pending') }}
+                                        </span>
+                                    @elseif($request->status == 1)
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                            {{ __('home.Approved') }}
+                                        </span>
+                                    @elseif($request->status == 3)
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                            {{ __('home.Completed') }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -152,6 +167,15 @@
                                     </svg>
                                     <span><strong>{{ __('home.Contact Number') }}:</strong> {{ $request->contact_number }}</span>
                                 </div>
+
+                                @if($request->requestedBy && $request->requestedBy->email)
+                                <div class="flex items-center {{ $isRtl ? 'flex-row-reverse' : '' }} gap-2 text-sm text-gray-600 dark:text-gray-300">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span><strong>{{ __('home.Contact Email') }}:</strong> <a href="mailto:{{ $request->requestedBy->email }}" class="text-red-600 dark:text-red-400 hover:underline">{{ $request->requestedBy->email }}</a></span>
+                                </div>
+                                @endif
                             </div>
 
                             @if($request->request_reason)

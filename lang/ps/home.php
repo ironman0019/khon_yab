@@ -89,5 +89,13 @@ return [
     'Send us a message and we will get back to you as soon as possible.' => 'موږ ته پیغام واستوئ او موږ به ژر تر ژره تاسو ته ځواب ورکړو.',
     'Contact form will be available soon. Please use the contact information provided.' => 'د اړیکو فورمه به ژر تر ژره شتون ولري. مهرباني وکړئ د چمتو شوي د اړیکو معلوماتو کار واخلئ.',
     'A comprehensive blood bank management system designed to connect donors with those in need.' => 'د وینې بانک د مدیریت یو بشپړ سیسټم چې د ورکوونکو د اړتیا لرونکو سره وصل کولو لپاره ډیزاین شوی.',
+    'Positive' => 'مثبت',
+    'Negative' => 'منفي',
+    'Pending' => 'په انتظار کې',
+    'Approved' => 'تایید شوی',
+    'Completed' => 'بشپړ شوی',
+    'Rejected' => 'رد شوی',
+    'Status' => 'وضعیت',
+    'Contact Email' => 'د اړیکو بریښنالیک',
 ];
 
