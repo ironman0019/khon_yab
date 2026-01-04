@@ -35,6 +35,55 @@
                 </p>
             </div>
 
+            <!-- Project Motivation Section -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                    {{ __('home.Project Motivation') }}
+                </h2>
+                
+                <div class="space-y-6">
+                    <!-- Motivation -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+                            {{ __('home.Why We Chose This Project') }}
+                        </h3>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                            {{ __('home.Project motivation description') }}
+                        </p>
+                    </div>
+
+                    <!-- Idea Contributors -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+                            {{ __('home.Idea Contributors') }}
+                        </h3>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                            {{ __('home.Idea contributors description') }}
+                        </p>
+                    </div>
+
+                    <!-- Project Selection -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+                            {{ __('home.How We Selected This Project') }}
+                        </h3>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                            {{ __('home.Project selection description') }}
+                        </p>
+                    </div>
+
+                    <!-- Project Goals -->
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
+                            {{ __('home.Project Goals') }}
+                        </h3>
+                        <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                            {{ __('home.Project goals description') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- System Features Section -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
