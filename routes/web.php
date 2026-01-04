@@ -26,6 +26,36 @@ Route::get('/api/cities', function (Illuminate\Http\Request $request) {
     return response()->json($cities);
 })->name('api.cities');
 
+Route::get('/api/users/search', function (Illuminate\Http\Request $request) {
+    $query = $request->get('q', '');
+    $userType = $request->get('user_type');
+
+    if (strlen($query) < 2) {
+        return response()->json([]);
+    }
+
+    $usersQuery = App\Models\User::query()
+        ->where('email', 'like', '%'.$query.'%')
+        ->where('id', '!=', auth()->id()); // Exclude current user
+
+    // Filter by user type if provided
+    if ($userType !== null && $userType !== '') {
+        if ($userType == -1) {
+            // Search for admin users
+            $usersQuery->where('is_admin', true);
+        } else {
+            $usersQuery->where('user_type', $userType);
+        }
+    }
+
+    $users = $usersQuery
+        ->select('id', 'email', 'full_name')
+        ->limit(10)
+        ->get();
+
+    return response()->json($users);
+})->middleware('auth')->name('api.users.search');
+
 Route::get('/dashboard', function () {
     $user = auth()->user();
 

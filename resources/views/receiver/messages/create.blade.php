@@ -48,19 +48,36 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4" x-data="emailAutocomplete()">
                         <label for="recipient_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {{ __('receiver.Recipient Email') }}
                         </label>
-                        <input 
-                            type="email" 
-                            id="recipient_email" 
-                            name="recipient_email" 
-                            value="{{ old('recipient_email') }}"
-                            required
-                            class="block w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="{{ __('receiver.Enter recipient email address') }}"
-                        >
+                        <div class="relative">
+                            <input 
+                                type="email" 
+                                id="recipient_email" 
+                                name="recipient_email" 
+                                x-model="email"
+                                @input="searchEmails()"
+                                @focus="searchEmails()"
+                                @blur="setTimeout(() => { showSuggestions = false; }, 200)"
+                                required
+                                class="block w-full border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white"
+                                placeholder="{{ __('receiver.Enter recipient email address') }}"
+                                autocomplete="off"
+                            >
+                            <div x-show="showSuggestions && suggestions.length > 0" 
+                                 x-transition
+                                 class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-auto">
+                                <template x-for="suggestion in suggestions" :key="suggestion.id">
+                                    <div @click="selectEmail(suggestion.email)" 
+                                         class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white" x-text="suggestion.email"></div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400" x-text="suggestion.full_name"></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
                         @error('recipient_email')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
@@ -114,5 +131,72 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function emailAutocomplete() {
+            return {
+                email: '{{ old('recipient_email') }}',
+                suggestions: [],
+                showSuggestions: false,
+                searchTimeout: null,
+
+                init() {
+                    // Listen for user type changes
+                    const userTypeSelect = document.getElementById('recipient_user_type');
+                    if (userTypeSelect) {
+                        userTypeSelect.addEventListener('change', () => {
+                            if (this.email && this.email.length >= 2) {
+                                this.searchEmails();
+                            }
+                        });
+                    }
+                },
+
+                searchEmails() {
+                    const query = this.email;
+                    const userType = document.getElementById('recipient_user_type')?.value || '';
+
+                    // Clear previous timeout
+                    if (this.searchTimeout) {
+                        clearTimeout(this.searchTimeout);
+                    }
+
+                    // If query is too short, clear suggestions
+                    if (query.length < 2) {
+                        this.suggestions = [];
+                        this.showSuggestions = false;
+                        return;
+                    }
+
+                    // Debounce the search
+                    this.searchTimeout = setTimeout(() => {
+                        fetch(`{{ route('api.users.search') }}?q=${encodeURIComponent(query)}&user_type=${encodeURIComponent(userType)}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json',
+                            },
+                            credentials: 'same-origin'
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            this.suggestions = data;
+                            this.showSuggestions = data.length > 0;
+                        })
+                        .catch(error => {
+                            console.error('Error searching emails:', error);
+                            this.suggestions = [];
+                            this.showSuggestions = false;
+                        });
+                    }, 300);
+                },
+
+                selectEmail(email) {
+                    this.email = email;
+                    this.showSuggestions = false;
+                    this.suggestions = [];
+                }
+            }
+        }
+    </script>
 </x-app-layout>
 
