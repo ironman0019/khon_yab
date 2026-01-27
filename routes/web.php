@@ -91,6 +91,8 @@ Route::prefix('donor')->middleware(['auth', 'verified'])->name('donor.')->group(
     Route::get('/messages/create', [App\Http\Controllers\Donor\MessageController::class, 'create'])->name('messages.create');
     Route::post('/messages', [App\Http\Controllers\Donor\MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/{user}', [App\Http\Controllers\Donor\MessageController::class, 'show'])->name('messages.show');
+    Route::get('/messages/{user}/fetch', [App\Http\Controllers\Donor\MessageController::class, 'fetchMessages'])->name('messages.fetch');
+    Route::get('/messages/conversations/fetch', [App\Http\Controllers\Donor\MessageController::class, 'fetchConversations'])->name('messages.conversations.fetch');
 });
 
 // Laboratory Dashboard
@@ -119,6 +121,8 @@ Route::prefix('laboratory')->middleware(['auth', 'verified'])->name('laboratory.
     Route::get('/messages/create', [App\Http\Controllers\Laboratory\MessageController::class, 'create'])->name('messages.create');
     Route::post('/messages', [App\Http\Controllers\Laboratory\MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/{user}', [App\Http\Controllers\Laboratory\MessageController::class, 'show'])->name('messages.show');
+    Route::get('/messages/{user}/fetch', [App\Http\Controllers\Laboratory\MessageController::class, 'fetchMessages'])->name('messages.fetch');
+    Route::get('/messages/conversations/fetch', [App\Http\Controllers\Laboratory\MessageController::class, 'fetchConversations'])->name('messages.conversations.fetch');
 });
 
 // Receiver Dashboard
@@ -138,6 +142,8 @@ Route::prefix('receiver')->middleware(['auth', 'verified'])->name('receiver.')->
     Route::get('/messages/create', [App\Http\Controllers\Receiver\MessageController::class, 'create'])->name('messages.create');
     Route::post('/messages', [App\Http\Controllers\Receiver\MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/{user}', [App\Http\Controllers\Receiver\MessageController::class, 'show'])->name('messages.show');
+    Route::get('/messages/{user}/fetch', [App\Http\Controllers\Receiver\MessageController::class, 'fetchMessages'])->name('messages.fetch');
+    Route::get('/messages/conversations/fetch', [App\Http\Controllers\Receiver\MessageController::class, 'fetchConversations'])->name('messages.conversations.fetch');
 });
 
 Route::middleware('auth')->group(function () {
@@ -164,6 +170,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/messages/unread-count', [App\Http\Controllers\Admin\MessageController::class, 'unreadCount'])->name('messages.unread-count');
     Route::get('/messages/create', [App\Http\Controllers\Admin\MessageController::class, 'create'])->name('messages.create');
     Route::post('/messages', [App\Http\Controllers\Admin\MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/conversations/fetch', [App\Http\Controllers\Admin\MessageController::class, 'fetchConversations'])->name('messages.conversations.fetch');
+    Route::get('/messages/{user}/fetch', [App\Http\Controllers\Admin\MessageController::class, 'fetchMessages'])->name('messages.fetch');
     Route::get('/messages/{user}', [App\Http\Controllers\Admin\MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages/{message}/read', [App\Http\Controllers\Admin\MessageController::class, 'markAsRead'])->name('messages.read');
     Route::post('/messages/conversation/{user}/read', [App\Http\Controllers\Admin\MessageController::class, 'markConversationAsRead'])->name('messages.conversation.read');

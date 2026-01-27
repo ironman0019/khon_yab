@@ -747,6 +747,9 @@ return [
     'Back' => 'بازگشت',
     'You' => 'شما',
     'Send a message to a user' => 'ارسال پیام به کاربر',
+    'Search conversations...' => 'جستجوی مکالمات...',
+    'Select a conversation' => 'یک مکالمه را انتخاب کنید',
+    'Choose a conversation from the list to start messaging' => 'یک مکالمه از لیست انتخاب کنید تا شروع به پیام‌رسانی کنید',
     // Database Backup Management
     'Database Backup Management' => 'مدیریت پشتیبان‌گیری پایگاه داده',
     'Create, download, and manage database backups' => 'ایجاد، دانلود و مدیریت پشتیبان‌گیری‌های پایگاه داده',

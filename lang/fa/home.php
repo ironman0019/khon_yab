@@ -106,5 +106,7 @@ return [
     'Rejected' => 'رد شده',
     'Status' => 'وضعیت',
     'Contact Email' => 'ایمیل تماس',
+    'Contact via WhatsApp' => 'تماس از طریق واتساپ',
+    'Hello, I am interested in your blood request for :patient_name' => 'سلام، من به درخواست خون شما برای :patient_name علاقه‌مند هستم',
 ];
 

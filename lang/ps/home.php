@@ -106,5 +106,7 @@ return [
     'Rejected' => 'رد شوی',
     'Status' => 'وضعیت',
     'Contact Email' => 'د اړیکو بریښنالیک',
+    'Contact via WhatsApp' => 'د واتساپ له لارې اړیکه',
+    'Hello, I am interested in your blood request for :patient_name' => 'سلام، زه ستاسو د وینې غوښتنې سره د :patient_name لپاره علاقه لرم',
 ];
 

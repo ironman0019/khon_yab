@@ -739,6 +739,9 @@ return [
     'Back' => 'Back',
     'You' => 'You',
     'Send a message to a user' => 'Send a message to a user',
+    'Search conversations...' => 'Search conversations...',
+    'Select a conversation' => 'Select a conversation',
+    'Choose a conversation from the list to start messaging' => 'Choose a conversation from the list to start messaging',
     // Database Backup Management
     'Database Backup Management' => 'Database Backup Management',
     'Create, download, and manage database backups' => 'Create, download, and manage database backups',

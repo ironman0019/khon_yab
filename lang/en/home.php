@@ -107,5 +107,7 @@ return [
     'Rejected' => 'Rejected',
     'Status' => 'Status',
     'Contact Email' => 'Contact Email',
+    'Contact via WhatsApp' => 'Contact via WhatsApp',
+    'Hello, I am interested in your blood request for :patient_name' => 'Hello, I am interested in your blood request for :patient_name',
 ];
 

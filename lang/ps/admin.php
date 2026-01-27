@@ -747,6 +747,9 @@ return [
     'Back' => 'بیرته',
     'You' => 'تاسو',
     'Send a message to a user' => 'د کارن ته پیغام واستوئ',
+    'Search conversations...' => 'د خبرو اترو لټون...',
+    'Select a conversation' => 'یوه خبره اتره وټاکئ',
+    'Choose a conversation from the list to start messaging' => 'د لیست څخه یوه خبره اتره وټاکئ ترڅو پیغامونه پیل کړئ',
     // Database Backup Management
     'Database Backup Management' => 'د ډیټابیس بیک اپ مدیریت',
     'Create, download, and manage database backups' => 'د ډیټابیس بیک اپونو رامینځته کول، ډاونلوډ کول او مدیریت',

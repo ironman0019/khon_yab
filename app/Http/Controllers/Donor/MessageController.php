@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMessageRequest;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -75,7 +76,37 @@ class MessageController extends Controller
                 'read_at' => now(),
             ]);
 
-        return view('donor.messages.show', compact('messages', 'user'));
+        // Get all conversations for the left panel
+        $allMessages = Message::where(function ($query) use ($currentUser) {
+            $query->where('sender_id', $currentUser->id)
+                ->orWhere('recipient_id', $currentUser->id);
+        })
+            ->with(['sender', 'recipient'])
+            ->latest()
+            ->get();
+
+        $conversations = $allMessages->groupBy(function ($message) use ($currentUser) {
+            return $message->sender_id === $currentUser->id
+                ? $message->recipient_id
+                : $message->sender_id;
+        })->map(function ($conversationMessages, $partnerId) use ($currentUser) {
+            $partner = User::find($partnerId);
+            $latestMessage = $conversationMessages->first();
+            $unreadCount = $conversationMessages->where('recipient_id', $currentUser->id)
+                ->where('is_read', false)
+                ->count();
+
+            return [
+                'partner' => $partner,
+                'latest_message' => $latestMessage,
+                'unread_count' => $unreadCount,
+                'total_count' => $conversationMessages->count(),
+            ];
+        })->sortByDesc(function ($conversation) {
+            return $conversation['latest_message']->created_at;
+        })->values();
+
+        return view('donor.messages.show', compact('messages', 'user', 'conversations'));
     }
 
     /**
@@ -89,7 +120,7 @@ class MessageController extends Controller
     /**
      * Store a newly created message.
      */
-    public function store(StoreMessageRequest $request): RedirectResponse
+    public function store(StoreMessageRequest $request): RedirectResponse|JsonResponse
     {
         $sender = Auth::user();
 
@@ -112,7 +143,7 @@ class MessageController extends Controller
             $subject = __('No Subject');
         }
 
-        Message::create([
+        $message = Message::create([
             'sender_id' => $sender->id,
             'recipient_id' => $recipient->id,
             'subject' => $subject,
@@ -120,7 +151,108 @@ class MessageController extends Controller
             'is_read' => false,
         ]);
 
+        $message->load(['sender', 'recipient']);
+
+        // Get updated conversations for sidebar
+        $conversations = $this->getConversations($sender);
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'conversations' => $conversations,
+            ]);
+        }
+
         return redirect()->route('donor.messages.show', $recipient->id)
             ->with('success', __('Message sent successfully.'));
+    }
+
+    /**
+     * Fetch messages for a conversation.
+     */
+    public function fetchMessages(User $user): JsonResponse
+    {
+        $currentUser = Auth::user();
+
+        if ($user->id === $currentUser->id) {
+            return response()->json(['error' => 'Invalid conversation'], 404);
+        }
+
+        $sinceId = request()->get('since_id');
+
+        $query = Message::conversationWith($currentUser, $user)
+            ->with(['sender', 'recipient'])
+            ->orderBy('created_at', 'asc');
+
+        if ($sinceId) {
+            $query->where('id', '>', $sinceId);
+        }
+
+        $messages = $query->get();
+
+        // Mark new messages as read
+        if ($messages->isNotEmpty()) {
+            Message::conversationWith($currentUser, $user)
+                ->where('recipient_id', $currentUser->id)
+                ->where('is_read', false)
+                ->whereIn('id', $messages->pluck('id'))
+                ->update([
+                    'is_read' => true,
+                    'read_at' => now(),
+                ]);
+        }
+
+        return response()->json([
+            'messages' => $messages,
+        ]);
+    }
+
+    /**
+     * Fetch conversations list.
+     */
+    public function fetchConversations(): JsonResponse
+    {
+        $user = Auth::user();
+        $conversations = $this->getConversations($user);
+
+        return response()->json([
+            'conversations' => $conversations,
+        ]);
+    }
+
+    /**
+     * Get conversations for a user.
+     */
+    private function getConversations(User $user): \Illuminate\Support\Collection
+    {
+        $messages = Message::where(function ($query) use ($user) {
+            $query->where('sender_id', $user->id)
+                ->orWhere('recipient_id', $user->id);
+        })
+            ->with(['sender', 'recipient'])
+            ->latest()
+            ->get();
+
+        return $messages->groupBy(function ($message) use ($user) {
+            return $message->sender_id === $user->id
+                ? $message->recipient_id
+                : $message->sender_id;
+        })->map(function ($conversationMessages, $partnerId) use ($user) {
+            $partner = User::find($partnerId);
+            $latestMessage = $conversationMessages->first();
+            $unreadCount = $conversationMessages->where('recipient_id', $user->id)
+                ->where('is_read', false)
+                ->count();
+
+            return [
+                'partner' => $partner,
+                'latest_message' => $latestMessage,
+                'unread_count' => $unreadCount,
+                'total_count' => $conversationMessages->count(),
+            ];
+        })->sortByDesc(function ($conversation) {
+            return $conversation['latest_message']->created_at;
+        })->values();
     }
 }
