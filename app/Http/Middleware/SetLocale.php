@@ -17,8 +17,8 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Set locale from cookie if available
-        $locale = $request->cookie('locale');
+        // Prefer session (set on language switch) so the redirected page gets the new locale immediately
+        $locale = $request->session()->get('locale') ?? $request->cookie('locale');
 
         // Validate locale and check if language is active
         if ($locale && in_array($locale, ['en', 'fa', 'ps'])) {
@@ -28,6 +28,7 @@ class SetLocale
 
             if ($language) {
                 App::setLocale($locale);
+                $request->session()->put('locale', $locale);
             } else {
                 // Fallback to default language if cookie locale is inactive
                 $defaultLanguage = Language::where('is_default', true)

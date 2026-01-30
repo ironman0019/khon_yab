@@ -1,4 +1,4 @@
-const CACHE_NAME = 'khonYab-v1';
+const CACHE_NAME = 'khonYab-v2';
 const urlsToCache = [
   '/',
   '/manifest.json',
@@ -36,31 +36,43 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network-first for home page (so language switch shows fresh locale), fallback to cache when offline
 self.addEventListener('fetch', (event) => {
-  // Only handle requests to the home page
-  if (event.request.url.includes(self.location.origin) && 
-      (event.request.url === self.location.origin + '/' || 
-       event.request.url === self.location.origin + '/index')) {
+  const isHomePage = event.request.mode === 'navigate' &&
+    event.request.url.includes(self.location.origin) &&
+    (event.request.url === self.location.origin + '/' ||
+     event.request.url === self.location.origin + '/index');
+
+  if (isHomePage) {
     event.respondWith(
-      caches.match(event.request)
+      fetch(event.request)
         .then((response) => {
-          // Return cached version or fetch from network
-          return response || fetch(event.request).then((response) => {
-            // Don't cache if not a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            // Clone the response
+          if (response && response.status === 200 && response.type === 'basic') {
             const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then((cache) => {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          });
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request);
         })
     );
+    return;
+  }
+
+  // For other cached URLs (manifest, icons), use cache-first
+  if (event.request.url.includes(self.location.origin)) {
+    const cachedUrl = urlsToCache.some((url) => {
+      const full = url === '/' ? self.location.origin + '/' : self.location.origin + url;
+      return event.request.url === full;
+    });
+    if (cachedUrl) {
+      event.respondWith(
+        caches.match(event.request).then((response) => response || fetch(event.request))
+      );
+    }
   }
 });
 
