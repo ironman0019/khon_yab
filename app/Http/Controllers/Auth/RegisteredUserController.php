@@ -113,6 +113,10 @@ class RegisteredUserController extends Controller
      */
     protected function redirectBasedOnUserType(User $user): RedirectResponse
     {
+        if (! $user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
+
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard.index');
         }
