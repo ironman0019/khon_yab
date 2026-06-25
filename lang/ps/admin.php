@@ -744,6 +744,8 @@ return [
     'optional' => 'اختیاري',
     'Message subject' => 'د پیغام موضوع',
     'No messages yet' => 'تر اوسه هیڅ پیغام نشته',
+    'Message sent successfully.' => 'پیغام په بریالیتوب سره واستول شو.',
+    'Failed to send message. Please try again.' => 'د پیغام لیږل ناکام شول. مهرباني وکړئ بیا هڅه وکړئ.',
     'Back' => 'بیرته',
     'You' => 'تاسو',
     'Send a message to a user' => 'د کارن ته پیغام واستوئ',

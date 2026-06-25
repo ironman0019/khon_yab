@@ -55,13 +55,13 @@
                 <!-- Page Content -->
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900">
                     @if(session('success'))
-                        <div class="bg-green-500 text-white px-4 py-3 rounded relative mx-4 mt-4" role="alert">
+                        <div class="session-flash-alert bg-green-500 text-white px-4 py-3 rounded relative mx-4 mt-4 transition-opacity duration-300" role="alert">
                             <span class="block sm:inline">{{ session('success') }}</span>
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="bg-red-500 text-white px-4 py-3 rounded relative mx-4 mt-4" role="alert">
+                        <div class="session-flash-alert bg-red-500 text-white px-4 py-3 rounded relative mx-4 mt-4 transition-opacity duration-300" role="alert">
                             <span class="block sm:inline">{{ session('error') }}</span>
                         </div>
                     @endif
@@ -70,6 +70,21 @@
                 </main>
             </div>
         </div>
+
+        @if(session('success') || session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.session-flash-alert').forEach(function (alert) {
+                        setTimeout(function () {
+                            alert.style.opacity = '0';
+                            setTimeout(function () {
+                                alert.remove();
+                            }, 300);
+                        }, 3000);
+                    });
+                });
+            </script>
+        @endif
 
         @stack('scripts')
     </body>

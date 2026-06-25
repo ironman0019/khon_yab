@@ -736,6 +736,8 @@ return [
     'optional' => 'optional',
     'Message subject' => 'Message subject',
     'No messages yet' => 'No messages yet',
+    'Message sent successfully.' => 'Message sent successfully.',
+    'Failed to send message. Please try again.' => 'Failed to send message. Please try again.',
     'Back' => 'Back',
     'You' => 'You',
     'Send a message to a user' => 'Send a message to a user',

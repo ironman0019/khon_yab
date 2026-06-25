@@ -744,6 +744,8 @@ return [
     'optional' => 'اختیاری',
     'Message subject' => 'موضوع پیام',
     'No messages yet' => 'هنوز پیامی وجود ندارد',
+    'Message sent successfully.' => 'پیام با موفقیت ارسال شد.',
+    'Failed to send message. Please try again.' => 'ارسال پیام ناموفق بود. لطفاً دوباره تلاش کنید.',
     'Back' => 'بازگشت',
     'You' => 'شما',
     'Send a message to a user' => 'ارسال پیام به کاربر',

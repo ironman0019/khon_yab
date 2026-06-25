@@ -175,12 +175,13 @@ class MessageController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $message,
+                'success_message' => __('admin.Message sent successfully.'),
                 'conversations' => $conversations,
             ]);
         }
 
         return redirect()->route('admin.messages.show', $recipient->id)
-            ->with('success', __('Message sent successfully.'));
+            ->with('success', __('admin.Message sent successfully.'));
     }
 
     /**

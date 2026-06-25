@@ -180,6 +180,10 @@
             const fetchConversationsUrl = '{{ route('admin.messages.conversations.fetch') }}';
             const storeMessageUrl = '{{ route('admin.messages.store') }}';
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const translations = {
+                messageSentSuccessfully: @json(__('admin.Message sent successfully.')),
+                failedToSendMessage: @json(__('admin.Failed to send message. Please try again.')),
+            };
             
             let lastMessageId = parseInt(document.getElementById('messages-container')?.getAttribute('data-last-message-id') || '0');
             let pollingInterval = null;
@@ -298,15 +302,15 @@
                             lastMessageId = data.message.id;
                             
                             // Show success message
-                            showSuccess('Message sent successfully.');
+                            showSuccess(data.success_message || translations.messageSentSuccessfully);
                         } else {
-                            const errorMsg = data.message || data.error || 'Failed to send message. Please try again.';
+                            const errorMsg = data.message || data.error || translations.failedToSendMessage;
                             showError(errorMsg);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        let errorMsg = 'Failed to send message. Please try again.';
+                        let errorMsg = translations.failedToSendMessage;
                         if (error.errors) {
                             const firstError = Object.values(error.errors)[0];
                             errorMsg = Array.isArray(firstError) ? firstError[0] : firstError;
