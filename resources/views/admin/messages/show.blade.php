@@ -245,11 +245,19 @@
             }
 
             function initMessageForm() {
-                const form = document.querySelector('form[action*="messages.store"]');
                 const messageInput = document.getElementById('message-input');
                 const sendButton = document.getElementById('send-button');
+                const form = messageInput ? messageInput.closest('form') : null;
 
                 if (!form || !messageInput) return;
+
+                messageInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (sendButton && sendButton.disabled) return;
+                        form.requestSubmit();
+                    }
+                });
 
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
