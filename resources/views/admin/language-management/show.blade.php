@@ -112,49 +112,8 @@
                 </div>
             </div>
 
-            <!-- Translations List -->
-            @if($language->translations->count() > 0)
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
-                    <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('admin.Translations') }} ({{ $language->translations->count() }})</h2>
-                    </div>
-                    <div class="px-6 py-4">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-900">
-                                    <tr>
-                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Group') }}</th>
-                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Key') }}</th>
-                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Value') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($language->translations as $translation)
-                                        <tr>
-                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                                {{ $translation->group ?? '-' }}
-                                            </td>
-                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                                {{ $translation->key }}
-                                            </td>
-                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
-                                                {{ Str::limit($translation->value, 50) }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center">{{ __('admin.No translations available for this language.') }}</p>
-                </div>
-            @endif
-
             <!-- Action Buttons -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('admin.Actions') }}</h3>
                 <div class="flex {{ $isRtl ? 'flex-row-reverse' : '' }} flex-wrap gap-3">
                     <!-- Manage Translations Button -->
@@ -197,6 +156,47 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Translations List -->
+            @if($language->translations->count() > 0)
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-6">
+                    <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">{{ __('admin.Translations') }} ({{ $language->translations->count() }})</h2>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-900">
+                                    <tr>
+                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Group') }}</th>
+                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Key') }}</th>
+                                        <th class="px-4 py-3 {{ $isRtl ? 'text-right' : 'text-left' }} text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">{{ __('admin.Value') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @foreach($language->translations as $translation)
+                                        <tr>
+                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
+                                                {{ $translation->group ?? '-' }}
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
+                                                {{ $translation->key }}
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-gray-900 dark:text-white {{ $isRtl ? 'text-right' : 'text-left' }}">
+                                                {{ Str::limit($translation->value, 50) }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center">{{ __('admin.No translations available for this language.') }}</p>
+                </div>
+            @endif
         </div>
     </div>
 </x-admin-layout>
