@@ -32,7 +32,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="mt-6 px-3 flex-1 overflow-y-auto pb-6">
+    <nav class="admin-sidebar-scroll mt-6 px-3 flex-1 overflow-y-auto pb-6">
         <div class="space-y-1">
             <!-- Dashboard -->
             <a href="{{ route('admin.dashboard.index') }}" 
@@ -170,3 +170,47 @@
     x-transition:leave-start="opacity-100"
     x-transition:leave-end="opacity-0"
 ></div>
+
+<style>
+    .admin-sidebar-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: #dc2626 #f3f4f6;
+    }
+
+    .dark .admin-sidebar-scroll {
+        scrollbar-color: #ef4444 #1f2937;
+    }
+
+    .admin-sidebar-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .admin-sidebar-scroll::-webkit-scrollbar-track {
+        background: #f3f4f6;
+        border-radius: 9999px;
+    }
+
+    .dark .admin-sidebar-scroll::-webkit-scrollbar-track {
+        background: #1f2937;
+    }
+
+    .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+        background: #dc2626;
+        border-radius: 9999px;
+        border: 2px solid #f3f4f6;
+        background-clip: padding-box;
+    }
+
+    .dark .admin-sidebar-scroll::-webkit-scrollbar-thumb {
+        background: #ef4444;
+        border-color: #1f2937;
+    }
+
+    .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: #b91c1c;
+    }
+
+    .dark .admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+        background: #f87171;
+    }
+</style>
