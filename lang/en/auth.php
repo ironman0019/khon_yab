@@ -13,6 +13,8 @@ return [
     'Register' => 'Register',
     'Already registered?' => 'Already registered?',
     'Don\'t have an account?' => 'Don\'t have an account?',
+    'Show password' => 'Show password',
+    'Hide password' => 'Hide password',
 
     'Full Name' => 'Full Name',
     'User Type' => 'User Type',

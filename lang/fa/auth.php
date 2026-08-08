@@ -13,6 +13,8 @@ return [
     'Register' => 'ثبت نام',
     'Already registered?' => 'از قبل ثبت نام کرده‌اید؟',
     'Don\'t have an account?' => 'حساب کاربری ندارید؟',
+    'Show password' => 'نمایش رمز عبور',
+    'Hide password' => 'پنهان کردن رمز عبور',
 
     'Full Name' => 'نام کامل',
     'User Type' => 'نوع کاربر',

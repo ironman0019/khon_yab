@@ -13,6 +13,8 @@ return [
     'Register' => 'نوم لیکنه',
     'Already registered?' => 'له مخکې نوم لیکنه کړې؟',
     'Don\'t have an account?' => 'حساب نلرئ؟',
+    'Show password' => 'پاسورډ ښکاره کړئ',
+    'Hide password' => 'پاسورډ پټ کړئ',
 
     'Full Name' => 'بشپړ نوم',
     'User Type' => 'د کارن ډول',
