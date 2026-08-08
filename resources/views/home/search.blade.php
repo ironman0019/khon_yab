@@ -174,7 +174,7 @@
                                         if (!str_starts_with($cleanPhone, '+')) {
                                             // Remove leading zeros if any
                                             $cleanPhone = ltrim($cleanPhone, '0');
-                                            $cleanPhone = '+93' . $cleanPhone; // Afghanistan country code, adjust as needed
+                                            $cleanPhone = '+98' . $cleanPhone;
                                         }
                                         // WhatsApp message text
                                         $whatsappMessage = urlencode(__('home.Hello, I am interested in your blood request for :patient_name', ['patient_name' => $request->patient_name]));
