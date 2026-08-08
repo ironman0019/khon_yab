@@ -533,6 +533,13 @@ return [
     'No translations available for this language.' => 'د دې ژبې لپاره کومه ژباړه شتون نلري.',
     'Manage Translations' => 'د ژباړو مدیریت',
     'Set as default language' => 'د تلوالیز ژبې په توګه تنظیم کول',
+    // Translation Management Session Messages
+    'Translation created successfully.' => 'ژباړه په بریالیتوب سره جوړه شوه.',
+    'Translation updated successfully.' => 'ژباړه په بریالیتوب سره تازه شوه.',
+    'Translation deleted successfully.' => 'ژباړه په بریالیتوب سره ړنګه شوه.',
+    'Translation already exists for this key, group, and language combination.' => 'د دې کیلي، ګروپ او ژبې ترکیب لپاره ژباړه دمخه شتون لري.',
+    'No translations found in lang files for the specified group and language.' => 'د ټاکل شوي ګروپ او ژبې لپاره په ژبې فایلونو کې کومه ژباړه ونه موندل شوه.',
+    'Import completed. :imported translations imported, :skipped skipped (already exist).' => 'واردات بشپړ شو. :imported ژباړې واردې شوې، :skipped پرېښودل شوې (دمخه شتون لري).',
     // Province Management
     'Province Management' => 'د ولایت مدیریت',
     'Manage all provinces' => 'د ټولو ولایتونو مدیریت',
@@ -595,6 +602,8 @@ return [
     // Reports Management
     'View and export various system reports' => 'د سیسټم مختلف راپورونه وګورئ او صادر کړئ',
     'Total Users' => 'ټول کاروونکي',
+    'Total Requests' => 'ټولې غوښتنې',
+    'Total Donations' => 'ټولې ورکړې',
     'Donations This Month' => 'د دې میاشتې ورکړل',
     'Active Donors' => 'فعال وین ورکونکي',
     'View all active donors with ability to donate' => 'ټول فعال وین ورکونکي وګورئ چې د ورکولو وړتیا لري',

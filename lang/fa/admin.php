@@ -533,6 +533,13 @@ return [
     'No translations available for this language.' => 'هیچ ترجمه‌ای برای این زبان موجود نیست.',
     'Manage Translations' => 'مدیریت ترجمه‌ها',
     'Set as default language' => 'تنظیم به عنوان زبان پیش‌فرض',
+    // Translation Management Session Messages
+    'Translation created successfully.' => 'ترجمه با موفقیت ایجاد شد.',
+    'Translation updated successfully.' => 'ترجمه با موفقیت به‌روزرسانی شد.',
+    'Translation deleted successfully.' => 'ترجمه با موفقیت حذف شد.',
+    'Translation already exists for this key, group, and language combination.' => 'ترجمه برای این کلید، گروه و ترکیب زبان قبلاً وجود دارد.',
+    'No translations found in lang files for the specified group and language.' => 'هیچ ترجمه‌ای در فایل‌های زبان برای گروه و زبان مشخص‌شده یافت نشد.',
+    'Import completed. :imported translations imported, :skipped skipped (already exist).' => 'واردات تکمیل شد. :imported ترجمه وارد شد، :skipped رد شد (از قبل موجود است).',
     // Province Management
     'Province Management' => 'مدیریت استان',
     'Manage all provinces' => 'مدیریت تمام استان‌ها',
@@ -595,6 +602,8 @@ return [
     // Reports Management
     'View and export various system reports' => 'مشاهده و خروجی گرفتن از گزارش‌های مختلف سیستم',
     'Total Users' => 'کل کاربران',
+    'Total Requests' => 'کل درخواست‌ها',
+    'Total Donations' => 'کل اهداها',
     'Donations This Month' => 'اهدای این ماه',
     'Active Donors' => 'اهداکنندگان فعال',
     'View all active donors with ability to donate' => 'مشاهده تمام اهداکنندگان فعال با قابلیت اهدا',

@@ -522,6 +522,13 @@ return [
     'No translations available for this language.' => 'No translations available for this language.',
     'Manage Translations' => 'Manage Translations',
     'Set as default language' => 'Set as default language',
+    // Translation Management Session Messages
+    'Translation created successfully.' => 'Translation created successfully.',
+    'Translation updated successfully.' => 'Translation updated successfully.',
+    'Translation deleted successfully.' => 'Translation deleted successfully.',
+    'Translation already exists for this key, group, and language combination.' => 'Translation already exists for this key, group, and language combination.',
+    'No translations found in lang files for the specified group and language.' => 'No translations found in lang files for the specified group and language.',
+    'Import completed. :imported translations imported, :skipped skipped (already exist).' => 'Import completed. :imported translations imported, :skipped skipped (already exist).',
     // Province Management
     'Province Management' => 'Province Management',
     'Manage all provinces' => 'Manage all provinces',
@@ -584,6 +591,8 @@ return [
     // Reports Management
     'View and export various system reports' => 'View and export various system reports',
     'Total Users' => 'Total Users',
+    'Total Requests' => 'Total Requests',
+    'Total Donations' => 'Total Donations',
     'Donations This Month' => 'Donations This Month',
     'Active Donors' => 'Active Donors',
     'View all active donors with ability to donate' => 'View all active donors with ability to donate',

@@ -79,7 +79,7 @@ class TranslationController extends Controller
         if ($existing) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Translation already exists for this key, group, and language combination.');
+                ->with('error', __('admin.Translation already exists for this key, group, and language combination.'));
         }
 
         Translation::create($request->validated());
@@ -90,7 +90,7 @@ class TranslationController extends Controller
         $redirectLanguage = $language ?? Language::where('code', $request->language_code)->first();
 
         return redirect()->route('admin.language-management.translations.index', $redirectLanguage)
-            ->with('success', 'Translation created successfully.');
+            ->with('success', __('admin.Translation created successfully.'));
     }
 
     /**
@@ -132,7 +132,7 @@ class TranslationController extends Controller
         if ($existing) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Translation already exists for this key, group, and language combination.');
+                ->with('error', __('admin.Translation already exists for this key, group, and language combination.'));
         }
 
         $translation->update($request->validated());
@@ -146,7 +146,7 @@ class TranslationController extends Controller
         $redirectLanguage = $language ?? Language::where('code', $request->language_code)->first();
 
         return redirect()->route('admin.language-management.translations.index', $redirectLanguage)
-            ->with('success', 'Translation updated successfully.');
+            ->with('success', __('admin.Translation updated successfully.'));
     }
 
     /**
@@ -165,7 +165,7 @@ class TranslationController extends Controller
         $redirectLanguage = $language ?? Language::where('code', $languageCode)->first();
 
         return redirect()->route('admin.language-management.translations.index', $redirectLanguage)
-            ->with('success', 'Translation deleted successfully.');
+            ->with('success', __('admin.Translation deleted successfully.'));
     }
 
     /**
@@ -186,7 +186,7 @@ class TranslationController extends Controller
 
         if (! is_array($fileTranslations)) {
             return redirect()->back()
-                ->with('error', 'No translations found in lang files for the specified group and language.');
+                ->with('error', __('admin.No translations found in lang files for the specified group and language.'));
         }
 
         $imported = 0;
@@ -216,6 +216,9 @@ class TranslationController extends Controller
         $this->translationService->clearCache($locale, $group);
 
         return redirect()->back()
-            ->with('success', "Import completed. {$imported} translations imported, {$skipped} skipped (already exist).");
+            ->with('success', __('admin.Import completed. :imported translations imported, :skipped skipped (already exist).', [
+                'imported' => $imported,
+                'skipped' => $skipped,
+            ]));
     }
 }
