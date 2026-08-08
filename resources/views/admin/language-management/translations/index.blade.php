@@ -85,9 +85,45 @@
             </div>
 
             <!-- Translations Table -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <div
+                class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+                x-data="{
+                    syncFromTop() {
+                        this.$refs.tableScroll.scrollLeft = this.$refs.topScroll.scrollLeft;
+                    },
+                    syncFromTable() {
+                        this.$refs.topScroll.scrollLeft = this.$refs.tableScroll.scrollLeft;
+                    },
+                    updateTopScrollWidth() {
+                        if (this.$refs.table && this.$refs.topScrollContent) {
+                            this.$refs.topScrollContent.style.width = this.$refs.table.scrollWidth + 'px';
+                        }
+                    }
+                }"
+                x-init="
+                    $nextTick(() => {
+                        updateTopScrollWidth();
+                        if (window.ResizeObserver) {
+                            new ResizeObserver(() => updateTopScrollWidth()).observe($refs.table);
+                        }
+                    });
+                "
+            >
+                {{-- Horizontal scrollbar at the top of the table --}}
+                <div
+                    x-ref="topScroll"
+                    class="translations-table-top-scroll overflow-x-auto overflow-y-hidden border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                    @scroll="syncFromTop"
+                >
+                    <div x-ref="topScrollContent" class="h-2.5"></div>
+                </div>
+
+                <div
+                    x-ref="tableScroll"
+                    class="overflow-x-auto translations-table-scroll"
+                    @scroll="syncFromTable"
+                >
+                    <table x-ref="table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -183,5 +219,57 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .translations-table-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .translations-table-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .translations-table-top-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #dc2626 #f3f4f6;
+        }
+
+        .dark .translations-table-top-scroll {
+            scrollbar-color: #ef4444 #111827;
+        }
+
+        .translations-table-top-scroll::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .translations-table-top-scroll::-webkit-scrollbar-track {
+            background: #f3f4f6;
+        }
+
+        .dark .translations-table-top-scroll::-webkit-scrollbar-track {
+            background: #111827;
+        }
+
+        .translations-table-top-scroll::-webkit-scrollbar-thumb {
+            background: #dc2626;
+            border-radius: 9999px;
+            border: 2px solid #f3f4f6;
+            background-clip: padding-box;
+        }
+
+        .dark .translations-table-top-scroll::-webkit-scrollbar-thumb {
+            background: #ef4444;
+            border-color: #111827;
+        }
+
+        .translations-table-top-scroll::-webkit-scrollbar-thumb:hover {
+            background: #b91c1c;
+        }
+
+        .dark .translations-table-top-scroll::-webkit-scrollbar-thumb:hover {
+            background: #f87171;
+        }
+    </style>
 </x-admin-layout>
 
