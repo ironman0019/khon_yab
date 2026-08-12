@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LanguageSeeder::class,
             TranslationSeeder::class,
-            AfghanistanProvinceCitySeeder::class,
+            // AfghanistanProvinceCitySeeder::class,
+            IranProvinceCitySeeder::class,
             UserSeeder::class,
             ReceiverSeeder::class,
             DonorSeeder::class,
