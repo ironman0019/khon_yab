@@ -1,11 +1,11 @@
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-700 dark:text-gray-300">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+        {{ __('auth.Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
     </div>
 
     @if (session('status') == 'verification-link-sent')
         <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+            {{ __('auth.A new verification link has been sent to the email address you provided during registration.') }}
         </div>
     @endif
 
@@ -21,7 +21,7 @@
 
             <div>
                 <x-primary-button class="bg-red-600 hover:bg-red-700 focus:ring-red-500 dark:bg-red-700 dark:hover:bg-red-600">
-                    {{ __('Resend Verification Email') }}
+                    {{ __('auth.Resend Verification Email') }}
                 </x-primary-button>
             </div>
         </form>
@@ -30,7 +30,7 @@
             @csrf
 
             <button type="submit" class="underline text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 transition-colors">
-                {{ __('Log Out') }}
+                {{ __('auth.Log Out') }}
             </button>
         </form>
     </div>
