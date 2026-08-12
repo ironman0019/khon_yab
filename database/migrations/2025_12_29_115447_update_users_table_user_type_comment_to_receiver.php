@@ -10,6 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         // Update the comment on user_type column
         DB::statement("ALTER TABLE users MODIFY COLUMN user_type TINYINT DEFAULT 0 COMMENT '0 => receiver, 1 => donor, 2 => laboratory'");
     }
@@ -19,6 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() !== 'mysql') {
+            return;
+        }
+
         // Revert the comment
         DB::statement("ALTER TABLE users MODIFY COLUMN user_type TINYINT DEFAULT 0 COMMENT '0 => user, 1 => donor, 2 => laboratory'");
     }
