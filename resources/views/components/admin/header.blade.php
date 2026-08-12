@@ -45,7 +45,7 @@
                     <div class="px-4 py-2 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                         {{ Auth::user()->email }}
                     </div>
-                    <x-dropdown-link :href="route('dashboard')">
+                    <x-dropdown-link :href="route('home.index')">
                         {{ __('admin.Back to Site') }}
                     </x-dropdown-link>
                     <form method="POST" action="{{ route('logout') }}">
