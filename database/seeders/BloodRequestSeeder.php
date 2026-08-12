@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Enums\BloodRequestStatus;
+use App\Enums\UserType;
 use App\Models\BloodRequest;
-use App\Models\City;
-use App\Models\HospitalUser;
 use App\Models\Province;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -17,18 +16,32 @@ class BloodRequestSeeder extends Seeder
      */
     public function run(): void
     {
-        $hospitalUsers = HospitalUser::with('user')->get();
-        $adminUsers = User::where('is_admin', true)->get();
-        $provinces = Province::with('cities')->take(10)->get();
+        $laboratoryUsers = User::query()
+            ->where('user_type', UserType::Laboratory->value)
+            ->get();
+        $adminUsers = User::query()
+            ->where('is_admin', true)
+            ->get();
+        $provinces = Province::query()
+            ->with('cities')
+            ->has('cities')
+            ->take(10)
+            ->get();
 
-        if ($hospitalUsers->isEmpty()) {
-            $this->command->warn('No hospital users found. Please run HospitalUserSeeder first.');
+        if ($laboratoryUsers->isEmpty()) {
+            $this->command->warn('No laboratory users found. Please run LaboratorySeeder first.');
 
             return;
         }
 
         if ($adminUsers->isEmpty()) {
             $this->command->warn('No admin users found. Please run UserSeeder first.');
+
+            return;
+        }
+
+        if ($provinces->isEmpty()) {
+            $this->command->warn('No provinces with cities found. Please run AfghanistanProvinceCitySeeder first.');
 
             return;
         }
@@ -42,34 +55,41 @@ class BloodRequestSeeder extends Seeder
             BloodRequestStatus::Completed->value,
         ];
 
-        // Patient names in different languages
-        $englishPatientNames = [
-            'Ahmed Hassan', 'Fatima Ali', 'Mohammad Karim', 'Zainab Ahmad', 'Omar Khan',
+        $patientNames = [
+            'احمد رضایی',
+            'فاطمه حسینی',
+            'محمد کریمی',
+            'زینب احمدی',
+            'علی نوری',
+            'مریم محمدی',
+            'حسن جعفری',
+            'ناهید رحیمی',
+            'عبدالله صدیقی',
+            'فرشته اکبری',
+            'یوسف شریفی',
+            'سارا محمودی',
         ];
 
-        $persianPatientNames = [
-            'احمد حسین', 'فاطمه علی', 'محمد کریم', 'زینب احمد', 'عمر خان',
-        ];
-
-        $pashtoPatientNames = [
-            'احمد حسین', 'فاطمه علی', 'محمد کریم', 'زینب احمد', 'عمر خان',
-        ];
-
-        // Request reasons in different languages
         $englishReasons = [
             'Emergency surgery required',
             'Accident victim needs blood transfusion',
             'Patient with severe anemia',
             'Post-operative blood loss',
             'Chronic disease treatment',
+            'Blood needed for high-risk delivery',
+            'Severe burn patient',
+            'Platelet shortage in cancer patient',
         ];
 
         $persianReasons = [
             'جراحی اضطراری مورد نیاز است',
             'قربانی حادثه نیاز به انتقال خون دارد',
-            'بیمار با کم خونی شدید',
-            'از دست دادن خون پس از عمل',
+            'بیمار با کم‌خونی شدید',
+            'از دست دادن خون پس از عمل جراحی',
             'درمان بیماری مزمن',
+            'نیاز به خون برای زایمان پرخطر',
+            'بیمار سوختگی شدید',
+            'کمبود پلاکت در بیمار سرطانی',
         ];
 
         $pashtoReasons = [
@@ -78,70 +98,112 @@ class BloodRequestSeeder extends Seeder
             'د شدید انیمیا سره ناروغ',
             'د عملیات وروسته د وینو ضایع کیدل',
             'د مزمن ناروغۍ درملنه',
+            'د لوړ خطر زیږون لپاره وینې ته اړتیا',
+            'د شدیدو سوځېدلو ناروغ',
+            'په سرطاني ناروغ کې د پلاټلیټ کمښت',
         ];
 
-        // Medical center names in different languages
         $englishMedicalCenters = [
-            'Central Emergency Ward', 'Surgery Department', 'Intensive Care Unit', 'Emergency Room',
+            'Central Emergency Ward',
+            'Surgery Department',
+            'Intensive Care Unit',
+            'Emergency Room',
+            'General Hospital',
+            'Pediatric Hospital',
+            'Maternity Ward',
+            'Medical Treatment Center',
         ];
 
         $persianMedicalCenters = [
-            'بخش اورژانس مرکزی', 'بخش جراحی', 'بخش مراقبت‌های ویژه', 'اتاق اورژانس',
+            'بخش اورژانس مرکزی',
+            'بخش جراحی',
+            'بخش مراقبت‌های ویژه',
+            'اتاق اورژانس',
+            'بیمارستان عمومی',
+            'بیمارستان کودکان',
+            'بخش زنان و زایمان',
+            'مرکز درمانی',
         ];
 
         $pashtoMedicalCenters = [
-            'د مرکزي اضطراري برخه', 'د جراحي برخه', 'د شدیدو پاملرنو برخه', 'د اضطراري خونه',
+            'د مرکزي اضطراري برخه',
+            'د جراحي برخه',
+            'د شدیدو پاملرنو برخه',
+            'د اضطراري خونه',
+            'عمومي روغتون',
+            'د ماشومانو روغتون',
+            'د ښځو او زیږون برخه',
+            'درملنیز مرکز',
         ];
 
-        // Rejection reasons in different languages
-        $rejectionReasons = [
+        $englishRejectionReasons = [
             'Insufficient blood inventory',
-            'موجودی خون کافی نیست',
-            'د وینو موجودیت کافي نه دی',
             'Request does not meet criteria',
+            'Patient information is incomplete',
+            'Requested blood type is unavailable',
+        ];
+
+        $persianRejectionReasons = [
+            'موجودی خون کافی نیست',
             'درخواست معیارها را برآورده نمی‌کند',
+            'اطلاعات بیمار ناقص است',
+            'گروه خونی درخواستی در دسترس نیست',
+        ];
+
+        $pashtoRejectionReasons = [
+            'د وینو موجودیت کافي نه دی',
             'غوښتنه معیارونه پوره نه کوي',
+            'د ناروغ معلومات نیمګړي دي',
+            'غوښتل شوې د وینې ډله شتون نلري',
         ];
 
-        // Notes in different languages
-        $notes = [
+        $englishNotes = [
             'Urgent request. Patient condition critical.',
-            'درخواست فوری. وضعیت بیمار بحرانی است.',
-            'عاجل غوښتنه. د ناروغ حالت بحراني دی.',
             'Standard blood request procedure followed.',
-            'رویه استاندارد درخواست خون رعایت شد.',
-            'د وینو د غوښتنې معیاري پروسیجر تعقیب شو.',
+            'Needs quick coordination with the laboratory.',
+            'Patient is admitted to the intensive care unit.',
         ];
 
-        // Create requests
-        for ($i = 0; $i < 20; $i++) {
-            $hospitalUser = $hospitalUsers->random();
+        $persianNotes = [
+            'درخواست فوری. وضعیت بیمار بحرانی است.',
+            'رویه استاندارد درخواست خون رعایت شد.',
+            'نیاز به هماهنگی سریع با آزمایشگاه.',
+            'بیمار در بخش مراقبت‌های ویژه بستری است.',
+        ];
+
+        $pashtoNotes = [
+            'عاجل غوښتنه. د ناروغ حالت بحراني دی.',
+            'د وینو د غوښتنې معیاري پروسیجر تعقیب شو.',
+            'د لابراتوار سره چټک همغږۍ ته اړتیا لري.',
+            'ناروغ په د شدیدو پاملرنو برخه کې بستر دی.',
+        ];
+
+        // Iranian mobile prefixes (09XXXXXXXXX)
+        $mobilePrefixes = ['0912', '0913', '0910', '0911', '0935', '0936', '0939', '0901', '0902', '0990'];
+
+        for ($i = 0; $i < 12; $i++) {
+            $laboratoryUser = $laboratoryUsers->random();
             $province = $provinces->random();
             $city = $province->cities->random();
             $status = $statuses[array_rand($statuses)];
-
-            // Randomly choose language for this request
             $langIndex = rand(0, 2);
-
-            $patientName = match ($langIndex) {
-                0 => $englishPatientNames[array_rand($englishPatientNames)],
-                1 => $persianPatientNames[array_rand($persianPatientNames)],
-                2 => $pashtoPatientNames[array_rand($pashtoPatientNames)],
-                default => $englishPatientNames[array_rand($englishPatientNames)],
-            };
 
             $requestReason = match ($langIndex) {
                 0 => $englishReasons[array_rand($englishReasons)],
                 1 => $persianReasons[array_rand($persianReasons)],
                 2 => $pashtoReasons[array_rand($pashtoReasons)],
-                default => $englishReasons[array_rand($englishReasons)],
             };
 
             $medicalCenter = match ($langIndex) {
                 0 => $englishMedicalCenters[array_rand($englishMedicalCenters)],
                 1 => $persianMedicalCenters[array_rand($persianMedicalCenters)],
                 2 => $pashtoMedicalCenters[array_rand($pashtoMedicalCenters)],
-                default => $englishMedicalCenters[array_rand($englishMedicalCenters)],
+            };
+
+            $notes = match ($langIndex) {
+                0 => $englishNotes[array_rand($englishNotes)],
+                1 => $persianNotes[array_rand($persianNotes)],
+                2 => $pashtoNotes[array_rand($pashtoNotes)],
             };
 
             $approvedBy = null;
@@ -153,19 +215,23 @@ class BloodRequestSeeder extends Seeder
                 $approvalDate = now()->subDays(rand(1, 30));
 
                 if ($status === BloodRequestStatus::Rejected->value) {
-                    $rejectionReason = $rejectionReasons[array_rand($rejectionReasons)];
+                    $rejectionReason = match ($langIndex) {
+                        0 => $englishRejectionReasons[array_rand($englishRejectionReasons)],
+                        1 => $persianRejectionReasons[array_rand($persianRejectionReasons)],
+                        2 => $pashtoRejectionReasons[array_rand($pashtoRejectionReasons)],
+                    };
                 }
             }
 
             BloodRequest::create([
-                'requested_by' => $hospitalUser->user_id,
+                'requested_by' => $laboratoryUser->id,
                 'blood_type' => $bloodTypes[array_rand($bloodTypes)],
                 'rh_factor' => $rhFactors[array_rand($rhFactors)],
                 'number_of_bags' => rand(1, 5),
-                'patient_name' => $patientName,
+                'patient_name' => $patientNames[array_rand($patientNames)],
                 'patient_age' => rand(5, 80),
                 'request_reason' => $requestReason,
-                'contact_number' => '0700'.rand(100000, 999999),
+                'contact_number' => $mobilePrefixes[array_rand($mobilePrefixes)].rand(1000000, 9999999),
                 'province_id' => $province->id,
                 'city_id' => $city->id,
                 'medical_center' => $medicalCenter,
@@ -173,7 +239,7 @@ class BloodRequestSeeder extends Seeder
                 'approved_by' => $approvedBy,
                 'approval_date' => $approvalDate,
                 'rejection_reason' => $rejectionReason,
-                'notes' => $notes[array_rand($notes)],
+                'notes' => $notes,
             ]);
         }
 
@@ -181,4 +247,3 @@ class BloodRequestSeeder extends Seeder
         $this->command->info('Total blood requests: '.BloodRequest::count());
     }
 }
-
