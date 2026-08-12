@@ -14,6 +14,7 @@ class MessageSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
+        $admins = User::query()->where('is_admin', true)->get();
 
         if ($users->count() < 2) {
             $this->command->warn('Not enough users found. Please run UserSeeder first.');
@@ -77,49 +78,81 @@ class MessageSeeder extends Seeder
             'ستاسو د وینو د اهدا ریکارډ تازه شو. د خپلو معلوماتو د اوسني ساتلو لپاره مننه.',
         ];
 
-        // Create messages between different users
+        $content = [
+            'englishSubjects' => $englishSubjects,
+            'persianSubjects' => $persianSubjects,
+            'pashtoSubjects' => $pashtoSubjects,
+            'englishMessages' => $englishMessages,
+            'persianMessages' => $persianMessages,
+            'pashtoMessages' => $pashtoMessages,
+        ];
+
+        // Create random messages between different users
         for ($i = 0; $i < 30; $i++) {
             $sender = $users->random();
             $recipient = $users->where('id', '!=', $sender->id)->random();
 
-            // Randomly choose language for this message
-            $langIndex = rand(0, 2);
+            $this->createSeedMessage($sender, $recipient, $content);
+        }
 
-            $subject = match ($langIndex) {
-                0 => $englishSubjects[array_rand($englishSubjects)],
-                1 => $persianSubjects[array_rand($persianSubjects)],
-                2 => $pashtoSubjects[array_rand($pashtoSubjects)],
-                default => $englishSubjects[array_rand($englishSubjects)],
-            };
+        // Always create messages for admin users
+        if ($admins->isEmpty()) {
+            $this->command->warn('No admin users found. Skipping guaranteed admin messages.');
+        } else {
+            for ($i = 0; $i < 10; $i++) {
+                $recipient = $admins->random();
+                $sender = $users->where('id', '!=', $recipient->id)->random();
 
-            $message = match ($langIndex) {
-                0 => $englishMessages[array_rand($englishMessages)],
-                1 => $persianMessages[array_rand($persianMessages)],
-                2 => $pashtoMessages[array_rand($pashtoMessages)],
-                default => $englishMessages[array_rand($englishMessages)],
-            };
-
-            // Randomly decide if message is read
-            $isRead = rand(0, 1) === 1;
-            $readAt = $isRead ? now()->subDays(rand(1, 10)) : null;
-
-            // Random creation date (past 30 days to now)
-            $createdAt = now()->subDays(rand(0, 30));
-
-            Message::create([
-                'sender_id' => $sender->id,
-                'recipient_id' => $recipient->id,
-                'subject' => $subject,
-                'message' => $message,
-                'is_read' => $isRead,
-                'read_at' => $readAt,
-                'created_at' => $createdAt,
-                'updated_at' => $createdAt,
-            ]);
+                $this->createSeedMessage($sender, $recipient, $content);
+            }
         }
 
         $this->command->info('Messages seeded successfully!');
         $this->command->info('Total messages: '.Message::count());
         $this->command->info('Unread messages: '.Message::where('is_read', false)->count());
+    }
+
+    /**
+     * @param  array{
+     *     englishSubjects: list<string>,
+     *     persianSubjects: list<string>,
+     *     pashtoSubjects: list<string>,
+     *     englishMessages: list<string>,
+     *     persianMessages: list<string>,
+     *     pashtoMessages: list<string>
+     * }  $content
+     */
+    private function createSeedMessage(User $sender, User $recipient, array $content): void
+    {
+        $langIndex = rand(0, 2);
+
+        $subject = match ($langIndex) {
+            0 => $content['englishSubjects'][array_rand($content['englishSubjects'])],
+            1 => $content['persianSubjects'][array_rand($content['persianSubjects'])],
+            2 => $content['pashtoSubjects'][array_rand($content['pashtoSubjects'])],
+            default => $content['englishSubjects'][array_rand($content['englishSubjects'])],
+        };
+
+        $message = match ($langIndex) {
+            0 => $content['englishMessages'][array_rand($content['englishMessages'])],
+            1 => $content['persianMessages'][array_rand($content['persianMessages'])],
+            2 => $content['pashtoMessages'][array_rand($content['pashtoMessages'])],
+            default => $content['englishMessages'][array_rand($content['englishMessages'])],
+        };
+
+        $isRead = rand(0, 1) === 1;
+        $readAt = $isRead ? now()->subDays(rand(1, 10)) : null;
+        $createdAt = now()->subDays(rand(0, 30));
+
+        Message::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'subject' => $subject,
+            'message' => $message,
+            'is_read' => $isRead,
+            'read_at' => $readAt,
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
+        ]);
     }
 }
