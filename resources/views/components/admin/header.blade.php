@@ -183,15 +183,31 @@
                                                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.created_at"></p>
                                                 </div>
                                             </template>
+                                            <template x-if="notification.type === 'contact_message'">
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                                        <span x-text="notification.sender_name"></span>
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                        <span x-text="notification.subject"></span>
+                                                    </p>
+                                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.message_preview"></p>
+                                                    <p class="text-xs text-gray-400 dark:text-gray-500 mt-1" x-text="notification.created_at"></p>
+                                                </div>
+                                            </template>
                                         </div>
                                     </div>
                                 </a>
                             </template>
                         </div>
-                        <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+                        <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
                             <a href="{{ route('admin.blood-request-management.index', ['status' => 0]) }}" 
-                               class="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+                               class="block text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
                                 {{ __('admin.View all pending requests') }}
+                            </a>
+                            <a href="{{ route('admin.contact-message-management.index', ['status' => 'unread']) }}" 
+                               class="block text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+                                {{ __('admin.View contact messages') }}
                             </a>
                         </div>
                         </div>

@@ -104,6 +104,22 @@
                                 </div>
                             @endif
 
+                            @if(($statistics['alerts']['unread_contact_messages'] ?? 0) > 0)
+                                <a href="{{ route('admin.contact-message-management.index', ['status' => 'unread']) }}" class="flex items-start p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 {{ in_array(app()->getLocale(), ['fa', 'ps']) ? 'ml-3' : 'mr-3' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-blue-800 dark:text-blue-300">
+                                            {{ __('admin.Unread Contact Messages') }}
+                                        </p>
+                                        <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">
+                                            {{ $statistics['alerts']['unread_contact_messages'] }} {{ __('admin.contact messages need attention') }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @endif
+
                             @if(($statistics['alerts']['expired_blood'] ?? 0) > 0)
                                 <div class="flex items-start p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
                                     <svg class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 {{ in_array(app()->getLocale(), ['fa', 'ps']) ? 'ml-3' : 'mr-3' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +152,7 @@
                                 </div>
                             @endif
 
-                            @if(($statistics['alerts']['pending_requests'] ?? 0) === 0 && ($statistics['alerts']['expired_blood'] ?? 0) === 0 && empty($statistics['alerts']['low_stock'] ?? []))
+                            @if(($statistics['alerts']['pending_requests'] ?? 0) === 0 && ($statistics['alerts']['expired_blood'] ?? 0) === 0 && empty($statistics['alerts']['low_stock'] ?? []) && ($statistics['alerts']['unread_contact_messages'] ?? 0) === 0)
                                 <div class="text-center py-8 text-gray-500 dark:text-gray-400">
                                     <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
