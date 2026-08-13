@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BloodRequest;
+use App\Models\ContactMessage;
 use App\Services\Admin\DashboardService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -25,7 +27,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get pending blood request notifications.
+     * Get pending blood request and unread contact message notifications.
      */
     public function notifications(): JsonResponse
     {
@@ -36,6 +38,13 @@ class DashboardController extends Controller
             ->get();
 
         $bloodRequestCount = BloodRequest::where('status', 0)->count();
+        $unreadContactCount = ContactMessage::query()->unread()->count();
+
+        $unreadContacts = ContactMessage::query()
+            ->unread()
+            ->latest()
+            ->limit(10)
+            ->get();
 
         // Build notifications
         $notifications = collect();
@@ -58,11 +67,24 @@ class DashboardController extends Controller
             ]);
         }
 
+        foreach ($unreadContacts as $contact) {
+            $notifications->push([
+                'id' => 'contact_message_'.$contact->id,
+                'type' => 'contact_message',
+                'sender_name' => $contact->name,
+                'subject' => $contact->subject,
+                'message_preview' => Str::limit($contact->message, 80),
+                'created_at' => $contact->created_at->diffForHumans(),
+                'timestamp' => $contact->created_at->timestamp,
+                'url' => route('admin.contact-message-management.show', ['contact_message' => $contact]),
+            ]);
+        }
+
         // Sort by timestamp descending and limit to 10
         $notifications = $notifications->sortByDesc('timestamp')->take(10)->values();
 
         return response()->json([
-            'count' => $bloodRequestCount,
+            'count' => $bloodRequestCount + $unreadContactCount,
             'notifications' => $notifications,
         ]);
     }

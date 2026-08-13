@@ -7,6 +7,7 @@ use App\Enums\BloodRequestStatus;
 use App\Models\BloodDonationRecord;
 use App\Models\BloodInventory;
 use App\Models\BloodRequest;
+use App\Models\ContactMessage;
 use App\Models\Donor;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,7 @@ class DashboardService
     }
 
     /**
-     * Get alerts (low stock, expired blood, pending requests).
+     * Get alerts (low stock, expired blood, pending requests, unread contacts).
      */
     protected function getAlerts(): array
     {
@@ -73,6 +74,7 @@ class DashboardService
             'low_stock' => $this->getLowStockAlerts(),
             'expired_blood' => $this->getExpiredBloodAlerts(),
             'pending_requests' => $this->getPendingRequestsCount(),
+            'unread_contact_messages' => $this->getUnreadContactMessagesCount(),
         ];
     }
 
@@ -114,6 +116,14 @@ class DashboardService
     {
         return BloodRequest::where('status', BloodRequestStatus::Pending->value)
             ->count();
+    }
+
+    /**
+     * Get unread contact messages count.
+     */
+    protected function getUnreadContactMessagesCount(): int
+    {
+        return ContactMessage::query()->unread()->count();
     }
 
     /**
