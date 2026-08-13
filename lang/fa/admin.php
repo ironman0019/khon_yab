@@ -794,4 +794,23 @@ return [
     'The subject may not be greater than :max characters.' => 'موضوع نمی‌تواند بیشتر از :max کاراکتر باشد.',
     'The message field is required.' => 'فیلد پیام الزامی است.',
     'You cannot send a message to yourself.' => 'شما نمی‌توانید به خودتان پیام ارسال کنید.',
+
+    // Contact Message Management
+    'Contact Messages' => 'پیام‌های تماس',
+    'View and manage contact form submissions' => 'مشاهده و مدیریت پیام‌های فرم تماس',
+    'Search by name, email, phone, or subject...' => 'جستجو بر اساس نام، ایمیل، تلفن یا موضوع...',
+    'Unread' => 'خوانده نشده',
+    'Read' => 'خوانده شده',
+    'No contact messages found' => 'هیچ پیام تماسی یافت نشد',
+    'Contact form submissions will appear here.' => 'پیام‌های ارسال‌شده از فرم تماس اینجا نمایش داده می‌شوند.',
+    'Contact Message Details' => 'جزئیات پیام تماس',
+    'View contact form submission details' => 'مشاهده جزئیات پیام فرم تماس',
+    'Message Information' => 'اطلاعات پیام',
+    'Mark as Unread' => 'علامت‌گذاری به عنوان خوانده نشده',
+    'Are you sure you want to delete this contact message?' => 'آیا از حذف این پیام تماس مطمئن هستید؟',
+    'Contact message deleted successfully.' => 'پیام تماس با موفقیت حذف شد.',
+    'Contact message marked as unread.' => 'پیام تماس به عنوان خوانده نشده علامت‌گذاری شد.',
+    'View contact messages' => 'مشاهده پیام‌های تماس',
+    'Unread Contact Messages' => 'پیام‌های تماس خوانده نشده',
+    'contact messages need attention' => 'پیام تماس نیاز به توجه دارد',
 ];

@@ -794,4 +794,23 @@ return [
     'The subject may not be greater than :max characters.' => 'موضوع نشي کولی د :max حروفو څخه زیات وي.',
     'The message field is required.' => 'د پیغام فیلد اړین دی.',
     'You cannot send a message to yourself.' => 'تاسو نشئ کولی خپل ځان ته پیغام واستوئ.',
+
+    // Contact Message Management
+    'Contact Messages' => 'د اړیکو پیغامونه',
+    'View and manage contact form submissions' => 'د اړیکو فورمې پیغامونه وګورئ او مدیریت یې کړئ',
+    'Search by name, email, phone, or subject...' => 'د نوم، بریښنالیک، تلیفون یا موضوع له مخې لټون...',
+    'Unread' => 'نالوستل شوی',
+    'Read' => 'لوستل شوی',
+    'No contact messages found' => 'هیڅ د اړیکو پیغام ونه موندل شو',
+    'Contact form submissions will appear here.' => 'د اړیکو فورمې پیغامونه به دلته ښکاره شي.',
+    'Contact Message Details' => 'د اړیکو پیغام تفصیلات',
+    'View contact form submission details' => 'د اړیکو فورمې پیغام تفصیلات وګورئ',
+    'Message Information' => 'د پیغام معلومات',
+    'Mark as Unread' => 'د نالوستل شوي په توګه نښه کړئ',
+    'Are you sure you want to delete this contact message?' => 'آیا تاسو ډاډه یاست چې دا د اړیکو پیغام حذف کړئ؟',
+    'Contact message deleted successfully.' => 'د اړیکو پیغام په بریالیتوب سره حذف شو.',
+    'Contact message marked as unread.' => 'د اړیکو پیغام د نالوستل شوي په توګه نښه شو.',
+    'View contact messages' => 'د اړیکو پیغامونه وګورئ',
+    'Unread Contact Messages' => 'نالوستل شوي د اړیکو پیغامونه',
+    'contact messages need attention' => 'د اړیکو پیغامونه پاملرنې ته اړتیا لري',
 ];

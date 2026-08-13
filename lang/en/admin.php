@@ -786,4 +786,23 @@ return [
     'The subject may not be greater than :max characters.' => 'The subject may not be greater than :max characters.',
     'The message field is required.' => 'The message field is required.',
     'You cannot send a message to yourself.' => 'You cannot send a message to yourself.',
+
+    // Contact Message Management
+    'Contact Messages' => 'Contact Messages',
+    'View and manage contact form submissions' => 'View and manage contact form submissions',
+    'Search by name, email, phone, or subject...' => 'Search by name, email, phone, or subject...',
+    'Unread' => 'Unread',
+    'Read' => 'Read',
+    'No contact messages found' => 'No contact messages found',
+    'Contact form submissions will appear here.' => 'Contact form submissions will appear here.',
+    'Contact Message Details' => 'Contact Message Details',
+    'View contact form submission details' => 'View contact form submission details',
+    'Message Information' => 'Message Information',
+    'Mark as Unread' => 'Mark as Unread',
+    'Are you sure you want to delete this contact message?' => 'Are you sure you want to delete this contact message?',
+    'Contact message deleted successfully.' => 'Contact message deleted successfully.',
+    'Contact message marked as unread.' => 'Contact message marked as unread.',
+    'View contact messages' => 'View contact messages',
+    'Unread Contact Messages' => 'Unread Contact Messages',
+    'contact messages need attention' => 'contact messages need attention',
 ];

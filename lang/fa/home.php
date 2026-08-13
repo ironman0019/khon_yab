@@ -11,7 +11,7 @@ return [
     'Quick Links' => 'لینک‌های سریع',
     'Contact Information' => 'اطلاعات تماس',
     'All rights reserved.' => 'تمام حقوق محفوظ است.',
-    
+
     // Home Page
     'Welcome to Blood Bank Management System' => 'به سیستم مدیریت بانک خون خوش آمدید',
     'A comprehensive platform for managing blood donations and requests' => 'یک پلتفرم جامع برای مدیریت اهدای خون و درخواست‌ها',
@@ -35,16 +35,28 @@ return [
     'Admin reviews and approves blood requests' => 'مدیر درخواست‌های خون را بررسی و تأیید می‌کند',
     'Step 4: Donate' => 'مرحله ۴: اهدا',
     'Donors can contribute and save lives' => 'اهدادهندگان می‌توانند کمک کنند و جان‌ها را نجات دهند',
-    
+
     // Contact Page
     'Get in Touch' => 'تماس با ما',
     'Contact Us' => 'با ما تماس بگیرید',
     'We would love to hear from you. Send us a message and we will respond as soon as possible.' => 'ما دوست داریم از شما بشنویم. برای ما پیام بفرستید و ما در اسرع وقت پاسخ خواهیم داد.',
     'Email' => 'ایمیل',
     'Phone' => 'تلفن',
+    'GitHub' => 'گیت‌هاب',
+    'View source on GitHub' => 'مشاهده منبع در گیت‌هاب',
     'Address' => 'آدرس',
     'Send Message' => 'ارسال پیام',
-    
+    'Name' => 'نام',
+    'Subject' => 'موضوع',
+    'Message' => 'پیام',
+    'Your message has been sent successfully. We will get back to you soon.' => 'پیام شما با موفقیت ارسال شد. به زودی با شما تماس خواهیم گرفت.',
+    'The name field is required.' => 'فیلد نام الزامی است.',
+    'The email field is required.' => 'فیلد ایمیل الزامی است.',
+    'The email must be a valid email address.' => 'ایمیل باید یک آدرس ایمیل معتبر باشد.',
+    'The subject field is required.' => 'فیلد موضوع الزامی است.',
+    'The message field is required.' => 'فیلد پیام الزامی است.',
+    'The message may not be greater than :max characters.' => 'پیام نباید بیشتر از :max کاراکتر باشد.',
+
     // About Page
     'About Our System' => 'درباره سیستم ما',
     'Our Mission' => 'ماموریت ما',
@@ -67,7 +79,7 @@ return [
     'Multi-language interface support' => 'پشتیبانی رابط چند زبانه',
     'Detailed reporting and analytics' => 'گزارش‌دهی و تجزیه و تحلیل دقیق',
     'Secure and reliable platform' => 'پلتفرم امن و قابل اعتماد',
-    
+
     // Search Page
     'Blood Request Search' => 'جستجوی درخواست خون',
     'Find blood requests in your area' => 'درخواست‌های خون در منطقه خود را پیدا کنید',
@@ -109,4 +121,3 @@ return [
     'Contact via WhatsApp' => 'تماس از طریق واتساپ',
     'Hello, I am interested in your blood request for :patient_name' => 'سلام، من به درخواست خون شما برای :patient_name علاقه‌مند هستم',
 ];
-

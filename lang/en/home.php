@@ -11,7 +11,7 @@ return [
     'Quick Links' => 'Quick Links',
     'Contact Information' => 'Contact Information',
     'All rights reserved.' => 'All rights reserved.',
-    
+
     // Home Page
     'Welcome to Blood Bank Management System' => 'Welcome to Blood Bank Management System',
     'A comprehensive platform for managing blood donations and requests' => 'A comprehensive platform for managing blood donations and requests',
@@ -35,16 +35,30 @@ return [
     'Admin reviews and approves blood requests' => 'Admin reviews and approves blood requests',
     'Step 4: Donate' => 'Step 4: Donate',
     'Donors can contribute and save lives' => 'Donors can contribute and save lives',
-    
+
     // Contact Page
     'Get in Touch' => 'Get in Touch',
     'Contact Us' => 'Contact Us',
     'We would love to hear from you. Send us a message and we will respond as soon as possible.' => 'We would love to hear from you. Send us a message and we will respond as soon as possible.',
     'Email' => 'Email',
     'Phone' => 'Phone',
+    'GitHub' => 'GitHub',
+    'View source on GitHub' => 'View source on GitHub',
     'Address' => 'Address',
     'Send Message' => 'Send Message',
-    
+    'Name' => 'Name',
+    'Subject' => 'Subject',
+    'Message' => 'Message',
+    'Your message has been sent successfully. We will get back to you soon.' => 'Your message has been sent successfully. We will get back to you soon.',
+    'The name field is required.' => 'The name field is required.',
+    'The email field is required.' => 'The email field is required.',
+    'The email must be a valid email address.' => 'The email must be a valid email address.',
+    'The subject field is required.' => 'The subject field is required.',
+    'The message field is required.' => 'The message field is required.',
+    'The message may not be greater than :max characters.' => 'The message may not be greater than :max characters.',
+    'Send us a message and we will get back to you as soon as possible.' => 'Send us a message and we will get back to you as soon as possible.',
+    'Contact form will be available soon. Please use the contact information provided.' => 'Contact form will be available soon. Please use the contact information provided.',
+
     // About Page
     'About Our System' => 'About Our System',
     'Our Mission' => 'Our Mission',
@@ -67,7 +81,7 @@ return [
     'Multi-language interface support' => 'Multi-language interface support',
     'Detailed reporting and analytics' => 'Detailed reporting and analytics',
     'Secure and reliable platform' => 'Secure and reliable platform',
-    
+
     // Search Page
     'Blood Request Search' => 'Blood Request Search',
     'Find blood requests in your area' => 'Find blood requests in your area',
@@ -96,8 +110,6 @@ return [
     'View Details' => 'View Details',
     'Ready to Make a Difference?' => 'Ready to Make a Difference?',
     'Join us in saving lives through blood donation' => 'Join us in saving lives through blood donation',
-    'Send us a message and we will get back to you as soon as possible.' => 'Send us a message and we will get back to you as soon as possible.',
-    'Contact form will be available soon. Please use the contact information provided.' => 'Contact form will be available soon. Please use the contact information provided.',
     'A comprehensive blood bank management system designed to connect donors with those in need.' => 'A comprehensive blood bank management system designed to connect donors with those in need.',
     'Positive' => 'Positive',
     'Negative' => 'Negative',
@@ -110,4 +122,3 @@ return [
     'Contact via WhatsApp' => 'Contact via WhatsApp',
     'Hello, I am interested in your blood request for :patient_name' => 'Hello, I am interested in your blood request for :patient_name',
 ];
-

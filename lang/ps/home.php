@@ -11,7 +11,7 @@ return [
     'Quick Links' => 'چټک لینکونه',
     'Contact Information' => 'د اړیکو معلومات',
     'All rights reserved.' => 'ټول حقونه خوندي دي.',
-    
+
     // Home Page
     'Welcome to Blood Bank Management System' => 'د وینې بانک مدیریت سیسټم ته ښه راغلاست',
     'A comprehensive platform for managing blood donations and requests' => 'د وینې ورکړې او غوښتنو د مدیریت لپاره یو بشپړ پلیټفارم',
@@ -35,16 +35,28 @@ return [
     'Admin reviews and approves blood requests' => 'اډمین د وینې غوښتنې بیاکتنه او تصویب کوي',
     'Step 4: Donate' => 'ګام ۴: ورکړه',
     'Donors can contribute and save lives' => 'ورکوونکي کولی شي مرسته وکړي او ژوندونه وژغوري',
-    
+
     // Contact Page
     'Get in Touch' => 'زموږ سره اړیکه ونیسئ',
     'Contact Us' => 'زموږ سره اړیکه ونیسئ',
     'We would love to hear from you. Send us a message and we will respond as soon as possible.' => 'موږ خوښ یو چې له تاسو څخه واورو. موږ ته پیغام واستوئ او موږ به ژر تر ژره ځواب ورکړو.',
     'Email' => 'بریښنالیک',
     'Phone' => 'تلیفون',
+    'GitHub' => 'ګیټ‌هب',
+    'View source on GitHub' => 'په ګیټ‌هب کې سرچینه وګورئ',
     'Address' => 'پته',
     'Send Message' => 'پیغام واستوئ',
-    
+    'Name' => 'نوم',
+    'Subject' => 'موضوع',
+    'Message' => 'پیغام',
+    'Your message has been sent successfully. We will get back to you soon.' => 'ستاسو پیغام په بریالیتوب سره واستول شو. موږ به ژر تر ژره تاسو ته ځواب ورکړو.',
+    'The name field is required.' => 'د نوم ساحه اړینه ده.',
+    'The email field is required.' => 'د بریښنالیک ساحه اړینه ده.',
+    'The email must be a valid email address.' => 'بریښنالیک باید د اعتبار وړ بریښنالیک پته وي.',
+    'The subject field is required.' => 'د موضوع ساحه اړینه ده.',
+    'The message field is required.' => 'د پیغام ساحه اړینه ده.',
+    'The message may not be greater than :max characters.' => 'پیغام باید له :max توریو څخه زیات نه وي.',
+
     // About Page
     'About Our System' => 'زموږ د سیسټم په اړه',
     'Our Mission' => 'زموږ ماموریت',
@@ -67,7 +79,7 @@ return [
     'Multi-language interface support' => 'د ګڼو ژبو انټرفیس ملاتړ',
     'Detailed reporting and analytics' => 'تفصيلي راپور ورکړه او تحلیل',
     'Secure and reliable platform' => 'د امنیت او باوري پلیټفارم',
-    
+
     // Search Page
     'Blood Request Search' => 'د وینې غوښتنو لټون',
     'Find blood requests in your area' => 'په خپل سیمه کې د وینې غوښتنې ومومئ',
@@ -109,4 +121,3 @@ return [
     'Contact via WhatsApp' => 'د واتساپ له لارې اړیکه',
     'Hello, I am interested in your blood request for :patient_name' => 'سلام، زه ستاسو د وینې غوښتنې سره د :patient_name لپاره علاقه لرم',
 ];
-
