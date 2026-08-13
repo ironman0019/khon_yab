@@ -41,7 +41,7 @@
                     {{ $siteName }}
                 </h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ __('home.Blood Bank Management System') }}
+                    {{ __('home.Blood Donation Management System') }}
                 </p>
             </div>
 

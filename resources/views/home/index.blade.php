@@ -8,7 +8,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
-                    {{ __('home.Welcome to Blood Bank Management System') }}
+                    {{ __('home.Welcome to Blood Donation Management System') }}
                 </h1>
                 <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
                     {{ __('home.A comprehensive platform for managing blood donations and requests') }}
@@ -115,7 +115,7 @@
                         {{ __('home.Step 1: Register') }}
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        {{ __('home.Create an account as a donor or hospital user') }}
+                        {{ __('home.Create an account as a donor, receiver, or laboratory') }}
                     </p>
                 </div>
 
@@ -125,10 +125,10 @@
                         2
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                        {{ __('home.Step 2: Request Blood') }}
+                        {{ __('home.Step 2: Donate or Request') }}
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        {{ __('home.Submit blood requests with patient details and requirements') }}
+                        {{ __('home.Donors record donations; receivers and laboratories submit blood requests') }}
                     </p>
                 </div>
 
@@ -138,10 +138,10 @@
                         3
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                        {{ __('home.Step 3: Get Approved') }}
+                        {{ __('home.Step 3: Test and Approve') }}
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        {{ __('home.Admin reviews and approves blood requests') }}
+                        {{ __('home.Laboratories test donated blood; admins review requests and manage inventory') }}
                     </p>
                 </div>
 
@@ -151,10 +151,10 @@
                         4
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                        {{ __('home.Step 4: Donate') }}
+                        {{ __('home.Step 4: Save Lives') }}
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300">
-                        {{ __('home.Donors can contribute and save lives') }}
+                        {{ __('home.Approved requests are fulfilled from tested blood in stock') }}
                     </p>
                 </div>
             </div>
