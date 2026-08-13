@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/')->name('home.')->group(function () {
     Route::get('/', [App\Http\Controllers\Home\HomeController::class, 'index'])->name('index');
     Route::get('/contact', [App\Http\Controllers\Home\HomeController::class, 'contact'])->name('contact');
+    Route::post('/contact', [App\Http\Controllers\Home\HomeController::class, 'storeContact'])
+        ->middleware('throttle:5,1')
+        ->name('contact.store');
     Route::get('/about', [App\Http\Controllers\Home\HomeController::class, 'about'])->name('about');
     Route::get('/search', [App\Http\Controllers\Home\HomeController::class, 'search'])->name('search');
 });
@@ -255,6 +258,13 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('reports-management/by-province/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportByProvince'])->name('reports-management.by-province.export');
     Route::get('reports-management/monthly-yearly/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportMonthlyYearly'])->name('reports-management.monthly-yearly.export');
     Route::get('reports-management/bag-expiration/export', [App\Http\Controllers\Admin\ReportsManagement\ReportController::class, 'exportBagExpiration'])->name('reports-management.bag-expiration.export');
+
+    // Contact Message Management
+    Route::post('contact-message-management/{contact_message}/unread', [App\Http\Controllers\Admin\ContactMessageManagement\ContactMessageController::class, 'markUnread'])
+        ->name('contact-message-management.unread');
+    Route::resource('contact-message-management', App\Http\Controllers\Admin\ContactMessageManagement\ContactMessageController::class)
+        ->only(['index', 'show', 'destroy'])
+        ->parameters(['contact-message-management' => 'contact_message']);
 
     // Database Backup
     Route::resource('backup-management', App\Http\Controllers\Admin\BackupManagement\BackupController::class)
