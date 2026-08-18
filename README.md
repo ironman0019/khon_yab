@@ -56,6 +56,7 @@ After login, `/dashboard` sends each account to the correct area:
 ### Other capabilities
 - Role-based access control (`admin` middleware for the admin area)
 - In-app messaging between users
+- Queued email verification and password-reset messages (registration does not wait on SMTP)
 - Donation interval and bag expiration rules from site settings
 - Dark mode on public and authenticated pages
 
@@ -131,7 +132,11 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Use your own MySQL username and password. Mail can stay on the `log` driver for local development (`MAIL_MAILER=log`).
+Use your own MySQL username and password.
+
+Queues use the database driver by default (`QUEUE_CONNECTION=database`). Mail can stay on the `log` driver for local development (`MAIL_MAILER=log`). In that mode emails are written to `storage/logs/laravel.log` instead of being sent, so you do not need SMTP or a queue worker to register.
+
+To actually send mail (Gmail or another SMTP server), see [Email and queues](#email-and-queues).
 
 ### 6. Run migrations and seeders
 
@@ -167,6 +172,8 @@ For local development with the PHP server, queue worker, and Vite hot reload tog
 composer run dev
 ```
 
+That starts `php artisan serve`, `php artisan queue:listen`, and `npm run dev`. The queue listener is required when `MAIL_MAILER` is `smtp`, because verification and password-reset emails are queued.
+
 If the UI does not update after a frontend change, run `npm run dev` or `npm run build` (or `composer run dev`).
 
 ## Quick setup script
@@ -182,6 +189,94 @@ It does **not** seed the database. After setup, configure `.env` and run:
 ```bash
 php artisan db:seed
 ```
+
+## Email and queues
+
+Registration and “forgot password” enqueue mail jobs instead of talking to SMTP in the HTTP request. The user is created (or the reset is accepted) immediately. A queue worker then sends the message in the background.
+
+`.env.example` already has `QUEUE_CONNECTION=database`. After `php artisan migrate`, the `jobs` and `failed_jobs` tables exist.
+
+### Local development
+
+Keep the default mailer for a first run:
+
+```env
+MAIL_MAILER=log
+QUEUE_CONNECTION=database
+```
+
+Use `composer run dev` so a queue worker is running. If you only run `php artisan serve`, queued mail will sit in the `jobs` table until you start a worker:
+
+```bash
+php artisan queue:work
+```
+
+### Sending real email (Gmail)
+
+Use an [App Password](https://support.google.com/accounts/answer/185833), not your normal Gmail password. SMTPS on port 465 is the supported setup:
+
+```env
+MAIL_MAILER=smtp
+MAIL_SCHEME=smtps
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=you@gmail.com
+MAIL_PASSWORD=your-app-password
+MAIL_ENCRYPTION=ssl
+MAIL_TIMEOUT=15
+MAIL_SOURCE_IP=0.0.0.0
+MAIL_FROM_ADDRESS=you@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+`MAIL_SOURCE_IP=0.0.0.0` forces IPv4. Some hosts resolve `smtp.gmail.com` to IPv6 first; that path can hang until timeout and leave a failed job.
+
+After changing mail settings in production, rebuild the config cache and restart the worker:
+
+```bash
+php artisan config:cache
+php artisan queue:restart
+```
+
+Retry a failed mail job with `php artisan queue:retry all`, or inspect `failed_jobs`.
+
+### Production: keep the worker running
+
+A cron that runs once a minute is not enough. The worker must run continuously (systemd or Supervisor). Example systemd unit:
+
+```ini
+[Unit]
+Description=Laravel queue worker
+After=network.target mysql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+Restart=always
+RestartSec=5
+WorkingDirectory=/path/to/khon_yab
+ExecStart=/usr/bin/php artisan queue:work database --sleep=3 --tries=3 --timeout=90 --max-time=3600 --max-jobs=500
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Adjust `User`, `WorkingDirectory`, and the PHP binary to match the server. Enable it with `systemctl enable --now your-queue.service`.
+
+Also add the Laravel scheduler cron (prunes old failed jobs daily):
+
+```cron
+* * * * * cd /path/to/khon_yab && php artisan schedule:run >> /dev/null 2>&1
+```
+
+After deploying PHP changes, run `php artisan queue:restart` so the worker reloads the new code.
+
+### HTTPS behind a reverse proxy
+
+`bootstrap/app.php` trusts proxy headers (`X-Forwarded-*`) so signed verification links stay on `https://` when nginx (or a CDN) terminates TLS. That setting is harmless on `php artisan serve` with no proxy.
+
+Set `APP_URL` to the public URL (`https://your-domain` in production, `http://127.0.0.1:8000` locally). When `APP_URL` starts with `https://`, the app also forces the HTTPS scheme for generated links.
 
 ## Demo accounts
 
@@ -289,6 +384,7 @@ app/
 │   ├── Middleware/     # Custom middleware (admin)
 │   └── Requests/       # Form request validation
 ├── Models/             # Eloquent models
+├── Notifications/      # Queued VerifyEmail and ResetPassword notifications
 ├── Services/           # Business logic (for example admin dashboard statistics)
 └── View/               # Blade components
 
@@ -375,10 +471,12 @@ Donors also have a personal donation report on `/donor/reports`.
 ## Security
 
 - Authentication via Laravel Breeze (login, registration, password reset, email verification)
+- Verification and password-reset emails are queued so a slow SMTP server cannot time out the register request
 - Admin routes protected by `auth`, `verified`, and `admin` middleware
 - Form request validation
 - CSRF protection
 - Database access through Eloquent (parameter binding)
+- Trusted proxies when the app runs behind nginx or a CDN (needed for correct HTTPS links)
 
 Change the seeded passwords before using this project outside local development.
 
