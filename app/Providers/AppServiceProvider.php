@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use App\Services\TranslationService;
+use Illuminate\Queue\Events\JobExceptionOccurred;
+use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Translation\FileLoader;
 
@@ -21,6 +26,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (str_starts_with((string) config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
+
+        Event::listen([JobProcessed::class, JobExceptionOccurred::class], function () {
+            Mail::purge();
+        });
+
         $this->app->extend('translation.loader', function (FileLoader $originalLoader, $app) {
             $files = $app['files'];
             $path = $app['path.lang'];
