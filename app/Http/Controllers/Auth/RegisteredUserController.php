@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Throwable;
 
 class RegisteredUserController extends Controller
 {
@@ -38,7 +39,7 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validated();
 
-        return DB::transaction(function () use ($validated) {
+        $user = DB::transaction(function () use ($validated) {
             // Create user
             $user = User::create([
                 'full_name' => $validated['full_name'],
@@ -99,13 +100,18 @@ class RegisteredUserController extends Controller
                 ]);
             }
 
-            event(new Registered($user));
-
-            Auth::login($user);
-
-            // Redirect based on user type
-            return $this->redirectBasedOnUserType($user);
+            return $user;
         });
+
+        try {
+            event(new Registered($user));
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        Auth::login($user);
+
+        return $this->redirectBasedOnUserType($user);
     }
 
     /**
